@@ -1,6 +1,51 @@
-/**
- * Estilos principales: layout de página, tarjetas y unidades de countdown.
- */
+/* Variables de diseño */
+:root {
+  --color-bg: #0f0f12;
+  --color-surface: #18181c;
+  --color-surface-hover: #1e1e24;
+  --color-border: #2a2a32;
+  --color-text: #e8e8ed;
+  --color-text-muted: #9898a6;
+  --color-accent: #7c6ef6;
+  --color-accent-soft: rgba(124, 110, 246, 0.15);
+  --color-success: #34d399;
+  --color-focus: var(--color-accent);
+
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --text-base: 1rem;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3rem;
+  --text-display: 3.5rem;
+
+  --line-tight: 1.25;
+  --line-normal: 1.5;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --page-padding: var(--space-4);
+  --card-gap: var(--space-6);
+  --section-gap: var(--space-10);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
 *,
 *::before,
 *::after {
@@ -22,26 +67,12 @@ body {
   min-height: 100vh;
 }
 
-/* Accesibilidad: contenido solo para lectores de pantalla */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Enfoque visible para teclado */
 :focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
-/* Contenedor de página */
+/* Layout */
 .page {
   min-height: 100vh;
   display: flex;
@@ -58,7 +89,7 @@ body {
 
 .page-title {
   margin: 0 0 var(--space-2);
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--color-text);
@@ -76,8 +107,8 @@ body {
 }
 
 .section-heading {
-  margin: 0 0 var(--space-4);
-  font-size: var(--text-xl);
+  margin: 0 0 var(--space-5);
+  font-size: var(--text-2xl);
   font-weight: 600;
   color: var(--color-text);
 }
@@ -115,14 +146,14 @@ body {
 
 .pomodoro-display {
   font-family: var(--font-mono);
-  font-size: var(--text-3xl);
+  font-size: var(--text-4xl);
   font-weight: 600;
   color: var(--color-text);
   letter-spacing: 0.02em;
 }
 
 .pomodoro-progress-wrap {
-  height: 6px;
+  height: 8px;
   background: var(--color-border);
   border-radius: 999px;
   overflow: hidden;
@@ -133,7 +164,6 @@ body {
   height: 100%;
   background: var(--color-accent);
   border-radius: 999px;
-  width: 0%;
   transition: width 1s linear;
 }
 
@@ -151,7 +181,7 @@ body {
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: background-color 0.2s ease, opacity 0.2s ease;
+  transition: background-color 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
 }
 
 .btn:disabled {
@@ -178,6 +208,153 @@ body {
   background: var(--color-border);
 }
 
+/* --- Countdowns: fechas más grandes y claras --- */
+.countdown-section {
+  margin: 0;
+}
+
+.countdown-grid {
+  display: grid;
+  gap: var(--space-8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .countdown-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-10);
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    padding: var(--space-8);
+  }
+  .countdown-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.countdown-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.countdown-card:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-accent-soft);
+}
+
+.countdown-card--finished {
+  border-color: rgba(52, 211, 153, 0.3);
+  background: rgba(52, 211, 153, 0.06);
+}
+
+.card-header {
+  margin-bottom: var(--space-6);
+}
+
+.card-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: var(--line-tight);
+}
+
+.card-description {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Bloques de tiempo: principal (años, meses, días) más grandes */
+.countdown-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  align-items: flex-end;
+}
+
+.countdown-block--primary {
+  gap: var(--space-8);
+}
+
+.countdown-block--secondary {
+  gap: var(--space-5);
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 4rem;
+}
+
+.countdown-unit--large {
+  min-width: 5rem;
+}
+
+.countdown-value {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  line-height: var(--line-tight);
+  color: var(--color-accent);
+  display: block;
+}
+
+/* Números grandes para años, meses, días */
+.countdown-unit--large .countdown-value {
+  font-size: var(--text-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.countdown-unit--medium .countdown-value {
+  font-size: var(--text-3xl);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.countdown-label {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+  font-weight: 600;
+}
+
+.countdown-unit--large .countdown-label {
+  font-size: var(--text-base);
+}
+
+.countdown-summary {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-normal);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.countdown-finished-msg {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-success);
+}
+
+/* Footer */
 .page-footer {
   padding: var(--space-6) 0;
   border-top: 1px solid var(--color-border);
@@ -194,131 +371,18 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* Sección de countdowns */
-.countdown-section {
-  margin: 0;
-}
-
-.countdown-grid {
-  display: grid;
-  gap: var(--card-gap);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.countdown-loading,
-.countdown-error {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: var(--space-8);
-  color: var(--color-text-muted);
-  font-size: var(--text-base);
-}
-
-.countdown-error {
-  color: var(--color-text);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-}
-
-.countdown-error code {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  padding: var(--space-1) var(--space-2);
-  background: var(--color-bg);
-  border-radius: var(--radius-sm);
-}
-
-/* Tarjeta de countdown */
-.countdown-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.countdown-card:hover {
-  background: var(--color-surface-hover);
-  border-color: var(--color-accent-soft);
-}
-
-.countdown-card.countdown-finished {
-  border-color: rgba(52, 211, 153, 0.3);
-  background: rgba(52, 211, 153, 0.06);
-}
-
-.card-header {
-  margin-bottom: var(--space-5);
-}
-
-.card-title {
-  margin: 0 0 var(--space-1);
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.card-description {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-}
-
-.card-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.countdown-summary {
-  margin: 0 0 var(--space-2);
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  line-height: var(--line-normal);
-}
-
-.countdown-units {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  align-items: flex-end;
-}
-
-/* Unidad (número + etiqueta) */
-.countdown-unit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 3.5rem;
-}
-
-.countdown-value {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xl);
-  font-weight: 600;
-  line-height: var(--line-tight);
-  color: var(--color-accent);
-  display: block;
-}
-
-.countdown-card.countdown-finished .countdown-value {
-  color: var(--color-success);
-}
-
-.countdown-label {
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-text-muted);
-  margin-top: var(--space-1);
-}
-
-.countdown-finished {
-  margin: 0;
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--color-success);
+/* Móvil: mantener legibilidad */
+@media (max-width: 479px) {
+  .page {
+    padding: var(--space-3);
+  }
+  .countdown-card {
+    padding: var(--space-5);
+  }
+  .countdown-unit--large .countdown-value {
+    font-size: 2.25rem;
+  }
+  .countdown-unit--medium .countdown-value {
+    font-size: 1.5rem;
+  }
 }

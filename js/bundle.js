@@ -10,7 +10,7 @@
     birthDate: new Date(2009, 4, 19),
     countdowns: [
       { id: 'year-2027', title: 'Año 2027', description: 'Inicio del año 2027', targetDate: new Date(2027, 0, 1, 0, 0, 0), detailLevel: 'full' },
-      { id: 'age-18', title: 'Mayor de edad (18 años)', description: 'Cumpleaños 18 — 19 de mayo', targetDate: null, detailLevel: 'full' },
+      { id: 'age-18', title: 'Mayor de edad (18 años)', description: 'Cumpleaños 18 — 19 de mayo', targetDate:, detailLevel: 'full' },
       { id: 'age-20', title: '20 años', description: 'Cumpleaños 20 — 19 de mayo', targetDate: null, detailLevel: 'full' },
       { id: 'age-25', title: '25 años', description: 'Cumpleaños 25 — 19 de mayo', targetDate: null, detailLevel: 'full' },
       { id: 'age-30', title: '30 años', description: 'Cumpleaños 30 — 19 de mayo', targetDate: null, detailLevel: 'full' },
