@@ -1,10 +1,36 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const SITE_URL = "https://fravelz.github.io/WEB-Time";
+
 export const metadata: Metadata = {
   title: "Countdowns y Pomodoro — 2027, 18 años, 20, 25, 30, 2045",
   description:
-    "Countdowns hacia 2027, mayoría de edad, cumpleaños 20, 25, 30, año 2045 y temporizador Pomodoro.",
+    "Web personal con countdowns hacia fechas importantes personales y un temporizador Pomodoro.",
+  openGraph: {
+    title: "Countdowns y Pomodoro — 2027, 18 años, 20, 25, 30, 2045",
+    description:
+      "Web personal con countdowns hacia fechas importantes personales y un temporizador Pomodoro.",
+    url: SITE_URL,
+    siteName: "Countdowns y Pomodoro",
+    locale: "es",
+    type: "website",
+    images: [
+      {
+        url: `${SITE_URL}/screenshot.png`,
+        width: 1200,
+        height: 630,
+        alt: "Vista de la web Countdowns y Pomodoro",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Countdowns y Pomodoro — 2027, 18 años, 20, 25, 30, 2045",
+    description:
+      "Web personal con countdowns hacia fechas importantes personales y un temporizador Pomodoro.",
+    images: [`${SITE_URL}/screenshot.png`],
+  },
 };
 
 export default function RootLayout({

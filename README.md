@@ -1,8 +1,12 @@
 # Countdowns y Pomodoro
 
-Web personal con **countdowns** hacia fechas importantes (año 2027, mayoría de edad, 20/25/30 años, año 2045) y un **temporizador Pomodoro** (25 min trabajo, 5 min descanso corto, 15 min descanso largo).
+**Web personal con countdowns hacia fechas importantes personales y un temporizador Pomodoro.**
 
-Hecho con **Next.js 15**, **React 18** y **TypeScript**.
+[![Screenshot](screenshot.png)](https://fravelz.github.io/WEB-Time/)
+
+🔗 **Publicado en:** [https://fravelz.github.io/WEB-Time/](https://fravelz.github.io/WEB-Time/)
+
+Countdowns hacia año 2027, mayoría de edad (18), 20, 25, 30 años, año 2045. Pomodoro: 25 min trabajo, 5 min descanso corto, 15 min descanso largo (cada 4 pomodoros). Hecho con **Next.js 15**, **React 18** y **TypeScript**.
 
 ---
 
