@@ -1,0 +1,60 @@
+/**
+ * Diseño responsive: grid de tarjetas y tamaños según viewport.
+ */
+/* Tablet y escritorio: 2 columnas */
+@media (min-width: 768px) {
+  .page {
+    padding: var(--space-6);
+  }
+
+  .page-title {
+    font-size: var(--text-3xl);
+  }
+
+  .countdown-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+
+  .countdown-value {
+    font-size: var(--text-3xl);
+  }
+}
+
+/* Escritorio grande: 3 columnas */
+@media (min-width: 1024px) {
+  .page {
+    padding: var(--space-8);
+  }
+
+  .countdown-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Móvil: una columna, unidades un poco más compactas */
+@media (max-width: 479px) {
+  .page {
+    padding: var(--space-3);
+  }
+
+  .countdown-card {
+    padding: var(--space-4);
+  }
+
+  .card-body {
+    gap: var(--space-3);
+  }
+
+  .countdown-unit {
+    min-width: 2.75rem;
+  }
+
+  .countdown-value {
+    font-size: var(--text-xl);
+  }
+
+  .countdown-label {
+    font-size: 0.65rem;
+  }
+}

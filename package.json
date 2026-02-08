@@ -1,0 +1,7 @@
+{
+  "name": "web-time",
+  "private": true,
+  "scripts": {
+    "serve": "npx serve . -p 3000"
+  }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Countdowns hacia 2027, mayoría de edad, cumpleaños 20, 25, 30, año 2045 y temporizador Pomodoro." />
+    <title>Countdowns y Pomodoro — 2027, 18 años, 20, 25, 30, 2045</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <h1 class="page-title">Countdowns</h1>
+        <p class="page-subtitle">Tiempo restante hasta fechas importantes — se actualiza cada segundo.</p>
+      </header>
+      <main class="page-main" id="main-content">
+        <section class="pomodoro-section" aria-labelledby="pomodoro-heading">
+          <h2 id="pomodoro-heading" class="section-heading">Pomodoro</h2>
+          <div class="pomodoro-card">
+            <p class="pomodoro-desc">25 min trabajo, 5 min descanso corto, 15 min descanso largo (cada 4 pomodoros).</p>
+            <p id="pomodoro-phase" class="pomodoro-phase" aria-live="polite">Trabajo</p>
+            <div class="pomodoro-display-wrap">
+              <span id="pomodoro-display" class="pomodoro-display" aria-live="polite">25:00</span>
+            </div>
+            <div class="pomodoro-progress-wrap">
+              <div id="pomodoro-progress" class="pomodoro-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="pomodoro-buttons">
+              <button type="button" id="pomodoro-start" class="btn btn-primary">Iniciar</button>
+              <button type="button" id="pomodoro-pause" class="btn btn-secondary" disabled>Pausar</button>
+              <button type="button" id="pomodoro-reset" class="btn btn-secondary">Reiniciar</button>
+            </div>
+          </div>
+        </section>
+        <section class="countdown-section" aria-labelledby="section-heading">
+          <h2 id="section-heading" class="section-heading">Countdowns</h2>
+          <div id="countdown-cards" class="countdown-grid">
+            <p id="countdown-loading" class="countdown-loading">Cargando countdowns…</p>
+          </div>
+        </section>
+      </main>
+      <footer class="page-footer">
+        <p>Fechas configurables en <code>js/config.js</code>. 18, 20, 25 y 30 años se calculan desde tu fecha de nacimiento (19 de mayo).</p>
+      </footer>
+    </div>
+    <script src="js/bundle.js"></script>
+    <script src="js/pomodoro.js"></script>
+  </body>
+</html>
