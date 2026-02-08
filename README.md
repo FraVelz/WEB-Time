@@ -6,27 +6,10 @@ Hecho con **Next.js 15**, **React 18** y **TypeScript**.
 
 ---
 
-## Inicio rápido
-
-**Requisitos:** Node.js 18+
-
-```bash
-# Clonar e instalar
-git clone <repo>
-cd WEB-Time
-npm install
-
-# Modo desarrollo
-npm run dev
-```
-
-Abre **http://localhost:3000** en el navegador.
-
----
-
 ## Qué incluye
 
 - **Countdowns** que se actualizan cada segundo, con tiempo restante en años, meses, días, horas, minutos y segundos (los años se ocultan cuando quedan 0).
+
 - **Pomodoro** con fases de trabajo, descanso corto y descanso largo (cada 4 pomodoros), con barra de progreso y botones Iniciar / Pausar / Reiniciar.
 - Diseño responsive y tema oscuro.
 
@@ -52,32 +35,23 @@ Abre **http://localhost:3000** en el navegador.
 
 ---
 
+## Zona horaria (Colombia)
+
+Las fechas objetivo están fijadas en **medianoche en Colombia (America/Bogotá, UTC-5)**. Así el “día siguiente” y el “año nuevo” coinciden con tu hora, sin depender de la zona del servidor.
+
+- **Dónde se define:** `config/countdowns.ts` — la función `midnightColombia(year, month, day)` crea cada fecha a 00:00 en Colombia.
+- **“Ahora”:** En el navegador se usa la hora local (`new Date()` en `CountdownGrid`), así que si estás en Colombia el countdown es correcto. Si cambias de zona, el tiempo restante sigue siendo “hasta esa medianoche en Colombia”.
+
+---
+
 ## Configuración
 
 Todo se controla desde **`config/countdowns.ts`**:
 
-- **Fecha de nacimiento:** variable `BIRTH_DATE` (por defecto 19 de mayo de 2008). A partir de ella se calculan los countdowns de 18, 20, 25 y 30 años.
+- **Fecha de nacimiento:** `BIRTH_YEAR`, `BIRTH_MONTH`, `BIRTH_DAY` (por defecto 19 de mayo de 2008). A partir de ellos se calculan los countdowns de 18, 20, 25 y 30 años.
 - **Countdowns fijos:** año 2027, año 2045 (puedes añadir o quitar entradas en el array).
-- Los countdowns de edad se generan automáticamente según `BIRTH_DATE`.
+- **Zona horaria:** constante `COLOMBIA_UTC_OFFSET_HOURS` (5) por si en el futuro Colombia cambiara de UTC-5.
 
 ---
 
-## Scripts
-
-| Comando        | Descripción                    |
-|----------------|--------------------------------|
-| `npm run dev`  | Servidor de desarrollo         |
-| `npm run build`| Build de producción            |
-| `npm start`    | Servir build (tras `npm run build`) |
-| `npm run lint` | Ejecutar el linter             |
-
----
-
-## Producción
-
-```bash
-npm run build
-npm start
-```
-
-Se sirve en el puerto 3000 por defecto.
+> **Autor:** Fravelz
