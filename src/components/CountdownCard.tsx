@@ -18,12 +18,27 @@ function TimeUnit({
   label: string;
   size?: "large" | "medium";
 }) {
+  const containerClasses =
+    size === "large"
+      ? "flex flex-col items-center min-w-[5rem]"
+      : "flex flex-col items-center min-w-[4rem]";
+
+  const valueClasses =
+    size === "large"
+      ? "font-mono font-semibold leading-tight text-accent text-4xl md:text-5xl"
+      : "font-mono font-semibold leading-tight text-accent text-2xl md:text-3xl";
+
+  const labelClasses =
+    size === "large"
+      ? "mt-1 text-sm uppercase tracking-[0.06em] text-muted font-semibold"
+      : "mt-1 text-xs uppercase tracking-[0.06em] text-muted font-semibold";
+
   return (
-    <div className={`countdown-unit countdown-unit--${size}`} role="group">
-      <span className="countdown-value" aria-hidden="true">
+    <div className={containerClasses} role="group">
+      <span className={valueClasses} aria-hidden="true">
         {value}
       </span>
-      <span className="countdown-label">{label}</span>
+      <span className={labelClasses}>{label}</span>
     </div>
   );
 }
@@ -32,33 +47,49 @@ export function CountdownCard({ config, data }: CountdownCardProps) {
   if (data.passed) {
     return (
       <article
-        className="countdown-card countdown-card--finished"
+        className="bg-surface border border-success/40 bg-success/10 rounded-2xl p-6 flex flex-col gap-6"
         aria-labelledby={`title-${config.id}`}
       >
-        <header className="card-header">
-          <h2 id={`title-${config.id}`} className="card-title">
+        <header className="space-y-1">
+          <h2
+            id={`title-${config.id}`}
+            className="text-xl font-semibold text-text leading-tight"
+          >
             {config.title}
           </h2>
-          <p className="card-description">{config.description}</p>
+          <p className="text-base text-muted">{config.description}</p>
         </header>
-        <div className="card-body" role="timer" aria-live="polite">
-          <p className="countdown-finished-msg">¡Ya llegó la fecha!</p>
+        <div className="flex flex-col gap-5" role="timer" aria-live="polite">
+          <p className="text-xl font-semibold text-success">
+            ¡Ya llegó la fecha!
+          </p>
         </div>
       </article>
     );
   }
 
   return (
-    <article className="countdown-card" aria-labelledby={`title-${config.id}`}>
-      <header className="card-header">
-        <h2 id={`title-${config.id}`} className="card-title">
+    <article
+      className="bg-surface border border-border rounded-2xl p-6 flex flex-col gap-6 transition-colors hover:bg-surface-hover hover:border-accent-soft"
+      aria-labelledby={`title-${config.id}`}
+    >
+      <header className="space-y-1">
+        <h2
+          id={`title-${config.id}`}
+          className="text-xl font-semibold text-text leading-tight"
+        >
           {config.title}
         </h2>
-        <p className="card-description">{config.description}</p>
+        <p className="text-base text-muted">{config.description}</p>
       </header>
-      <div className="card-body" role="timer" aria-live="polite" aria-atomic="true">
+      <div
+        className="flex flex-col gap-5"
+        role="timer"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         {/* Bloque principal: años (solo si > 0), meses, días */}
-        <div className="countdown-block countdown-block--primary">
+        <div className="flex flex-wrap items-end gap-6 md:gap-8">
           {data.years > 0 && (
             <TimeUnit
               size="large"
@@ -78,12 +109,12 @@ export function CountdownCard({ config, data }: CountdownCardProps) {
           />
         </div>
         {/* Bloque secundario: horas, minutos, segundos */}
-        <div className="countdown-block countdown-block--secondary">
+        <div className="flex flex-wrap items-end gap-5">
           <TimeUnit size="medium" value={pad(data.hours)} label="horas" />
           <TimeUnit size="medium" value={pad(data.minutes)} label="min" />
           <TimeUnit size="medium" value={pad(data.seconds)} label="seg" />
         </div>
-        <p className="countdown-summary">
+        <p className="mt-2 border-t border-border pt-2 text-xs md:text-sm text-muted leading-normal">
           {data.years > 0 && (
             <>
               {data.years} {pluralize(data.years, "año", "años")},{" "}

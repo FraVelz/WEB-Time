@@ -81,54 +81,56 @@ export function Pomodoro() {
   };
 
   return (
-    <section className="pomodoro-section" aria-labelledby="pomodoro-heading">
-      <h2 id="pomodoro-heading" className="section-heading">
-        Pomodoro
-      </h2>
-      <div className="pomodoro-card">
-        <p className="pomodoro-desc">
-          25 min trabajo, 5 min descanso corto, 15 min descanso largo (cada 4 pomodoros).
-        </p>
-        <p className="pomodoro-phase" aria-live="polite">
-          {PHASE_LABELS[phase]}
-        </p>
-        <div className="pomodoro-display-wrap">
-          <span className="pomodoro-display" aria-live="polite">
-            {formatTime(secondsLeft)}
-          </span>
-        </div>
-        <div className="pomodoro-progress-wrap">
-          <div
-            className="pomodoro-progress"
-            role="progressbar"
-            aria-valuenow={Math.round(progressPct)}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            style={{ width: `${progressPct}%` }}
-          />
-        </div>
-        <div className="pomodoro-buttons">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={handleStart}
-            disabled={isRunning}
-          >
-            {isRunning ? "En marcha" : "Iniciar"}
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handlePause}
-            disabled={!isRunning}
-          >
-            Pausar
-          </button>
-          <button type="button" className="btn btn-secondary" onClick={handleReset}>
-            Reiniciar
-          </button>
-        </div>
+    <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 max-w-md mx-auto">
+      <p className="mb-4 text-sm text-[var(--color-muted)]">
+        25 min trabajo, 5 min descanso corto, 15 min descanso largo (cada 4 pomodoros).
+      </p>
+      <p className="mb-2 text-base font-semibold text-[var(--color-accent)]" aria-live="polite">
+        {PHASE_LABELS[phase]}
+      </p>
+      <div className="mb-4">
+        <span
+          className="font-mono text-4xl md:text-5xl font-semibold text-[var(--color-text)] tracking-wide"
+          aria-live="polite"
+        >
+          {formatTime(secondsLeft)}
+        </span>
       </div>
-    </section>
+      <div className="h-2 rounded-full overflow-hidden mb-6 bg-[var(--color-border)]">
+        <div
+          className="h-full rounded-full bg-[var(--color-accent)] transition-[width] duration-1000 ease-linear"
+          role="progressbar"
+          aria-valuenow={Math.round(progressPct)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          style={{ width: `${progressPct}%` }}
+        />
+      </div>
+      <div className="flex flex-wrap gap-3">
+        <button
+          type="button"
+          className="rounded-lg bg-[var(--color-accent)] px-4 py-2 text-sm font-semibold text-white hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          onClick={handleStart}
+          disabled={isRunning}
+        >
+          {isRunning ? "En marcha" : "Iniciar"}
+        </button>
+        <button
+          type="button"
+          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-hover)] px-4 py-2 text-sm font-semibold text-[var(--color-text)] hover:bg-[var(--color-border)] disabled:opacity-50 disabled:cursor-not-allowed transition"
+          onClick={handlePause}
+          disabled={!isRunning}
+        >
+          Pausar
+        </button>
+        <button
+          type="button"
+          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-hover)] px-4 py-2 text-sm font-semibold text-[var(--color-text)] hover:bg-[var(--color-border)] transition"
+          onClick={handleReset}
+        >
+          Reiniciar
+        </button>
+      </div>
+    </div>
   );
 }

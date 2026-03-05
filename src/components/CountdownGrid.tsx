@@ -26,7 +26,10 @@ export function CountdownGrid({ countdowns }: CountdownGridProps) {
   });
 
   return (
-    <div className="countdown-grid" role="list">
+    <div
+      className="grid gap-8 md:gap-10 md:grid-cols-2 xl:grid-cols-3"
+      role="list"
+    >
       {countdowns.map((config) => (
         <div key={config.id} role="listitem">
           <CountdownCard config={config} data={dataMap.get(config.id)!} />

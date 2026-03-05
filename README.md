@@ -2,7 +2,7 @@
 
 **Web personal con countdowns hacia fechas importantes personales y un temporizador Pomodoro.**
 
-[![Screenshot](screenshot.png)](https://fravelz.github.io/WEB-Time/)
+[![Screenshot](./public/screenshot.png)](https://fravelz.github.io/WEB-Time/)
 
 🔗 **Publicado en:** [https://fravelz.github.io/WEB-Time/](https://fravelz.github.io/WEB-Time/)
 
@@ -22,19 +22,22 @@ Countdowns hacia año 2027, mayoría de edad (18), 20, 25, 30 años, año 2045. 
 ## Estructura del proyecto
 
 ```
-├── app/
-│   ├── layout.tsx      # Layout y metadatos
-│   ├── page.tsx        # Página principal
-│   └── globals.css      # Variables y estilos globales
-├── components/
-│   ├── CountdownCard.tsx   # Tarjeta de un countdown
-│   ├── CountdownGrid.tsx   # Grid que actualiza cada segundo
-│   └── Pomodoro.tsx        # Temporizador Pomodoro
-├── config/
-│   └── countdowns.ts       # Fechas objetivo y fecha de nacimiento
-└── lib/
-    ├── countdown.ts        # Cálculo de tiempo restante
-    └── formatting.ts       # Plurales y formateo
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx      # Layout y metadatos
+│   │   ├── page.tsx        # Página principal
+│   │   └── globals.css     # Variables y estilos globales
+│   ├── components/
+│   │   ├── CountdownCard.tsx   # Tarjeta de un countdown
+│   │   ├── CountdownGrid.tsx   # Grid que actualiza cada segundo
+│   │   └── Pomodoro.tsx        # Temporizador Pomodoro
+│   ├── config/
+│   │   └── countdowns.ts       # Fechas objetivo y fecha de nacimiento
+│   └── lib/
+│       ├── countdown.ts        # Cálculo de tiempo restante
+│       └── formatting.ts       # Plurales y formateo
+└── public/
+    └── screenshot.png          # Imagen usada en README y meta OG/Twitter
 ```
 
 ---
