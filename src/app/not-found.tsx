@@ -13,7 +13,7 @@ export default function NotFound() {
           No encontramos esta página.
         </p>
         <Link
-          href="/#inicio"
+          href="/inicio"
           className="rounded-lg bg-[var(--color-accent)] px-6 py-3 text-sm font-semibold text-white hover:brightness-110 transition"
         >
           Volver al inicio

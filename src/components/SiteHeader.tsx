@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const SECTIONS = [
-  { id: "inicio", label: "Inicio" },
-  { id: "pomodoro", label: "Pomodoro" },
-  { id: "temporizador", label: "Temporizador" },
-  { id: "hora", label: "Hora" },
+  { path: "/inicio", label: "Inicio" },
+  { path: "/pomodoro", label: "Pomodoro" },
+  { path: "/temporizador", label: "Temporizador" },
+  { path: "/hora", label: "Hora" },
 ] as const;
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header
@@ -18,12 +21,12 @@ export function SiteHeader() {
       role="banner"
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-        <a
-          href="#inicio"
+        <Link
+          href="/inicio"
           className="text-lg font-semibold text-[var(--color-text)] hover:text-[var(--color-accent)] transition-colors"
         >
           WEB-Time
-        </a>
+        </Link>
 
         <button
           type="button"
@@ -42,16 +45,23 @@ export function SiteHeader() {
           className={`absolute top-full left-0 right-0 flex flex-col gap-1 border-b border-[var(--color-border)] bg-[var(--color-bg)] p-4 md:static md:flex-row md:border-0 md:bg-transparent md:p-0 ${open ? "flex" : "hidden md:flex"}`}
           aria-label="Secciones principales"
         >
-          {SECTIONS.map(({ id, label }) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              className="rounded-lg px-4 py-2 text-[var(--color-text)] hover:bg-[var(--color-surface)] hover:text-[var(--color-accent)] transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              {label}
-            </a>
-          ))}
+          {SECTIONS.map(({ path, label }) => {
+            const isActive = pathname === path || (path === "/inicio" && pathname === "/");
+            return (
+              <Link
+                key={path}
+                href={path}
+                className={`rounded-lg px-4 py-2 transition-colors ${
+                  isActive
+                    ? "text-[var(--color-accent)] bg-[var(--color-surface)]"
+                    : "text-[var(--color-text)] hover:bg-[var(--color-surface)] hover:text-[var(--color-accent)]"
+                }`}
+                onClick={() => setOpen(false)}
+              >
+                {label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </header>
