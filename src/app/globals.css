@@ -41,7 +41,7 @@
   }
 }
 
-/* Utilidades que usan variables del tema (por si Tailwind no genera bg-bg, text-muted, etc.) */
+/* Utilidades del tema (variables CSS) */
 .bg-bg { background-color: var(--color-bg); }
 .bg-surface { background-color: var(--color-surface); }
 .bg-surface-hover { background-color: var(--color-surface-hover); }
@@ -60,3 +60,49 @@
 .hover\:brightness-110:hover { filter: brightness(1.1); }
 .font-sans { font-family: var(--font-sans); }
 .font-mono { font-family: var(--font-mono); }
+
+/* Acordeón countdowns */
+.countdown-accordion-item {
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: var(--color-surface);
+}
+.countdown-accordion-item + .countdown-accordion-item {
+  margin-top: 0.5rem;
+}
+.countdown-accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.countdown-accordion-trigger:hover {
+  background-color: var(--color-surface-hover);
+}
+.countdown-accordion-trigger[aria-expanded="true"] {
+  border-bottom: 1px solid var(--color-border);
+}
+.countdown-accordion-trigger .chevron {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.2s ease;
+}
+.countdown-accordion-trigger[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+.countdown-accordion-panel {
+  padding: 0 1.25rem 1.25rem;
+}

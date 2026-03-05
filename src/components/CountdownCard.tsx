@@ -7,6 +7,8 @@ import type { CountdownItem } from "@/config/countdowns";
 type CountdownCardProps = {
   config: CountdownItem;
   data: TimeRemaining;
+  /** En acordeón el título va en el trigger; no repetir cabecera */
+  hideHeader?: boolean;
 };
 
 function TimeUnit({
@@ -43,26 +45,24 @@ function TimeUnit({
   );
 }
 
-export function CountdownCard({ config, data }: CountdownCardProps) {
+export function CountdownCard({ config, data, hideHeader }: CountdownCardProps) {
   if (data.passed) {
     return (
       <article
-        className="bg-surface border border-success/40 bg-success/10 rounded-2xl p-6 flex flex-col gap-6"
-        aria-labelledby={`title-${config.id}`}
+        className="bg-surface border border-success/40 bg-success/10 rounded-xl p-4 flex flex-col gap-4"
+        aria-labelledby={hideHeader ? undefined : `title-${config.id}`}
       >
-        <header className="space-y-1">
-          <h2
-            id={`title-${config.id}`}
-            className="text-xl font-semibold text-text leading-tight"
-          >
-            {config.title}
-          </h2>
-          <p className="text-base text-muted">{config.description}</p>
-        </header>
+        {!hideHeader && (
+          <header className="space-y-1">
+            <h2 id={`title-${config.id}`} className="text-xl font-semibold text-text leading-tight">
+              {config.title}
+            </h2>
+            <p className="text-base text-muted">{config.description}</p>
+          </header>
+        )}
+        {hideHeader && <p className="text-sm text-muted">{config.description}</p>}
         <div className="flex flex-col gap-5" role="timer" aria-live="polite">
-          <p className="text-xl font-semibold text-success">
-            ¡Ya llegó la fecha!
-          </p>
+          <p className="text-xl font-semibold text-success">¡Ya llegó la fecha!</p>
         </div>
       </article>
     );
@@ -70,18 +70,20 @@ export function CountdownCard({ config, data }: CountdownCardProps) {
 
   return (
     <article
-      className="bg-surface border border-border rounded-2xl p-6 flex flex-col gap-6 transition-colors hover:bg-surface-hover hover:border-accent-soft"
-      aria-labelledby={`title-${config.id}`}
+      className="bg-surface border border-border rounded-xl p-4 flex flex-col gap-4 transition-colors hover:bg-surface-hover hover:border-accent-soft"
+      aria-labelledby={hideHeader ? undefined : `title-${config.id}`}
     >
-      <header className="space-y-1">
-        <h2
-          id={`title-${config.id}`}
-          className="text-xl font-semibold text-text leading-tight"
-        >
-          {config.title}
-        </h2>
-        <p className="text-base text-muted">{config.description}</p>
-      </header>
+      {!hideHeader && (
+        <header className="space-y-1">
+          <h2 id={`title-${config.id}`} className="text-xl font-semibold text-text leading-tight">
+            {config.title}
+          </h2>
+          <p className="text-base text-muted">{config.description}</p>
+        </header>
+      )}
+      {hideHeader && (
+        <p className="text-sm text-muted">{config.description}</p>
+      )}
       <div
         className="flex flex-col gap-5"
         role="timer"
