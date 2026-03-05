@@ -12,8 +12,18 @@ type CountdownGridProps = {
   countdowns: CountdownItem[];
 };
 
+function shortSummary(data: TimeRemaining): string {
+  if (data.passed) return "¡Llegó!";
+  const parts: string[] = [];
+  if (data.years > 0) parts.push(`${data.years}a`);
+  if (data.months > 0) parts.push(`${data.months}m`);
+  parts.push(`${data.days}d`);
+  return parts.join(", ");
+}
+
 export function CountdownGrid({ countdowns }: CountdownGridProps) {
   const [now, setNow] = useState(() => new Date());
+  const [openIndex, setOpenIndex] = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), TICK_MS);
@@ -26,15 +36,53 @@ export function CountdownGrid({ countdowns }: CountdownGridProps) {
   });
 
   return (
-    <div
-      className="grid gap-8 md:gap-10 md:grid-cols-2 xl:grid-cols-3"
-      role="list"
-    >
-      {countdowns.map((config) => (
-        <div key={config.id} role="listitem">
-          <CountdownCard config={config} data={dataMap.get(config.id)!} />
-        </div>
-      ))}
+    <div className="space-y-2" role="list">
+      {countdowns.map((config, index) => {
+        const data = dataMap.get(config.id)!;
+        const isOpen = openIndex === index;
+        return (
+          <div
+            key={config.id}
+            className="countdown-accordion-item"
+            role="listitem"
+          >
+            <button
+              type="button"
+              className="countdown-accordion-trigger"
+              aria-expanded={isOpen}
+              aria-controls={`panel-${config.id}`}
+              id={`trigger-${config.id}`}
+              onClick={() => setOpenIndex(isOpen ? -1 : index)}
+            >
+              <span className="font-semibold text-text truncate min-w-0">
+                {config.title}
+              </span>
+              <span className="text-sm text-muted shrink-0">
+                {shortSummary(data)}
+              </span>
+              <svg
+                className="chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+            <div
+              id={`panel-${config.id}`}
+              role="region"
+              aria-labelledby={`trigger-${config.id}`}
+              className="countdown-accordion-panel"
+              hidden={!isOpen}
+            >
+              <CountdownCard config={config} data={data} hideHeader />
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
