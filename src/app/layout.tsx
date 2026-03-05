@@ -33,6 +33,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { SiteHeader } from "@/components/SiteHeader";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,7 +50,19 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body className="min-h-screen flex flex-col">
+        <SiteHeader />
+        <main className="flex-1">{children}</main>
+        <footer className="border-t border-[var(--color-border)] py-6 text-center text-sm text-[var(--color-muted)]">
+          <p>
+            WEB-Time — Fechas en{" "}
+            <code className="rounded bg-[var(--color-surface)] px-1.5 py-0.5 font-mono text-xs">
+              config/countdowns.ts
+            </code>
+            . 18, 20, 25 y 30 años desde fecha de nacimiento (19 de mayo).
+          </p>
+        </footer>
+      </body>
     </html>
   );
 }
