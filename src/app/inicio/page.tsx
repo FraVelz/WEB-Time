@@ -18,14 +18,12 @@ export default function InicioPage() {
             Sobre los countdowns
           </h2>
           <p className="text-[var(--color-muted)] leading-relaxed mb-4">
-            Los contadores se actualizan cada segundo y muestran el tiempo restante hasta
-            cada fecha en años, meses, días, horas, minutos y segundos. Las fechas
-            están definidas en medianoche (Colombia). Puedes editar las metas y tu fecha
-            de nacimiento en <code className="rounded bg-[var(--color-bg)] px-1.5 py-0.5 font-mono text-xs">config/countdowns.ts</code>.
+            Si todo sale bien, los primeros periodos de tiempo en estas secciones, parecerá demasiado. Apenas llegue a la mitad 
+            de estos contadores, las personas llegaran a ver, pensaran que mas se puede llegar a hacer?
           </p>
           <ul className="text-[var(--color-muted)] text-sm space-y-1 list-disc list-inside">
-            <li>Año 2027 y 2045: inicio de año.</li>
-            <li>18, 20, 25 y 30 años: calculados desde tu fecha de nacimiento (19 de mayo).</li>
+            <li>Mission</li>
+            <li>Dar la vida en un legado que ninguna persona llego jamas a imaginar semejante progreso en cortos periodos de tiempo.</li>
           </ul>
         </section>
 

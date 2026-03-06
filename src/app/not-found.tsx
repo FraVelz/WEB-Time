@@ -4,7 +4,6 @@ import { SiteHeader } from "@/components/SiteHeader";
 export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col">
-      <SiteHeader />
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-16">
         <h1 className="text-4xl font-bold text-[var(--color-text)] mb-2">
           404
