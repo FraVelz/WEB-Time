@@ -22,7 +22,7 @@ export function InicioSection() {
               src="/Copia-de-Napoleón-Brienne.jpg"
               alt="Napoleón en Brienne, estudiando con un mapa de Europa al fondo"
               fill
-              className="object-cover object-center"
+              className="object-contain object-center"
               sizes="(max-width: 768px) 100vw, 900px"
               priority
             />
@@ -32,7 +32,7 @@ export function InicioSection() {
             />
             <div className="absolute bottom-4 left-4 right-4 text-[var(--color-text)]">
               <p className="text-sm text-[var(--color-text)]/90 max-w-xl">
-                Contadores hacia fechas importantes.
+                 🇨🇴
               </p>
             </div>
           </div>

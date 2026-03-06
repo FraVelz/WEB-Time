@@ -23,12 +23,21 @@ function shortSummary(data: TimeRemaining): string {
 
 export function CountdownGrid({ countdowns }: CountdownGridProps) {
   const [now, setNow] = useState(() => new Date());
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openSet, setOpenSet] = useState<Set<number>>(() => new Set([0]));
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), TICK_MS);
     return () => clearInterval(id);
   }, []);
+
+  const toggle = (index: number) => {
+    setOpenSet((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  };
 
   const dataMap = new Map<string, TimeRemaining>();
   countdowns.forEach((c) => {
@@ -39,7 +48,7 @@ export function CountdownGrid({ countdowns }: CountdownGridProps) {
     <div className="space-y-2" role="list">
       {countdowns.map((config, index) => {
         const data = dataMap.get(config.id)!;
-        const isOpen = openIndex === index;
+        const isOpen = openSet.has(index);
         return (
           <div
             key={config.id}
@@ -52,9 +61,9 @@ export function CountdownGrid({ countdowns }: CountdownGridProps) {
               aria-expanded={isOpen}
               aria-controls={`panel-${config.id}`}
               id={`trigger-${config.id}`}
-              onClick={() => setOpenIndex(isOpen ? -1 : index)}
+              onClick={() => toggle(index)}
             >
-              <span className="font-semibold text-text truncate min-w-0">
+              <span className="font-semibold text-text select-text truncate min-w-0">
                 {config.title}
               </span>
               <span className="text-sm text-muted shrink-0">
