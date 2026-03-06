@@ -1,10 +1,10 @@
 # WEB-Time
 
+[English version](./README.EN.md)
+
 **Web personal con countdowns hacia fechas importantes, temporizador Pomodoro, temporizadores personalizados y hora mundial.**
 
 [![Screenshot](public/screenshot.png)](https://fravelz.github.io/WEB-Time/)
-
-🔗 **Publicado en:** [https://fravelz.github.io/WEB-Time/](https://fravelz.github.io/WEB-Time/)
 
 Hecho con **Next.js 15** (App Router), **React 18**, **TypeScript** y **Tailwind CSS v4**.
 

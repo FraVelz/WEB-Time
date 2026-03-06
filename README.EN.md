@@ -1,10 +1,10 @@
 # WEB-Time
 
+[Version en Español](./README.md)
+
 **Personal site with countdowns to important dates, Pomodoro timer, custom timers, and world clock.**
 
-[![Screenshot](screenshot.png)](https://fravelz.github.io/WEB-Time/)
-
-🔗 **Live at:** [https://fravelz.github.io/WEB-Time/](https://fravelz.github.io/WEB-Time/)
+[![Screenshot](./public/screenshot.png)](https://fravelz.github.io/WEB-Time/)
 
 Built with **Next.js 15** (App Router), **React 18**, **TypeScript**, and **Tailwind CSS v4**.
 
