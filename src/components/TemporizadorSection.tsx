@@ -84,11 +84,13 @@ export function TemporizadorSection() {
     secondsElapsed,
     isRunning,
     soundEnabled,
+    alarmPlaying,
     setMode,
     setSecondsLeft,
     addTime,
     toggleSound,
     toggleTimer,
+    stopAlarm,
     resetTimer,
     resetCronometro,
   } = useTimer();
@@ -347,14 +349,19 @@ export function TemporizadorSection() {
             </div>
           )}
 
-          {/* Play / Pause */}
+          {/* Play / Pause / Pausar alarma */}
           <button
             type="button"
-            onClick={toggleTimer}
-            disabled={mode === "temporizador" && secondsLeft <= 0}
+            onClick={alarmPlaying ? stopAlarm : toggleTimer}
+            disabled={mode === "temporizador" && secondsLeft <= 0 && !alarmPlaying}
             className="w-full rounded-2xl bg-[var(--color-accent)] py-4 flex items-center justify-center gap-2 text-white font-semibold hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isRunning ? (
+            {alarmPlaying ? (
+              <>
+                <PauseIcon />
+                Pausar alarma
+              </>
+            ) : isRunning ? (
               <>
                 <PauseIcon />
                 Pausar

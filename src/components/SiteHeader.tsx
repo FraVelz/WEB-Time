@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTimer } from "@/context/TimerContext";
+import { usePomodoroOptional } from "@/context/PomodoroContext";
 
 const SECTIONS = [
   { path: "/inicio", label: "Inicio" },
@@ -16,14 +17,24 @@ function pad(n: number) {
   return String(Math.floor(n)).padStart(2, "0");
 }
 
+const PHASE_LABELS: Record<string, string> = {
+  work: "Trabajo",
+  shortBreak: "Descanso",
+  longBreak: "Descanso largo",
+};
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const { isRunning, mode, secondsLeft, secondsElapsed } = useTimer();
+  const pomodoro = usePomodoroOptional();
   const timerDisplay =
     mode === "temporizador"
       ? `${pad(Math.floor(secondsLeft / 60))}:${pad(secondsLeft % 60)}`
       : `${pad(Math.floor(secondsElapsed / 60))}:${pad(secondsElapsed % 60)}`;
+  const pomodoroDisplay = pomodoro
+    ? `${pad(Math.floor(pomodoro.secondsLeft / 60))}:${pad(pomodoro.secondsLeft % 60)}`
+    : "";
 
   return (
     <header
@@ -46,6 +57,16 @@ export function SiteHeader() {
             >
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" />
               {timerDisplay}
+            </Link>
+          )}
+          {pomodoro?.isRunning && (
+            <Link
+              href="/pomodoro"
+              className="flex items-center gap-1.5 rounded-lg bg-[var(--color-success)]/20 px-2.5 py-1 text-xs font-mono font-medium text-[var(--color-success)] hover:bg-[var(--color-success)]/30 transition-colors"
+              title={pomodoro ? `Pomodoro: ${PHASE_LABELS[pomodoro.phase]}` : "Pomodoro"}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-success)] animate-pulse" />
+              {pomodoroDisplay}
             </Link>
           )}
         </div>

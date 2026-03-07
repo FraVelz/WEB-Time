@@ -25,6 +25,7 @@ type TimerState = {
   cronoStartTime: number | null;
   isRunning: boolean;
   soundEnabled: boolean;
+  alarmPlaying: boolean;
 };
 
 type TimerContextValue = TimerState & {
@@ -33,6 +34,7 @@ type TimerContextValue = TimerState & {
   addTime: (seconds: number) => void;
   toggleSound: () => void;
   toggleTimer: () => void;
+  stopAlarm: () => void;
   resetTimer: () => void;
   resetCronometro: () => void;
 };
@@ -46,6 +48,7 @@ const initialState: TimerState = {
   cronoStartTime: null,
   isRunning: false,
   soundEnabled: true,
+  alarmPlaying: false,
 };
 
 const TimerContext = createContext<TimerContextValue | null>(null);
@@ -64,6 +67,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
     try {
       const audio = new Audio(ALARM_PATH);
       audio.volume = 1;
+      audio.loop = true;
       audio.play().catch(() => {});
       audioRef.current = audio;
     } catch {
@@ -121,6 +125,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
             secondsLeft: 0,
             isRunning: false,
             endTime: null,
+            alarmPlaying: s.soundEnabled,
           };
         }
         return { ...s, secondsLeft: remaining };
@@ -225,7 +230,26 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const toggleSound = useCallback(() => {
-    setState((s) => ({ ...s, soundEnabled: !s.soundEnabled }));
+    setState((s) => {
+      const nextEnabled = !s.soundEnabled;
+      if (!nextEnabled && audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current = null;
+        alarmPlayedRef.current = false;
+      }
+      return { ...s, soundEnabled: nextEnabled, alarmPlaying: nextEnabled ? s.alarmPlaying : false };
+    });
+  }, []);
+
+  const stopAlarm = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+    alarmPlayedRef.current = false;
+    setState((s) => ({ ...s, alarmPlaying: false }));
   }, []);
 
   const toggleTimer = useCallback(() => {
@@ -267,6 +291,11 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resetTimer = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
     alarmPlayedRef.current = false;
     setState((s) => ({
       ...s,
@@ -274,6 +303,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
       totalSeconds: s.totalSeconds || 5 * 60,
       isRunning: false,
       endTime: null,
+      alarmPlaying: false,
     }));
   }, []);
 
@@ -293,6 +323,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
     addTime,
     toggleSound,
     toggleTimer,
+    stopAlarm,
     resetTimer,
     resetCronometro,
   };
