@@ -9,52 +9,70 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import type { TimerItem, CronoState, TimerMode } from "@/types/timer";
 
 const ALARM_PATH = "/alarma.mp3";
+const DEFAULT_SECONDS = 5 * 60;
 
-type TimerMode = "temporizador" | "cronometro";
+function generateId(): string {
+  return crypto.randomUUID?.() ?? `t-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
 
-type TimerState = {
-  mode: TimerMode;
-  // Temporizador (cuenta regresiva)
-  secondsLeft: number;
-  totalSeconds: number;
-  endTime: number | null; // timestamp cuando termina (para precisión con throttling)
-  // Cronómetro (cuenta ascendente)
-  secondsElapsed: number;
-  cronoStartTime: number | null;
-  isRunning: boolean;
-  soundEnabled: boolean;
-  alarmPlaying: boolean;
-};
+function createTimer(overrides?: Partial<TimerItem> & { name?: string }): TimerItem {
+  return {
+    id: generateId(),
+    name: overrides?.name ?? "Temporizador",
+    secondsLeft: overrides?.secondsLeft ?? DEFAULT_SECONDS,
+    totalSeconds: overrides?.totalSeconds ?? DEFAULT_SECONDS,
+    endTime: null,
+    isRunning: false,
+    ...overrides,
+  };
+}
 
-type TimerContextValue = TimerState & {
-  setMode: (mode: TimerMode) => void;
-  setSecondsLeft: (seconds: number) => void;
-  addTime: (seconds: number) => void;
-  toggleSound: () => void;
-  toggleTimer: () => void;
-  stopAlarm: () => void;
-  resetTimer: () => void;
-  resetCronometro: () => void;
-};
-
-const initialState: TimerState = {
-  mode: "temporizador",
-  secondsLeft: 5 * 60,
-  totalSeconds: 5 * 60,
-  endTime: null,
+const initialCrono: CronoState = {
   secondsElapsed: 0,
   cronoStartTime: null,
   isRunning: false,
-  soundEnabled: true,
-  alarmPlaying: false,
+};
+
+type TimerContextValue = {
+  mode: TimerMode;
+  timers: TimerItem[];
+  crono: CronoState;
+  soundEnabled: boolean;
+  alarmPlaying: boolean;
+  alarmTimerId: string | null;
+  setMode: (mode: TimerMode) => void;
+  addTimer: (name?: string, initialSeconds?: number) => void;
+  removeTimer: (id: string) => void;
+  updateTimerName: (id: string, name: string) => void;
+  setTimerSeconds: (id: string, seconds: number) => void;
+  addTimerTime: (id: string, seconds: number) => void;
+  toggleTimer: (id: string) => void;
+  resetTimer: (id: string) => void;
+  toggleSound: () => void;
+  stopAlarm: () => void;
+  resetCronometro: () => void;
+  toggleCronometro: () => void;
+  /** Algún temporizador o el cronómetro está en marcha (para el header) */
+  isRunning: boolean;
+  /** Tiempo a mostrar en header: primer temporizador activo o cronómetro */
+  displayForHeader: { type: "timer"; id: string; secondsLeft: number } | { type: "crono"; secondsElapsed: number } | null;
 };
 
 const TimerContext = createContext<TimerContextValue | null>(null);
 
 export function TimerProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<TimerState>(initialState);
+  const [mode, setModeState] = useState<TimerMode>("temporizador");
+  const [timers, setTimers] = useState<TimerItem[]>(() => [
+    createTimer({ name: "Temporizador 1" }),
+  ]);
+  const [crono, setCrono] = useState<CronoState>(initialCrono);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [alarmPlaying, setAlarmPlaying] = useState(false);
+  const [alarmTimerId, setAlarmTimerId] = useState<string | null>(null);
+
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const wakeLockRef = useRef<{ release: () => Promise<void> } | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -63,7 +81,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   const playAlarm = useCallback(() => {
     if (alarmPlayedRef.current) return;
     alarmPlayedRef.current = true;
-    if (!state.soundEnabled) return;
+    if (!soundEnabled) return;
     try {
       const audio = new Audio(ALARM_PATH);
       audio.volume = 1;
@@ -71,17 +89,17 @@ export function TimerProvider({ children }: { children: ReactNode }) {
       audio.play().catch(() => {});
       audioRef.current = audio;
     } catch {
-      // Ignorar errores de reproducción
+      // ignore
     }
-  }, [state.soundEnabled]);
+  }, [soundEnabled]);
 
   const requestWakeLock = useCallback(async () => {
     if (typeof navigator !== "undefined" && "wakeLock" in navigator) {
       try {
-        const wakeLock = await navigator.wakeLock.request("screen");
-        wakeLockRef.current = wakeLock;
+        const w = await navigator.wakeLock.request("screen");
+        wakeLockRef.current = w;
       } catch {
-        // Wake Lock no disponible o rechazado
+        // ignore
       }
     }
   }, []);
@@ -91,155 +109,10 @@ export function TimerProvider({ children }: { children: ReactNode }) {
       try {
         await wakeLockRef.current.release();
       } catch {
-        // Ignorar
+        // ignore
       }
       wakeLockRef.current = null;
     }
-  }, []);
-
-  const stopTimer = useCallback(() => {
-    alarmPlayedRef.current = false;
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    releaseWakeLock();
-    setState((s) => ({
-      ...s,
-      isRunning: false,
-      endTime: null,
-      cronoStartTime: null,
-    }));
-  }, [releaseWakeLock]);
-
-  const tick = useCallback(() => {
-    setState((s) => {
-      if (s.mode === "temporizador") {
-        if (!s.endTime) return s;
-        const now = Date.now();
-        const remaining = Math.max(0, Math.ceil((s.endTime - now) / 1000));
-        if (remaining <= 0) {
-          playAlarm();
-          return {
-            ...s,
-            secondsLeft: 0,
-            isRunning: false,
-            endTime: null,
-            alarmPlaying: s.soundEnabled,
-          };
-        }
-        return { ...s, secondsLeft: remaining };
-      } else {
-        // Cronómetro
-        if (!s.cronoStartTime) return s;
-        const elapsed = Math.floor((Date.now() - s.cronoStartTime) / 1000);
-        return { ...s, secondsElapsed: elapsed };
-      }
-    });
-  }, [playAlarm]);
-
-  useEffect(() => {
-    const s = state;
-    if (!s.isRunning) {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-      releaseWakeLock();
-      return;
-    }
-
-    requestWakeLock();
-    tick(); // Actualizar inmediatamente
-    intervalRef.current = setInterval(tick, 200); // Actualizar cada 200ms para suavidad (Date.now() mantiene precisión)
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    };
-  }, [state.isRunning, state.mode, state.endTime, state.cronoStartTime, tick, requestWakeLock, releaseWakeLock]);
-
-  // Detectar cuando el timer llega a 0 para parar el intervalo
-  useEffect(() => {
-    if (!state.isRunning && intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  }, [state.isRunning]);
-
-  // Re-adquirir Wake Lock cuando la pestaña vuelve a ser visible
-  useEffect(() => {
-    const handleVisibility = () => {
-      if (document.visibilityState === "visible" && state.isRunning) {
-        requestWakeLock();
-      } else if (document.visibilityState === "hidden") {
-        releaseWakeLock();
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () => document.removeEventListener("visibilitychange", handleVisibility);
-  }, [state.isRunning, requestWakeLock, releaseWakeLock]);
-
-  // Limpiar al cerrar la página
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      stopTimer();
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [stopTimer]);
-
-  const setMode = useCallback((mode: TimerMode) => {
-    setState((s) => {
-      if (s.isRunning) return s;
-      return {
-        ...s,
-        mode,
-        ...(mode === "temporizador"
-          ? { secondsLeft: s.totalSeconds || 5 * 60, totalSeconds: s.totalSeconds || 5 * 60 }
-          : { secondsElapsed: 0, cronoStartTime: null }),
-      };
-    });
-  }, []);
-
-  const setSecondsLeft = useCallback((seconds: number) => {
-    setState((s) => ({
-      ...s,
-      secondsLeft: Math.max(0, seconds),
-      totalSeconds: Math.max(0, seconds),
-      endTime: s.isRunning && s.mode === "temporizador"
-        ? Date.now() + Math.max(0, seconds) * 1000
-        : s.endTime,
-    }));
-  }, []);
-
-  const addTime = useCallback((seconds: number) => {
-    setState((s) => {
-      if (s.mode !== "temporizador") return s;
-      const newTotal = Math.max(0, s.secondsLeft + seconds);
-      const newEndTime = s.isRunning ? Date.now() + newTotal * 1000 : null;
-      return {
-        ...s,
-        secondsLeft: newTotal,
-        totalSeconds: newTotal,
-        endTime: newEndTime,
-      };
-    });
-  }, []);
-
-  const toggleSound = useCallback(() => {
-    setState((s) => {
-      const nextEnabled = !s.soundEnabled;
-      if (!nextEnabled && audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        audioRef.current = null;
-        alarmPlayedRef.current = false;
-      }
-      return { ...s, soundEnabled: nextEnabled, alarmPlaying: nextEnabled ? s.alarmPlaying : false };
-    });
   }, []);
 
   const stopAlarm = useCallback(() => {
@@ -249,83 +122,235 @@ export function TimerProvider({ children }: { children: ReactNode }) {
       audioRef.current = null;
     }
     alarmPlayedRef.current = false;
-    setState((s) => ({ ...s, alarmPlaying: false }));
+    setAlarmPlaying(false);
+    setAlarmTimerId(null);
   }, []);
 
-  const toggleTimer = useCallback(() => {
-    alarmPlayedRef.current = false;
-    setState((s) => {
-      if (s.mode === "temporizador") {
-        if (s.isRunning) {
-          return {
-            ...s,
-            isRunning: false,
-            endTime: null,
-          };
-        }
-        if (s.secondsLeft <= 0) return s;
-        return {
-          ...s,
-          isRunning: true,
-          endTime: Date.now() + s.secondsLeft * 1000,
-        };
-      } else {
-        // Cronómetro
-        if (s.isRunning) {
-          return {
-            ...s,
-            isRunning: false,
-            cronoStartTime: null,
-            secondsElapsed: Math.floor(
-              (Date.now() - (s.cronoStartTime ?? Date.now())) / 1000
-            ),
-          };
-        }
-        return {
-          ...s,
-          isRunning: true,
-          cronoStartTime: Date.now() - s.secondsElapsed * 1000,
-        };
+  const tick = useCallback(() => {
+    setTimers((prev) => {
+      let anyFinished: string | null = null;
+      const next = prev.map((t) => {
+        if (!t.isRunning || t.endTime == null) return t;
+        const now = Date.now();
+        const remaining = Math.max(0, Math.ceil((t.endTime - now) / 1000));
+        if (remaining <= 0) anyFinished = t.id;
+        return { ...t, secondsLeft: remaining, isRunning: remaining > 0 };
+      });
+      if (anyFinished) {
+        playAlarm();
+        setAlarmTimerId(anyFinished);
+        setAlarmPlaying(true);
+        return next.map((t) =>
+          t.id === anyFinished ? { ...t, isRunning: false, endTime: null } : t
+        );
       }
+      return next;
+    });
+
+    setCrono((c) => {
+      if (!c.isRunning || c.cronoStartTime == null) return c;
+      const elapsed = Math.floor((Date.now() - c.cronoStartTime) / 1000);
+      return { ...c, secondsElapsed: elapsed };
+    });
+  }, [playAlarm]);
+
+  const anyTimerRunning = timers.some((t) => t.isRunning);
+  const cronoRunning = crono.isRunning;
+  const shouldTick = anyTimerRunning || cronoRunning;
+
+  useEffect(() => {
+    if (!shouldTick) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      releaseWakeLock();
+      return;
+    }
+    requestWakeLock();
+    tick();
+    intervalRef.current = setInterval(tick, 200);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [shouldTick, tick, requestWakeLock, releaseWakeLock]);
+
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible" && shouldTick) requestWakeLock();
+      else if (document.visibilityState === "hidden") releaseWakeLock();
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [shouldTick, requestWakeLock, releaseWakeLock]);
+
+  const setMode = useCallback((newMode: TimerMode) => {
+    if (anyTimerRunning || cronoRunning) return;
+    setModeState(newMode);
+    if (newMode === "cronometro") setCrono(initialCrono);
+  }, [anyTimerRunning, cronoRunning]);
+
+  const addTimer = useCallback((name?: string, initialSeconds?: number) => {
+    const count = timers.length + 1;
+    setTimers((prev) => [
+      ...prev,
+      createTimer({
+        name: name?.trim() || `Temporizador ${count}`,
+        secondsLeft: initialSeconds ?? DEFAULT_SECONDS,
+        totalSeconds: initialSeconds ?? DEFAULT_SECONDS,
+      }),
+    ]);
+  }, [timers.length]);
+
+  const removeTimer = useCallback((id: string) => {
+    setTimers((prev) => prev.filter((t) => t.id !== id));
+    if (alarmTimerId === id) stopAlarm();
+  }, [alarmTimerId, stopAlarm]);
+
+  const updateTimerName = useCallback((id: string, newName: string) => {
+    setTimers((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, name: newName.trim() || t.name } : t))
+    );
+  }, []);
+
+  const setTimerSeconds = useCallback((id: string, seconds: number) => {
+    const sec = Math.max(0, seconds);
+    setTimers((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        const isRunning = t.isRunning && t.endTime != null;
+        return {
+          ...t,
+          secondsLeft: sec,
+          totalSeconds: sec,
+          endTime: isRunning ? Date.now() + sec * 1000 : null,
+        };
+      })
+    );
+  }, []);
+
+  const addTimerTime = useCallback((id: string, delta: number) => {
+    setTimers((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        const newTotal = Math.max(0, t.secondsLeft + delta);
+        const isRunning = t.isRunning && t.endTime != null;
+        return {
+          ...t,
+          secondsLeft: newTotal,
+          totalSeconds: newTotal,
+          endTime: isRunning ? Date.now() + newTotal * 1000 : null,
+        };
+      })
+    );
+  }, []);
+
+  const toggleTimer = useCallback((id: string) => {
+    if (alarmTimerId === id) {
+      stopAlarm();
+      return;
+    }
+    setTimers((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        if (t.isRunning) {
+          return { ...t, isRunning: false, endTime: null };
+        }
+        if (t.secondsLeft <= 0) return t;
+        return {
+          ...t,
+          isRunning: true,
+          endTime: Date.now() + t.secondsLeft * 1000,
+        };
+      })
+    );
+  }, [alarmTimerId, stopAlarm]);
+
+  const resetTimer = useCallback((id: string) => {
+    if (alarmTimerId === id) stopAlarm();
+    setTimers((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        const total = t.totalSeconds || DEFAULT_SECONDS;
+        return {
+          ...t,
+          secondsLeft: total,
+          totalSeconds: total,
+          isRunning: false,
+          endTime: null,
+        };
+      })
+    );
+  }, [alarmTimerId, stopAlarm]);
+
+  const toggleSound = useCallback(() => {
+    setSoundEnabled((v) => {
+      if (!v) return true;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current = null;
+      }
+      alarmPlayedRef.current = false;
+      return false;
     });
   }, []);
 
-  const resetTimer = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current = null;
-    }
-    alarmPlayedRef.current = false;
-    setState((s) => ({
-      ...s,
-      secondsLeft: s.totalSeconds || 5 * 60,
-      totalSeconds: s.totalSeconds || 5 * 60,
-      isRunning: false,
-      endTime: null,
-      alarmPlaying: false,
-    }));
+  const resetCronometro = useCallback(() => {
+    setCrono(initialCrono);
   }, []);
 
-  const resetCronometro = useCallback(() => {
-    setState((s) => ({
-      ...s,
-      secondsElapsed: 0,
-      cronoStartTime: null,
-      isRunning: false,
-    }));
+  // Cronómetro play/pause
+  const toggleCronometro = useCallback(() => {
+    setCrono((c) => {
+      if (c.isRunning) {
+        const elapsed = Math.floor(
+          (Date.now() - (c.cronoStartTime ?? Date.now())) / 1000
+        );
+        return { ...c, isRunning: false, cronoStartTime: null, secondsElapsed: elapsed };
+      }
+      return {
+        ...c,
+        isRunning: true,
+        cronoStartTime: Date.now() - c.secondsElapsed * 1000,
+      };
+    });
   }, []);
+
+  const firstRunningTimer = timers.find((t) => t.isRunning && t.endTime != null);
+  const displayForHeader =
+    firstRunningTimer != null
+      ? { type: "timer" as const, id: firstRunningTimer.id, secondsLeft: firstRunningTimer.secondsLeft }
+      : crono.isRunning
+        ? { type: "crono" as const, secondsElapsed: crono.secondsElapsed }
+        : null;
+
+  const isRunning = anyTimerRunning || cronoRunning;
 
   const value: TimerContextValue = {
-    ...state,
+    mode,
+    timers,
+    crono,
+    soundEnabled,
+    alarmPlaying,
+    alarmTimerId,
     setMode,
-    setSecondsLeft,
-    addTime,
-    toggleSound,
+    addTimer,
+    removeTimer,
+    updateTimerName,
+    setTimerSeconds,
+    addTimerTime,
     toggleTimer,
-    stopAlarm,
     resetTimer,
+    toggleSound,
+    stopAlarm,
     resetCronometro,
+    toggleCronometro,
+    isRunning,
+    displayForHeader,
   };
 
   return (
