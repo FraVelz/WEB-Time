@@ -32,9 +32,11 @@ export default function PomodoroPage() {
             </h2>
             <ol className="text-[var(--color-muted)] text-sm space-y-2 list-decimal list-inside">
               <li>Pulsa <strong className="text-[var(--color-text)]">Iniciar</strong> para un bloque de 25 min de trabajo.</li>
-              <li>Al terminar, entra un descanso corto (5 min) o largo (15 min cada 4 pomodoros).</li>
+              <li>Al terminar, suena la alarma y entra un descanso corto (5 min) o largo (15 min cada 4 pomodoros).</li>
               <li>Usa <strong className="text-[var(--color-text)]">Pausar</strong> si te interrumpen.</li>
-              <li><strong className="text-[var(--color-text)]">Reiniciar</strong> vuelve a poner el tiempo actual del bloque.</li>
+              <li>Cuando suene la alarma, pulsa <strong className="text-[var(--color-text)]">Pausar alarma</strong> para silenciarla.</li>
+              <li>El Pomodoro sigue en segundo plano al cambiar de página.</li>
+              <li><strong className="text-[var(--color-text)]">Reiniciar</strong> vuelve al bloque de trabajo inicial.</li>
             </ol>
           </div>
           <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
