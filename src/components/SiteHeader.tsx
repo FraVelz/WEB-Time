@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTimer } from "@/context/TimerContext";
 
 const SECTIONS = [
   { path: "/inicio", label: "Inicio" },
@@ -11,9 +12,18 @@ const SECTIONS = [
   { path: "/hora", label: "Hora" },
 ] as const;
 
+function pad(n: number) {
+  return String(Math.floor(n)).padStart(2, "0");
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { isRunning, mode, secondsLeft, secondsElapsed } = useTimer();
+  const timerDisplay =
+    mode === "temporizador"
+      ? `${pad(Math.floor(secondsLeft / 60))}:${pad(secondsLeft % 60)}`
+      : `${pad(Math.floor(secondsElapsed / 60))}:${pad(secondsElapsed % 60)}`;
 
   return (
     <header
@@ -21,12 +31,24 @@ export function SiteHeader() {
       role="banner"
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-        <Link
-          href="/inicio"
-          className="text-lg font-semibold text-[var(--color-text)] hover:text-[var(--color-accent)] transition-colors"
-        >
-          WEB-Time
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/inicio"
+            className="text-lg font-semibold text-[var(--color-text)] hover:text-[var(--color-accent)] transition-colors"
+          >
+            WEB-Time
+          </Link>
+          {isRunning && (
+            <Link
+              href="/temporizador"
+              className="flex items-center gap-1.5 rounded-lg bg-[var(--color-accent)]/20 px-2.5 py-1 text-xs font-mono font-medium text-[var(--color-accent)] hover:bg-[var(--color-accent)]/30 transition-colors"
+              title="Temporizador en marcha"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" />
+              {timerDisplay}
+            </Link>
+          )}
+        </div>
 
         <button
           type="button"

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Hora mundial — WEB-Time",
-  description: "Horario actual en países estratégicos: Colombia, Estados Unidos, Rusia, China, Japón y más.",
+  description: "Hora actual en las capitales de las 8 principales potencias mundiales y Colombia: Washington, Pekín, Moscú, Londres, París, Berlín, Tokio, Nueva Delhi y Bogotá.",
 };
 
 export default function HoraPage() {
@@ -16,8 +16,7 @@ export default function HoraPage() {
             Hora mundial
           </h1>
           <p className="text-[var(--color-muted)] text-lg max-w-2xl">
-            Consulta la hora actual en distintas zonas horarias. Útil para llamadas,
-            reuniones o contenido en vivo en otros países.
+            Hora actual en las capitales de las 8 principales potencias mundiales y Colombia.
           </p>
         </header>
 
@@ -28,8 +27,9 @@ export default function HoraPage() {
             Zonas incluidas
           </h2>
           <p className="text-[var(--color-muted)] text-sm mb-4">
-            Colombia, Estados Unidos (Este y Pacífico), Rusia (Moscú), China, Japón,
-            Reino Unido, Europa (París) y Brasil. La hora se actualiza cada segundo.
+            Estados Unidos (Washington D.C.), China (Pekín), Rusia (Moscú), Reino Unido (Londres),
+            Francia (París), Alemania (Berlín), Japón (Tokio), India (Nueva Delhi) y Colombia (Bogotá).
+            La hora se actualiza cada segundo.
           </p>
           <p className="text-[var(--color-muted)] text-xs">
             Todas las horas se muestran en formato 24h. La zona se interpreta con la

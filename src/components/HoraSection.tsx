@@ -2,16 +2,16 @@
 
 import { useState, useEffect } from "react";
 
-const ZONES: { zone: string; label: string }[] = [
-  { zone: "America/Bogota", label: "Colombia" },
-  { zone: "America/New_York", label: "Estados Unidos (ET)" },
-  { zone: "America/Los_Angeles", label: "Estados Unidos (PT)" },
-  { zone: "Europe/Moscow", label: "Rusia (Moscú)" },
-  { zone: "Asia/Shanghai", label: "China" },
-  { zone: "Asia/Tokyo", label: "Japón" },
-  { zone: "Europe/London", label: "Reino Unido" },
-  { zone: "Europe/Paris", label: "Europa (París)" },
-  { zone: "America/Sao_Paulo", label: "Brasil" },
+const ZONES: { zone: string; label: string; capital: string }[] = [
+  { zone: "America/New_York", label: "Estados Unidos", capital: "Washington D.C." },
+  { zone: "Asia/Shanghai", label: "China", capital: "Pekín" },
+  { zone: "Europe/Moscow", label: "Rusia", capital: "Moscú" },
+  { zone: "Europe/London", label: "Reino Unido", capital: "Londres" },
+  { zone: "Europe/Paris", label: "Francia", capital: "París" },
+  { zone: "Europe/Berlin", label: "Alemania", capital: "Berlín" },
+  { zone: "Asia/Tokyo", label: "Japón", capital: "Tokio" },
+  { zone: "Asia/Kolkata", label: "India", capital: "Nueva Delhi" },
+  { zone: "America/Bogota", label: "Colombia", capital: "Bogotá" },
 ];
 
 function useTime(zone: string) {
@@ -38,11 +38,11 @@ function useTime(zone: string) {
   return time;
 }
 
-function ClockCard({ zone, label }: { zone: string; label: string }) {
+function ClockCard({ zone, label, capital }: { zone: string; label: string; capital: string }) {
   const time = useTime(zone);
   return (
     <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 flex flex-col gap-1">
-      <span className="text-sm font-medium text-[var(--color-muted)]">{label}</span>
+      <span className="text-sm font-medium text-[var(--color-muted)]">{label} — {capital}</span>
       <span className="font-mono text-2xl text-[var(--color-accent)]">{time}</span>
     </div>
   );
@@ -63,12 +63,12 @@ export function HoraSection() {
           Hora mundial
         </h2>
         <p className="text-[var(--color-muted)] text-sm mb-8">
-          Horario actual en países estratégicos.
+          Hora actual en las capitales de las 8 principales potencias mundiales y Colombia.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {ZONES.map(({ zone, label }) => (
-            <ClockCard key={zone} zone={zone} label={label} />
+          {ZONES.map(({ zone, label, capital }) => (
+            <ClockCard key={zone} zone={zone} label={label} capital={capital} />
           ))}
         </div>
       </div>
