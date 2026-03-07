@@ -11,6 +11,47 @@ type CountdownCardProps = {
   hideHeader?: boolean;
 };
 
+const COLOMBIA = "America/Bogota";
+
+function toDate(value: Date | string): Date {
+  return typeof value === "string" ? new Date(value) : value;
+}
+
+/** Ej: "Será en 2040, el 19 de mayo, a las 00:00" */
+function formatTargetDateTime(date: Date | string): string {
+  const d = toDate(date);
+  const year = d.toLocaleString("es-ES", { year: "numeric", timeZone: COLOMBIA });
+  const dayMonth = d.toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "long",
+    timeZone: COLOMBIA,
+  });
+  const time = d.toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: COLOMBIA,
+  });
+  return `Será en ${year}, el ${dayMonth}, a las ${time}`;
+}
+
+function formatTargetDateTimePast(date: Date | string): string {
+  const d = toDate(date);
+  const year = d.toLocaleString("es-ES", { year: "numeric", timeZone: COLOMBIA });
+  const dayMonth = d.toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "long",
+    timeZone: COLOMBIA,
+  });
+  const time = d.toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: COLOMBIA,
+  });
+  return `Fue en ${year}, el ${dayMonth}, a las ${time}`;
+}
+
 function TimeUnit({
   value,
   label,
@@ -61,6 +102,9 @@ export function CountdownCard({ config, data, hideHeader }: CountdownCardProps) 
           </header>
         )}
         {hideHeader && <p className="text-sm text-muted">{config.description}</p>}
+        <p className="text-sm text-muted">
+          <strong className="text-text">{formatTargetDateTimePast(config.targetDate)}</strong>.
+        </p>
         <div className="flex flex-col gap-5" role="timer" aria-live="polite">
           <p className="text-xl font-semibold text-success">¡Ya llegó la fecha!</p>
         </div>
@@ -84,6 +128,9 @@ export function CountdownCard({ config, data, hideHeader }: CountdownCardProps) 
       {hideHeader && (
         <p className="text-sm text-muted">{config.description}</p>
       )}
+      <p className="text-sm text-muted">
+        <strong className="text-text">{formatTargetDateTime(config.targetDate)}</strong>.
+      </p>
       <div
         className="flex flex-col gap-5"
         role="timer"
@@ -116,16 +163,6 @@ export function CountdownCard({ config, data, hideHeader }: CountdownCardProps) 
           <TimeUnit size="medium" value={pad(data.minutes)} label="min" />
           <TimeUnit size="medium" value={pad(data.seconds)} label="seg" />
         </div>
-        <p className="mt-2 border-t border-border pt-2 text-xs md:text-sm text-muted leading-normal">
-          {data.years > 0 && (
-            <>
-              {data.years} {pluralize(data.years, "año", "años")},{" "}
-            </>
-          )}
-          {data.months} {pluralize(data.months, "mes", "meses")}, {data.days}{" "}
-          {pluralize(data.days, "día", "días")} — {pad(data.hours)}:{pad(data.minutes)}:
-          {pad(data.seconds)}
-        </p>
       </div>
     </article>
   );
