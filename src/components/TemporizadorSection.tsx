@@ -1,25 +1,9 @@
 "use client";
 
 import { useTimer } from "@/context/TimerContext";
-import { useCallback, useRef, useState } from "react";
-
-function pad(n: number): string {
-  return String(Math.floor(n)).padStart(2, "0");
-}
-
-function formatTimer(seconds: number): string {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${pad(m)}:${pad(s)}`;
-}
-
-function formatCronometro(seconds: number): string {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-  if (h > 0) return `${pad(h)}:${pad(m)}:${pad(s)}`;
-  return `${pad(m)}:${pad(s)}`;
-}
+import { TimerCard } from "./TimerCard";
+import { formatCronometro } from "@/lib/timerFormat";
+import { useCallback } from "react";
 
 function CheckIcon({ className }: { className?: string }) {
   return (
@@ -77,66 +61,27 @@ function FullscreenIcon({ className }: { className?: string }) {
   );
 }
 
+function PlusIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  );
+}
+
 export function TemporizadorSection() {
   const {
     mode,
-    secondsLeft,
-    secondsElapsed,
-    isRunning,
+    timers,
+    crono,
     soundEnabled,
-    alarmPlaying,
     setMode,
-    setSecondsLeft,
-    addTime,
+    addTimer,
     toggleSound,
-    toggleTimer,
-    stopAlarm,
-    resetTimer,
     resetCronometro,
+    toggleCronometro,
   } = useTimer();
-
-  const [editing, setEditing] = useState(false);
-  const [customValue, setCustomValue] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const displayValue =
-    mode === "temporizador" ? formatTimer(secondsLeft) : formatCronometro(secondsElapsed);
-
-  const handleDisplayClick = useCallback(() => {
-    if (mode !== "temporizador" || isRunning) return;
-    setEditing(true);
-    setTimeout(() => inputRef.current?.select(), 0);
-  }, [mode, isRunning]);
-
-  const handleTimeInput = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const v = e.target.value.trim();
-      if (!v) return;
-      const parts = v.split(":").map((p) => parseInt(p, 10) || 0);
-      if (parts.length >= 2) {
-        const [m, s] = parts;
-        setSecondsLeft(Math.max(0, m * 60 + Math.min(59, s)));
-      } else if (parts.length === 1) {
-        const m = parts[0];
-        setSecondsLeft(Math.max(0, m * 60));
-      }
-    },
-    [setSecondsLeft]
-  );
-
-  const handleTimeBlur = useCallback(() => {
-    setEditing(false);
-  }, []);
-
-  const handleTimeKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter") {
-        setEditing(false);
-        inputRef.current?.blur();
-      }
-    },
-    []
-  );
 
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
@@ -146,29 +91,7 @@ export function TemporizadorSection() {
     }
   }, []);
 
-  const canEdit = mode === "temporizador" && !isRunning;
-
-  const parseCustomSeconds = useCallback((v: string): number => {
-    const trimmed = v.trim();
-    if (!trimmed) return 0;
-    const parts = trimmed.split(":").map((p) => parseInt(p, 10) || 0);
-    if (parts.length >= 2) {
-      const [m, s] = parts;
-      return Math.max(0, m * 60 + Math.min(59, s));
-    }
-    if (parts.length === 1) return Math.max(0, parts[0] * 60);
-    return 0;
-  }, []);
-
-  const handleCustomAdd = useCallback(() => {
-    const sec = parseCustomSeconds(customValue);
-    if (sec > 0) addTime(sec);
-  }, [customValue, parseCustomSeconds, addTime]);
-
-  const handleCustomSubtract = useCallback(() => {
-    const sec = parseCustomSeconds(customValue);
-    if (sec > 0) addTime(-sec);
-  }, [customValue, parseCustomSeconds, addTime]);
+  const cronoDisplay = formatCronometro(crono.secondsElapsed);
 
   return (
     <section
@@ -176,7 +99,7 @@ export function TemporizadorSection() {
       className="scroll-mt-20 py-12 md:py-16 border-t border-[var(--color-border)]"
       aria-labelledby="temporizador-heading"
     >
-      <div className="mx-auto max-w-2xl px-4 md:px-6">
+      <div className="mx-auto max-w-4xl px-4 md:px-6">
         <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8">
           {/* Tabs */}
           <div className="flex gap-2 mb-6">
@@ -206,7 +129,7 @@ export function TemporizadorSection() {
             </button>
           </div>
 
-          {/* Top controls: speaker, fullscreen */}
+          {/* Controles globales: sonido, pantalla completa */}
           <div className="flex justify-end gap-2 mb-4">
             <button
               type="button"
@@ -227,167 +150,56 @@ export function TemporizadorSection() {
             </button>
           </div>
 
-          {/* Display */}
-          <div
-            className={`mb-6 ${canEdit ? "cursor-text" : ""}`}
-            onClick={handleDisplayClick}
-          >
-            {editing && canEdit ? (
-              <input
-                ref={inputRef}
-                type="text"
-                defaultValue={displayValue}
-                onChange={handleTimeInput}
-                onBlur={handleTimeBlur}
-                onKeyDown={handleTimeKeyDown}
-                className="w-full bg-transparent text-5xl md:text-6xl font-mono font-light text-[var(--color-text)] border-b-2 border-[var(--color-border)] focus:outline-none focus:border-[var(--color-accent)]"
-                placeholder="M:SS"
-                autoFocus
-              />
-            ) : (
-              <p className="text-5xl md:text-6xl font-mono font-light text-[var(--color-text)]">
-                {displayValue}
-              </p>
-            )}
-          </div>
-
-          {/* Quick add / subtract (solo temporizador) */}
           {mode === "temporizador" && (
             <>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <span className="text-xs font-medium text-[var(--color-muted)] w-full">Sumar:</span>
-                <button
-                  type="button"
-                  onClick={() => addTime(30)}
-                  className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-surface-hover)] text-[var(--color-text)] hover:bg-[var(--color-border)] transition-colors"
-                >
-                  +0:30
-                </button>
-                <button
-                  type="button"
-                  onClick={() => addTime(60)}
-                  className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-surface-hover)] text-[var(--color-text)] hover:bg-[var(--color-border)] transition-colors"
-                >
-                  +1:00
-                </button>
-                <button
-                  type="button"
-                  onClick={() => addTime(5 * 60)}
-                  className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-surface-hover)] text-[var(--color-text)] hover:bg-[var(--color-border)] transition-colors"
-                >
-                  +5:00
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-xs font-medium text-[var(--color-muted)] w-full">Restar:</span>
-                <button
-                  type="button"
-                  onClick={() => addTime(-30)}
-                  disabled={secondsLeft < 30}
-                  className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-surface-hover)] text-[var(--color-text)] hover:bg-[var(--color-border)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  −0:30
-                </button>
-                <button
-                  type="button"
-                  onClick={() => addTime(-60)}
-                  disabled={secondsLeft < 60}
-                  className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-surface-hover)] text-[var(--color-text)] hover:bg-[var(--color-border)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  −1:00
-                </button>
-                <button
-                  type="button"
-                  onClick={() => addTime(-5 * 60)}
-                  disabled={secondsLeft < 5 * 60}
-                  className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-surface-hover)] text-[var(--color-text)] hover:bg-[var(--color-border)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  −5:00
-                </button>
-              </div>
-              {/* Números personalizados */}
-              <div className="flex flex-wrap items-end gap-2 mb-6 p-3 rounded-xl bg-[var(--color-surface-hover)]/50 border border-[var(--color-border)]/50">
-                <span className="text-xs font-medium text-[var(--color-muted)] w-full">Personalizado (M:SS o minutos):</span>
-                <input
-                  type="text"
-                  value={customValue}
-                  onChange={(e) => setCustomValue(e.target.value)}
-                  placeholder="ej. 2:30 o 15"
-                  className="flex-1 min-w-[6rem] rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 font-mono text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)]/50 focus:outline-none focus:border-[var(--color-accent)]"
-                />
-                <button
-                  type="button"
-                  onClick={handleCustomAdd}
-                  disabled={!parseCustomSeconds(customValue)}
-                  className="rounded-lg px-3 py-2 text-sm font-medium bg-[var(--color-accent)]/20 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  +
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCustomSubtract}
-                  disabled={!parseCustomSeconds(customValue) || secondsLeft < parseCustomSeconds(customValue)}
-                  className="rounded-lg px-3 py-2 text-sm font-medium bg-[var(--color-accent)]/20 text-[var(--color-accent)] hover:bg-[var(--color-accent)]/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  −
-                </button>
-              </div>
+              {/* Lista de temporizadores */}
+              <ul className="space-y-6 mb-6" aria-label="Lista de temporizadores">
+                {timers.map((t) => (
+                  <li key={t.id}>
+                    <TimerCard timerId={t.id} />
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                onClick={() => addTimer()}
+                className="w-full rounded-xl border-2 border-dashed border-[var(--color-border)] py-4 flex items-center justify-center gap-2 text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors font-medium"
+              >
+                <PlusIcon />
+                Añadir temporizador
+              </button>
             </>
           )}
 
-          {/* Cronómetro: reset */}
           {mode === "cronometro" && (
-            <div className="mb-6">
-              <button
-                type="button"
-                onClick={resetCronometro}
-                disabled={isRunning}
-                className="rounded-full px-4 py-2 text-sm font-medium bg-[var(--color-surface-hover)] text-[var(--color-text)] hover:bg-[var(--color-border)] disabled:opacity-50 transition-colors"
-              >
-                Reiniciar
-              </button>
+            <div className="space-y-6">
+              <p className="text-5xl md:text-6xl font-mono font-light text-[var(--color-text)]">
+                {cronoDisplay}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={toggleCronometro}
+                  className="rounded-2xl bg-[var(--color-accent)] py-4 px-8 flex items-center justify-center gap-2 text-white font-semibold hover:brightness-110 transition-all"
+                >
+                  {crono.isRunning ? <PauseIcon /> : <PlayIcon />}
+                  {crono.isRunning ? "Pausar" : "Iniciar"}
+                </button>
+                <button
+                  type="button"
+                  onClick={resetCronometro}
+                  disabled={crono.isRunning}
+                  className="rounded-xl py-4 px-6 text-sm font-medium bg-[var(--color-surface-hover)] text-[var(--color-text)] hover:bg-[var(--color-border)] disabled:opacity-50 transition-colors"
+                >
+                  Reiniciar
+                </button>
+              </div>
             </div>
-          )}
-
-          {/* Play / Pause / Pausar alarma */}
-          <button
-            type="button"
-            onClick={alarmPlaying ? stopAlarm : toggleTimer}
-            disabled={mode === "temporizador" && secondsLeft <= 0 && !alarmPlaying}
-            className="w-full rounded-2xl bg-[var(--color-accent)] py-4 flex items-center justify-center gap-2 text-white font-semibold hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {alarmPlaying ? (
-              <>
-                <PauseIcon />
-                Pausar alarma
-              </>
-            ) : isRunning ? (
-              <>
-                <PauseIcon />
-                Pausar
-              </>
-            ) : (
-              <>
-                <PlayIcon />
-                Iniciar
-              </>
-            )}
-          </button>
-
-          {/* Temporizador: reset cuando está en 0 */}
-          {mode === "temporizador" && secondsLeft <= 0 && !isRunning && (
-            <button
-              type="button"
-              onClick={resetTimer}
-              className="w-full mt-3 rounded-xl py-2 text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] transition-colors"
-            >
-              Reiniciar
-            </button>
           )}
         </div>
 
         <p className="mt-4 text-sm text-[var(--color-muted)] text-center">
-          El temporizador sigue en segundo plano al cambiar de página. Se detiene al cerrar la pestaña.
+          Los temporizadores siguen en segundo plano al cambiar de página. Se detienen al cerrar la pestaña.
         </p>
       </div>
     </section>

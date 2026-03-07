@@ -26,12 +26,13 @@ const PHASE_LABELS: Record<string, string> = {
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const { isRunning, mode, secondsLeft, secondsElapsed } = useTimer();
+  const { isRunning, displayForHeader } = useTimer();
   const pomodoro = usePomodoroOptional();
-  const timerDisplay =
-    mode === "temporizador"
-      ? `${pad(Math.floor(secondsLeft / 60))}:${pad(secondsLeft % 60)}`
-      : `${pad(Math.floor(secondsElapsed / 60))}:${pad(secondsElapsed % 60)}`;
+  const timerDisplay = displayForHeader
+    ? displayForHeader.type === "timer"
+      ? `${pad(Math.floor(displayForHeader.secondsLeft / 60))}:${pad(displayForHeader.secondsLeft % 60)}`
+      : `${pad(Math.floor(displayForHeader.secondsElapsed / 60))}:${pad(displayForHeader.secondsElapsed % 60)}`
+    : "";
   const pomodoroDisplay = pomodoro
     ? `${pad(Math.floor(pomodoro.secondsLeft / 60))}:${pad(pomodoro.secondsLeft % 60)}`
     : "";
