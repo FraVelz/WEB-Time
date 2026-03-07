@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 };
 
 import { SiteHeader } from "@/components/SiteHeader";
+import { TimerProvider } from "@/context/TimerContext";
 
 export default function RootLayout({
   children,
@@ -51,13 +52,15 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col">
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <footer className="border-t border-[var(--color-border)] py-6 text-center text-sm text-[var(--color-muted)]">
-          <p>
-            WEB-Time — Fravelz
-          </p>
-        </footer>
+        <TimerProvider>
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <footer className="border-t border-[var(--color-border)] py-6 text-center text-sm text-[var(--color-muted)]">
+            <p>
+              WEB-Time — Fravelz
+            </p>
+          </footer>
+        </TimerProvider>
       </body>
     </html>
   );
