@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { SiteHeader } from "@/features/shared/components/SiteHeader";
-import { AppProviders } from "@/features/shared/providers/AppProviders";
-import { dmSans, jetbrainsMono } from "@/features/shared/lib/fonts";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { AppProviders } from "@/providers/AppProviders";
+import { dmSans, jetbrainsMono } from "@/lib/fonts";
 
 const SITE_URL = "https://fravelz.github.io/WEB-Time";
 
@@ -44,9 +45,7 @@ export default function RootLayout({
         <AppProviders>
           <SiteHeader />
           <main className="flex-1">{children}</main>
-          <footer className="border-t border-[var(--color-border)] py-6 text-center text-sm text-[var(--color-muted)]">
-            <p>WEB-Time · Fravelz</p>
-          </footer>
+          <SiteFooter />
         </AppProviders>
       </body>
     </html>

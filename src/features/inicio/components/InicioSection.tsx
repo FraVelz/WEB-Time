@@ -26,8 +26,13 @@ export function InicioSection() {
               className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)]/80 via-transparent to-transparent"
               aria-hidden
             />
-            <div className="absolute right-4 bottom-4 left-4 text-[var(--color-text)]">
-              <p className="max-w-xl text-sm text-[var(--color-text)]/90">🇨🇴</p>
+            <div className="absolute bottom-4 left-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-bg)]/80 px-3 py-1.5 text-xs font-semibold tracking-wide text-[var(--color-text)] shadow-lg backdrop-blur-md">
+                <span className="text-sm leading-none" aria-hidden>
+                  🇨🇴
+                </span>
+                Colombia
+              </span>
             </div>
           </div>
         </div>

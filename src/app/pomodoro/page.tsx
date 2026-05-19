@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PomodoroPage from "@/features/pomodoro/pages/PomodoroPage";
+import PomodoroPage from "@/features/pomodoro/PomodoroPage";
 import { pomodoroMetadata } from "@/features/pomodoro/metadata";
 
 export const metadata: Metadata = pomodoroMetadata;

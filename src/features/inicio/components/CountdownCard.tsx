@@ -1,8 +1,9 @@
 "use client";
 
+import type { CountdownItem } from "@/features/inicio/config/countdowns";
 import type { TimeRemaining } from "@/features/inicio/lib/countdown";
 import { pluralize, pad } from "@/features/inicio/lib/formatting";
-import type { CountdownItem } from "@/features/inicio/config/countdowns";
+import { cn } from "@/lib/cn";
 
 type CountdownCardProps = {
   config: CountdownItem;
@@ -59,25 +60,21 @@ function formatTargetDateTimePast(date: Date | string): string {
 }
 
 function TimeUnit({ value, label, size = "large" }: { value: string; label: string; size?: "large" | "medium" }) {
-  const containerClasses =
-    size === "large" ? "flex flex-col items-center min-w-[5rem]" : "flex flex-col items-center min-w-[4rem]";
-
-  const valueClasses =
-    size === "large"
-      ? "font-mono font-semibold leading-tight text-accent text-4xl md:text-5xl"
-      : "font-mono font-semibold leading-tight text-accent text-2xl md:text-3xl";
-
-  const labelClasses =
-    size === "large"
-      ? "mt-1 text-sm uppercase tracking-[0.06em] text-muted font-semibold"
-      : "mt-1 text-xs uppercase tracking-[0.06em] text-muted font-semibold";
-
+  const large = size === "large";
   return (
-    <div className={containerClasses} role="group">
-      <span className={valueClasses} aria-hidden="true">
+    <div className={cn("flex flex-col items-center", large ? "min-w-20" : "min-w-16")} role="group">
+      <span
+        className={cn(
+          "font-mono font-semibold leading-tight text-accent",
+          large ? "text-4xl md:text-5xl" : "text-2xl md:text-3xl",
+        )}
+        aria-hidden
+      >
         {value}
       </span>
-      <span className={labelClasses}>{label}</span>
+      <span className={cn("mt-1 font-semibold uppercase tracking-wide text-muted", large ? "text-sm" : "text-xs")}>
+        {label}
+      </span>
     </div>
   );
 }
