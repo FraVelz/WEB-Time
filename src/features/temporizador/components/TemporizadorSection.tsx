@@ -25,9 +25,7 @@ function ModeTab({
       onClick={onClick}
       className={cn(
         "flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors",
-        active
-          ? "bg-accent/20 text-accent"
-          : "text-muted hover:bg-surface-hover hover:text-text",
+        active ? "bg-accent/20 text-accent" : "text-muted hover:bg-surface-hover hover:text-text",
       )}
     >
       {icon}
@@ -41,7 +39,7 @@ export function TemporizadorSection() {
     useTimer();
 
   return (
-    <div className="rounded-2xl border border-border bg-surface p-6 md:p-8">
+    <div className="border-border bg-surface rounded-2xl border p-6 md:p-8">
       <div className="mb-6 flex gap-2">
         <ModeTab
           active={mode === "temporizador"}
@@ -71,7 +69,7 @@ export function TemporizadorSection() {
           <button
             type="button"
             onClick={() => addTimer()}
-            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border py-4 font-medium text-muted transition-colors hover:border-accent hover:text-accent"
+            className="border-border text-muted hover:border-accent hover:text-accent flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed py-4 font-medium transition-colors"
           >
             <PlusIcon />
             Añadir temporizador
@@ -81,14 +79,14 @@ export function TemporizadorSection() {
 
       {mode === "cronometro" && (
         <div className="space-y-6">
-          <p className="font-mono text-5xl font-light text-text md:text-6xl">
+          <p className="text-text font-mono text-5xl font-light md:text-6xl">
             {formatCronometro(crono.secondsElapsed)}
           </p>
           <div className="flex flex-wrap gap-3">
             <button
               type="button"
               onClick={toggleCronometro}
-              className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-accent px-8 py-4 font-semibold text-white transition-all hover:brightness-110"
+              className="bg-accent flex cursor-pointer items-center justify-center gap-2 rounded-2xl px-8 py-4 font-semibold text-white transition-all hover:brightness-110"
             >
               {crono.isRunning ? <PauseIcon /> : <PlayIcon />}
               {crono.isRunning ? "Pausar" : "Iniciar"}
@@ -97,7 +95,7 @@ export function TemporizadorSection() {
               type="button"
               onClick={resetCronometro}
               disabled={crono.isRunning}
-              className="cursor-pointer rounded-xl bg-surface-hover px-6 py-4 text-sm font-medium text-text transition-colors hover:bg-border disabled:cursor-not-allowed disabled:opacity-50"
+              className="bg-surface-hover text-text hover:bg-border cursor-pointer rounded-xl px-6 py-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
             >
               Reiniciar
             </button>
@@ -105,7 +103,7 @@ export function TemporizadorSection() {
         </div>
       )}
 
-      <p className="mt-4 text-center text-sm text-muted">
+      <p className="text-muted mt-4 text-center text-sm">
         Los temporizadores siguen en segundo plano al cambiar de página. Se detienen al cerrar la pestaña.
       </p>
     </div>

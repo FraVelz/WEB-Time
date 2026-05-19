@@ -2,12 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { useTimerAlarm } from "@/features/temporizador/hooks/useTimerAlarm";
-import {
-  LONG_BREAK_SEC,
-  POMODOROS_FOR_LONG,
-  SHORT_BREAK_SEC,
-  WORK_SEC,
-} from "@/features/pomodoro/lib/constants";
+import { LONG_BREAK_SEC, POMODOROS_FOR_LONG, SHORT_BREAK_SEC, WORK_SEC } from "@/features/pomodoro/lib/constants";
 
 type Phase = "work" | "shortBreak" | "longBreak";
 

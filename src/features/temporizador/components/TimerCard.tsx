@@ -28,14 +28,14 @@ function PresetRow({
 }) {
   return (
     <div className="flex flex-wrap gap-2">
-      <span className="w-full text-xs font-medium text-muted">{label}</span>
+      <span className="text-muted w-full text-xs font-medium">{label}</span>
       {PRESETS.map(({ sec, label: presetLabel }) => (
         <button
           key={`${sign}-${sec}`}
           type="button"
           onClick={() => onAdjust(timerId, sign * sec)}
           disabled={sign < 0 && secondsLeft < sec}
-          className="cursor-pointer rounded-full bg-surface-hover px-3 py-1.5 text-sm font-medium text-text transition-colors hover:bg-border disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-surface-hover text-text hover:bg-border cursor-pointer rounded-full px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
         >
           {sign > 0 ? "+" : "−"}
           {presetLabel}
@@ -94,7 +94,7 @@ export function TimerCard({ timerId }: TimerCardProps) {
 
   return (
     <article
-      className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-accent/50 md:p-5"
+      className="border-border bg-surface hover:border-accent/50 flex flex-col gap-4 rounded-xl border p-4 transition-colors md:p-5"
       aria-label={`Temporizador ${timer.name}`}
     >
       <div className="flex items-center gap-2">
@@ -102,7 +102,7 @@ export function TimerCard({ timerId }: TimerCardProps) {
           type="text"
           value={timer.name}
           onChange={(e) => updateTimerName(timerId, e.target.value)}
-          className="min-w-0 flex-1 rounded-lg border border-border bg-bg px-3 py-2 text-base font-medium text-text placeholder:text-muted focus:border-accent focus:outline-none"
+          className="border-border bg-bg text-text placeholder:text-muted focus:border-accent min-w-0 flex-1 rounded-lg border px-3 py-2 text-base font-medium focus:outline-none"
           placeholder="Nombre del temporizador"
           aria-label="Nombre del temporizador"
         />
@@ -110,7 +110,7 @@ export function TimerCard({ timerId }: TimerCardProps) {
           <button
             type="button"
             onClick={() => removeTimer(timerId)}
-            className="cursor-pointer rounded-lg p-2 text-sm font-medium text-muted transition-colors hover:bg-red-500/10 hover:text-red-400"
+            className="text-muted cursor-pointer rounded-lg p-2 text-sm font-medium transition-colors hover:bg-red-500/10 hover:text-red-400"
             aria-label="Quitar temporizador"
           >
             <TrashIcon />
@@ -127,7 +127,7 @@ export function TimerCard({ timerId }: TimerCardProps) {
           onBlur={() => setEditingTime(false)}
           onKeyDown={(e) => e.key === "Enter" && (e.currentTarget.blur(), setEditingTime(false))}
           className={cn(
-            "w-full border-b-2 border-border bg-transparent font-mono text-4xl font-light text-text",
+            "border-border text-text w-full border-b-2 bg-transparent font-mono text-4xl font-light",
             "focus:border-accent focus:outline-none md:text-5xl",
           )}
           placeholder="M:SS"
@@ -140,10 +140,10 @@ export function TimerCard({ timerId }: TimerCardProps) {
           className="w-full cursor-pointer text-left"
           aria-label="Editar tiempo del temporizador"
         >
-          <p className="font-mono text-4xl font-light text-text md:text-5xl">{displayTime}</p>
+          <p className="text-text font-mono text-4xl font-light md:text-5xl">{displayTime}</p>
         </button>
       ) : (
-        <p className="font-mono text-4xl font-light text-text md:text-5xl">{displayTime}</p>
+        <p className="text-text font-mono text-4xl font-light md:text-5xl">{displayTime}</p>
       )}
 
       <PresetRow label="Sumar:" sign={1} timerId={timerId} secondsLeft={timer.secondsLeft} onAdjust={addTimerTime} />
@@ -155,13 +155,13 @@ export function TimerCard({ timerId }: TimerCardProps) {
           value={customValue}
           onChange={(e) => setCustomValue(e.target.value)}
           placeholder="M:SS o min"
-          className="min-w-20 flex-1 rounded-lg border border-border bg-bg px-3 py-2 font-mono text-sm text-text placeholder:text-muted focus:border-accent focus:outline-none"
+          className="border-border bg-bg text-text placeholder:text-muted focus:border-accent min-w-20 flex-1 rounded-lg border px-3 py-2 font-mono text-sm focus:outline-none"
         />
         <button
           type="button"
           onClick={() => customSec > 0 && addTimerTime(timerId, customSec)}
           disabled={!customSec}
-          className="cursor-pointer rounded-lg bg-accent/20 px-3 py-2 text-sm font-medium text-accent hover:bg-accent/30 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-accent/20 text-accent hover:bg-accent/30 cursor-pointer rounded-lg px-3 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
         >
           +
         </button>
@@ -169,7 +169,7 @@ export function TimerCard({ timerId }: TimerCardProps) {
           type="button"
           onClick={() => customSec > 0 && timer.secondsLeft >= customSec && addTimerTime(timerId, -customSec)}
           disabled={!customSec || timer.secondsLeft < customSec}
-          className="cursor-pointer rounded-lg bg-accent/20 px-3 py-2 text-sm font-medium text-accent hover:bg-accent/30 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-accent/20 text-accent hover:bg-accent/30 cursor-pointer rounded-lg px-3 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
         >
           −
         </button>
@@ -179,7 +179,7 @@ export function TimerCard({ timerId }: TimerCardProps) {
         type="button"
         onClick={isAlarmForThis ? stopAlarm : () => toggleTimer(timerId)}
         disabled={!isAlarmForThis && !timer.isRunning && timer.secondsLeft <= 0}
-        className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-accent py-3 font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+        className="bg-accent flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-3 font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {timer.isRunning || isAlarmForThis ? <PauseIcon /> : <PlayIcon />}
         {mainLabel}
@@ -189,7 +189,7 @@ export function TimerCard({ timerId }: TimerCardProps) {
         <button
           type="button"
           onClick={() => resetTimer(timerId)}
-          className="w-full cursor-pointer rounded-lg py-2 text-sm font-medium text-muted transition-colors hover:bg-surface-hover hover:text-text"
+          className="text-muted hover:bg-surface-hover hover:text-text w-full cursor-pointer rounded-lg py-2 text-sm font-medium transition-colors"
         >
           Reiniciar
         </button>
