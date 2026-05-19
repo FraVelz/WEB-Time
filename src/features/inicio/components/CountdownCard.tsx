@@ -1,8 +1,8 @@
 "use client";
 
-import { getTimeRemaining, type TimeRemaining } from "@/lib/countdown";
-import { pluralize, pad } from "@/lib/formatting";
-import type { CountdownItem } from "@/config/countdowns";
+import type { TimeRemaining } from "@/features/inicio/lib/countdown";
+import { pluralize, pad } from "@/features/inicio/lib/formatting";
+import type { CountdownItem } from "@/features/inicio/config/countdowns";
 
 type CountdownCardProps = {
   config: CountdownItem;
@@ -20,7 +20,10 @@ function toDate(value: Date | string): Date {
 /** Ej: "Será en 2040, el 19 de mayo, a las 00:00" */
 function formatTargetDateTime(date: Date | string): string {
   const d = toDate(date);
-  const year = d.toLocaleString("es-ES", { year: "numeric", timeZone: COLOMBIA });
+  const year = d.toLocaleString("es-ES", {
+    year: "numeric",
+    timeZone: COLOMBIA,
+  });
   const dayMonth = d.toLocaleDateString("es-ES", {
     day: "numeric",
     month: "long",
@@ -37,7 +40,10 @@ function formatTargetDateTime(date: Date | string): string {
 
 function formatTargetDateTimePast(date: Date | string): string {
   const d = toDate(date);
-  const year = d.toLocaleString("es-ES", { year: "numeric", timeZone: COLOMBIA });
+  const year = d.toLocaleString("es-ES", {
+    year: "numeric",
+    timeZone: COLOMBIA,
+  });
   const dayMonth = d.toLocaleDateString("es-ES", {
     day: "numeric",
     month: "long",
@@ -52,19 +58,9 @@ function formatTargetDateTimePast(date: Date | string): string {
   return `Fue en ${year}, el ${dayMonth}, a las ${time}`;
 }
 
-function TimeUnit({
-  value,
-  label,
-  size = "large",
-}: {
-  value: string;
-  label: string;
-  size?: "large" | "medium";
-}) {
+function TimeUnit({ value, label, size = "large" }: { value: string; label: string; size?: "large" | "medium" }) {
   const containerClasses =
-    size === "large"
-      ? "flex flex-col items-center min-w-[5rem]"
-      : "flex flex-col items-center min-w-[4rem]";
+    size === "large" ? "flex flex-col items-center min-w-[5rem]" : "flex flex-col items-center min-w-[4rem]";
 
   const valueClasses =
     size === "large"
@@ -90,23 +86,23 @@ export function CountdownCard({ config, data, hideHeader }: CountdownCardProps) 
   if (data.passed) {
     return (
       <article
-        className="bg-surface border border-success/40 bg-success/10 rounded-xl p-4 flex flex-col gap-4"
+        className="bg-surface border-success/40 bg-success/10 flex flex-col gap-4 rounded-xl border p-4"
         aria-labelledby={hideHeader ? undefined : `title-${config.id}`}
       >
         {!hideHeader && (
           <header className="space-y-1">
-            <h2 id={`title-${config.id}`} className="text-xl font-semibold text-text leading-tight">
+            <h2 id={`title-${config.id}`} className="text-text text-xl leading-tight font-semibold">
               {config.title}
             </h2>
-            <p className="text-base text-muted">{config.description}</p>
+            <p className="text-muted text-base">{config.description}</p>
           </header>
         )}
-        {hideHeader && <p className="text-sm text-muted">{config.description}</p>}
-        <p className="text-sm text-muted">
+        {hideHeader && <p className="text-muted text-sm">{config.description}</p>}
+        <p className="text-muted text-sm">
           <strong className="text-text">{formatTargetDateTimePast(config.targetDate)}</strong>.
         </p>
         <div className="flex flex-col gap-5" role="timer" aria-live="polite">
-          <p className="text-xl font-semibold text-success">¡Ya llegó la fecha!</p>
+          <p className="text-success text-xl font-semibold">¡Ya llegó la fecha!</p>
         </div>
       </article>
     );
@@ -114,48 +110,29 @@ export function CountdownCard({ config, data, hideHeader }: CountdownCardProps) 
 
   return (
     <article
-      className="bg-surface border border-border rounded-xl p-4 flex flex-col gap-4 transition-colors hover:bg-surface-hover hover:border-accent-soft"
+      className="bg-surface border-border hover:bg-surface-hover hover:border-accent-soft flex flex-col gap-4 rounded-xl border p-4 transition-colors"
       aria-labelledby={hideHeader ? undefined : `title-${config.id}`}
     >
       {!hideHeader && (
         <header className="space-y-1">
-          <h2 id={`title-${config.id}`} className="text-xl font-semibold text-text leading-tight">
+          <h2 id={`title-${config.id}`} className="text-text text-xl leading-tight font-semibold">
             {config.title}
           </h2>
-          <p className="text-base text-muted">{config.description}</p>
+          <p className="text-muted text-base">{config.description}</p>
         </header>
       )}
-      {hideHeader && (
-        <p className="text-sm text-muted">{config.description}</p>
-      )}
-      <p className="text-sm text-muted">
+      {hideHeader && <p className="text-muted text-sm">{config.description}</p>}
+      <p className="text-muted text-sm">
         <strong className="text-text">{formatTargetDateTime(config.targetDate)}</strong>.
       </p>
-      <div
-        className="flex flex-col gap-5"
-        role="timer"
-        aria-live="polite"
-        aria-atomic="true"
-      >
+      <div className="flex flex-col gap-5" role="timer" aria-live="polite" aria-atomic="true">
         {/* Bloque principal: años (solo si > 0), meses, días */}
         <div className="flex flex-wrap items-end gap-6 md:gap-8">
           {data.years > 0 && (
-            <TimeUnit
-              size="large"
-              value={String(data.years)}
-              label={pluralize(data.years, "año", "años")}
-            />
+            <TimeUnit size="large" value={String(data.years)} label={pluralize(data.years, "año", "años")} />
           )}
-          <TimeUnit
-            size="large"
-            value={String(data.months)}
-            label={pluralize(data.months, "mes", "meses")}
-          />
-          <TimeUnit
-            size="large"
-            value={pad(data.days)}
-            label={pluralize(data.days, "día", "días")}
-          />
+          <TimeUnit size="large" value={String(data.months)} label={pluralize(data.months, "mes", "meses")} />
+          <TimeUnit size="large" value={pad(data.days)} label={pluralize(data.days, "día", "días")} />
         </div>
         {/* Bloque secundario: horas, minutos, segundos */}
         <div className="flex flex-wrap items-end gap-5">

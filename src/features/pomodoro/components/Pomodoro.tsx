@@ -1,6 +1,6 @@
 "use client";
 
-import { usePomodoro } from "@/context/PomodoroContext";
+import { usePomodoro } from "@/features/pomodoro/context/PomodoroContext";
 
 function pad(n: number): string {
   return String(Math.floor(n)).padStart(2, "0");
@@ -37,7 +37,16 @@ function PauseIcon({ className }: { className?: string }) {
 
 function SpeakerIcon({ muted }: { muted?: boolean }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
       {muted ? (
         <>
@@ -53,7 +62,16 @@ function SpeakerIcon({ muted }: { muted?: boolean }) {
 
 function FullscreenIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
     </svg>
   );
@@ -85,17 +103,17 @@ export function Pomodoro() {
   };
 
   return (
-    <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8 max-w-md mx-auto">
+    <div className="mx-auto max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8">
       <p className="mb-4 text-sm text-[var(--color-muted)]">
         25 min trabajo, 5 min descanso corto, 15 min descanso largo (cada 4 pomodoros).
       </p>
 
       {/* Controles: altavoz, pantalla completa */}
-      <div className="flex justify-end gap-2 mb-4">
+      <div className="mb-4 flex justify-end gap-2">
         <button
           type="button"
           onClick={toggleSound}
-          className="rounded-lg p-2 text-[var(--color-muted)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text)] transition-colors"
+          className="cursor-pointer rounded-lg p-2 text-[var(--color-muted)] transition-colors hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text)]"
           aria-label={soundEnabled ? "Desactivar alarma" : "Activar alarma"}
           title={soundEnabled ? "Alarma activada" : "Alarma desactivada"}
         >
@@ -104,7 +122,7 @@ export function Pomodoro() {
         <button
           type="button"
           onClick={toggleFullscreen}
-          className="rounded-lg p-2 text-[var(--color-muted)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text)] transition-colors"
+          className="cursor-pointer rounded-lg p-2 text-[var(--color-muted)] transition-colors hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text)]"
           aria-label="Pantalla completa"
         >
           <FullscreenIcon />
@@ -122,14 +140,14 @@ export function Pomodoro() {
 
       <div className="mb-4">
         <span
-          className="font-mono text-4xl md:text-5xl font-light text-[var(--color-text)] tracking-wide"
+          className="font-mono text-4xl font-light tracking-wide text-[var(--color-text)] md:text-5xl"
           aria-live="polite"
         >
           {formatTime(secondsLeft)}
         </span>
       </div>
 
-      <div className="h-2 rounded-full overflow-hidden mb-6 bg-[var(--color-border)]">
+      <div className="mb-6 h-2 overflow-hidden rounded-full bg-[var(--color-border)]">
         <div
           className="h-full rounded-full bg-[var(--color-accent)] transition-[width] duration-300 ease-linear"
           role="progressbar"
@@ -145,7 +163,7 @@ export function Pomodoro() {
         type="button"
         onClick={alarmPlaying ? stopAlarm : toggleTimer}
         disabled={secondsLeft <= 0 && !alarmPlaying}
-        className="w-full rounded-2xl bg-[var(--color-accent)] py-4 flex items-center justify-center gap-2 text-white font-semibold hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-3"
+        className="mb-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-[var(--color-accent)] py-4 font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {alarmPlaying ? (
           <>
@@ -168,12 +186,12 @@ export function Pomodoro() {
       <button
         type="button"
         onClick={resetPomodoro}
-        className="w-full rounded-xl py-2 text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] transition-colors"
+        className="w-full cursor-pointer rounded-xl py-2 text-sm font-medium text-[var(--color-muted)] transition-colors hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text)]"
       >
         Reiniciar
       </button>
 
-      <p className="mt-4 text-sm text-[var(--color-muted)] text-center">
+      <p className="mt-4 text-center text-sm text-[var(--color-muted)]">
         El Pomodoro sigue en segundo plano al cambiar de página. Se detiene al cerrar la pestaña.
       </p>
     </div>

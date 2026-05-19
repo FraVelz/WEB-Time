@@ -12,9 +12,9 @@
   --color-accent-soft: rgb(124 110 246 / 0.15);
   --color-success: #34d399;
 
-  /* Tipografía (usadas por font-sans y font-mono) */
-  --font-sans: "DM Sans", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* Tipografía (next/font en layout.tsx) */
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
 @layer base {
@@ -42,24 +42,60 @@
 }
 
 /* Utilidades del tema (variables CSS) */
-.bg-bg { background-color: var(--color-bg); }
-.bg-surface { background-color: var(--color-surface); }
-.bg-surface-hover { background-color: var(--color-surface-hover); }
-.border-border { border-color: var(--color-border); }
-.border-accent-soft { border-color: var(--color-accent-soft); }
-.text-text { color: var(--color-text); }
-.text-muted { color: var(--color-muted); }
-.text-accent { color: var(--color-accent); }
-.text-success { color: var(--color-success); }
-.bg-accent { background-color: var(--color-accent); }
-.bg-success\/10 { background-color: rgb(52 211 153 / 0.1); }
-.border-success\/40 { border-color: rgb(52 211 153 / 0.4); }
-.hover\:bg-border:hover { background-color: var(--color-border); }
-.hover\:bg-surface-hover:hover { background-color: var(--color-surface-hover); }
-.hover\:border-accent-soft:hover { border-color: var(--color-accent-soft); }
-.hover\:brightness-110:hover { filter: brightness(1.1); }
-.font-sans { font-family: var(--font-sans); }
-.font-mono { font-family: var(--font-mono); }
+.bg-bg {
+  background-color: var(--color-bg);
+}
+.bg-surface {
+  background-color: var(--color-surface);
+}
+.bg-surface-hover {
+  background-color: var(--color-surface-hover);
+}
+.border-border {
+  border-color: var(--color-border);
+}
+.border-accent-soft {
+  border-color: var(--color-accent-soft);
+}
+.text-text {
+  color: var(--color-text);
+}
+.text-muted {
+  color: var(--color-muted);
+}
+.text-accent {
+  color: var(--color-accent);
+}
+.text-success {
+  color: var(--color-success);
+}
+.bg-accent {
+  background-color: var(--color-accent);
+}
+.bg-success\/10 {
+  background-color: rgb(52 211 153 / 0.1);
+}
+.border-success\/40 {
+  border-color: rgb(52 211 153 / 0.4);
+}
+.hover\:bg-border:hover {
+  background-color: var(--color-border);
+}
+.hover\:bg-surface-hover:hover {
+  background-color: var(--color-surface-hover);
+}
+.hover\:border-accent-soft:hover {
+  border-color: var(--color-accent-soft);
+}
+.hover\:brightness-110:hover {
+  filter: brightness(1.1);
+}
+.font-sans {
+  font-family: var(--font-sans);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
 
 /* Acordeón countdowns */
 .countdown-accordion-item {
@@ -85,7 +121,6 @@
   color: var(--color-text);
   background-color: transparent;
   border: none;
-  cursor: pointer;
   transition: background-color 0.2s ease;
 }
 .countdown-accordion-trigger:hover {
