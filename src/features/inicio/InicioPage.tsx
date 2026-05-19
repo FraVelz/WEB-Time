@@ -21,7 +21,7 @@ export default function InicioPage() {
           <ul className="list-inside list-disc space-y-2 text-sm text-[var(--color-muted)]">
             <li>
               <span className="font-medium text-[var(--color-text)]">Misión:</span> construir un legado de avance tan
-              sostenido que, en plazos relativamente cortos, parezca difícil de imaginar — y que inspire a otros a
+              sostenido que, en plazos relativamente cortos, parezca difícil de imaginar, y que inspire a otros a
               plantearse hasta dónde se puede llegar.
             </li>
             <li>No son predicciones ni garantías: son brújulas personales que iré afinando según avance la vida.</li>
