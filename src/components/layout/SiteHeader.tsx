@@ -186,10 +186,7 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:gap-4 md:px-6">
-        <Link
-          href="/inicio"
-          className="text-text hover:text-accent shrink-0 text-lg font-semibold transition-colors"
-        >
+        <Link href="/inicio" className="text-text hover:text-accent shrink-0 text-lg font-semibold transition-colors">
           WEB-Time
         </Link>
 
@@ -218,10 +215,7 @@ export function SiteHeader() {
 
       <nav
         id="nav-menu-mobile"
-        className={cn(
-          "border-border bg-bg border-b md:hidden",
-          open ? "flex flex-col gap-1 px-4 py-3" : "hidden",
-        )}
+        className={cn("border-border bg-bg border-b md:hidden", open ? "flex flex-col gap-1 px-4 py-3" : "hidden")}
         aria-label="Secciones principales"
       >
         <RunningBadges
@@ -233,14 +227,7 @@ export function SiteHeader() {
           className="mb-2"
         />
         {NAV_LINKS.map(({ path, label }) => (
-          <NavLink
-            key={path}
-            path={path}
-            label={label}
-            pathname={pathname}
-            variant="mobile"
-            onNavigate={closeMenu}
-          />
+          <NavLink key={path} path={path} label={label} pathname={pathname} variant="mobile" onNavigate={closeMenu} />
         ))}
       </nav>
     </header>

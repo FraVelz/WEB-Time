@@ -61,25 +61,25 @@ Si el `type` ya es `docs` y todo el cambio es genérico, puede usarse **sin** sc
 
 ## Tipos (`type`) — priorizar
 
-| Tipo        | Uso en este repo |
-| ----------- | ---------------- |
-| `feat`      | Nueva capacidad o comportamiento visible para el usuario. |
-| `fix`       | Corrección de bug o regresión. |
-| `docs`      | Documentación (`README`, `docs/`, comandos bajo `.cursor/commands/`, etc.). |
-| `style`     | Formato, Prettier; sin cambiar lógica. |
-| `refactor`  | Reestructuración sin cambiar comportamiento observable. |
-| `perf`      | Rendimiento. |
-| `test`      | Tests. |
-| `build`     | Build, dependencias. |
-| `ci`        | CI. |
-| `chore`     | Mantenimiento (scripts auxiliares, `.gitignore`, etc.). |
+| Tipo       | Uso en este repo                                                            |
+| ---------- | --------------------------------------------------------------------------- |
+| `feat`     | Nueva capacidad o comportamiento visible para el usuario.                   |
+| `fix`      | Corrección de bug o regresión.                                              |
+| `docs`     | Documentación (`README`, `docs/`, comandos bajo `.cursor/commands/`, etc.). |
+| `style`    | Formato, Prettier; sin cambiar lógica.                                      |
+| `refactor` | Reestructuración sin cambiar comportamiento observable.                     |
+| `perf`     | Rendimiento.                                                                |
+| `test`     | Tests.                                                                      |
+| `build`    | Build, dependencias.                                                        |
+| `ci`       | CI.                                                                         |
+| `chore`    | Mantenimiento (scripts auxiliares, `.gitignore`, etc.).                     |
 
 **Evitar** tipos no estándar (`delete:`, `update:` como tipo único). Preferir `refactor:` / `chore:` con descripción clara.
 
 ## Descripción y estilo
 
 - **Inglés** en asunto y cuerpo del commit.
-- Imperativo: *add*, *fix*, *update*, *remove*, no *added* / *fixes*.
+- Imperativo: _add_, _fix_, _update_, _remove_, no _added_ / _fixes_.
 - **~72 caracteres** en la primera línea cuando sea razonable.
 - No encadenar `feat: ... feat: ...` en una sola línea (patrón antiguo del repo).
 

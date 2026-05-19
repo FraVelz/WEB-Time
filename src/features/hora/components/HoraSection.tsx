@@ -44,11 +44,11 @@ function useZoneTime(zone: string) {
 function ClockCard({ zone, label, capital }: (typeof ZONES)[number]) {
   const time = useZoneTime(zone);
   return (
-    <div className="flex flex-col gap-1 rounded-xl border border-border bg-surface p-4">
-      <span className="text-sm font-medium text-muted">
+    <div className="border-border bg-surface flex flex-col gap-1 rounded-xl border p-4">
+      <span className="text-muted text-sm font-medium">
         {label}, {capital}
       </span>
-      <span className="font-mono text-2xl text-accent">{time}</span>
+      <span className="text-accent font-mono text-2xl">{time}</span>
     </div>
   );
 }

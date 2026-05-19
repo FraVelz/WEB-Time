@@ -65,14 +65,14 @@ function TimeUnit({ value, label, size = "large" }: { value: string; label: stri
     <div className={cn("flex flex-col items-center", large ? "min-w-20" : "min-w-16")} role="group">
       <span
         className={cn(
-          "font-mono font-semibold leading-tight text-accent",
+          "text-accent font-mono leading-tight font-semibold",
           large ? "text-4xl md:text-5xl" : "text-2xl md:text-3xl",
         )}
         aria-hidden
       >
         {value}
       </span>
-      <span className={cn("mt-1 font-semibold uppercase tracking-wide text-muted", large ? "text-sm" : "text-xs")}>
+      <span className={cn("text-muted mt-1 font-semibold tracking-wide uppercase", large ? "text-sm" : "text-xs")}>
         {label}
       </span>
     </div>

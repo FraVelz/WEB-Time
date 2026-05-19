@@ -14,8 +14,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(timerReducer, initialTimerState);
   const { mode, timers, crono, soundEnabled, alarmPlaying, alarmTimerId } = state;
 
-  const { playAlarm, requestWakeLock, releaseWakeLock, stopAlarmAudio, muteAlarmAudio } =
-    useTimerAlarm(soundEnabled);
+  const { playAlarm, requestWakeLock, releaseWakeLock, stopAlarmAudio, muteAlarmAudio } = useTimerAlarm(soundEnabled);
 
   const setTimers = useCallback(
     (fn: (prev: TimerItem[]) => TimerItem[]) => dispatch({ type: "SET_TIMERS", timers: fn }),

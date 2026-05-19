@@ -7,8 +7,8 @@ type PomodoroInfoCardProps = {
 
 export function PomodoroInfoCard({ title, children }: PomodoroInfoCardProps) {
   return (
-    <div className="rounded-2xl border border-border bg-surface p-6">
-      <h2 className="mb-3 text-lg font-semibold text-text">{title}</h2>
+    <div className="border-border bg-surface rounded-2xl border p-6">
+      <h2 className="text-text mb-3 text-lg font-semibold">{title}</h2>
       {children}
     </div>
   );

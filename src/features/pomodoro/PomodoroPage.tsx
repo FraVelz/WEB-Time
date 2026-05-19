@@ -17,7 +17,7 @@ export default function PomodoroPage() {
 
       <section className="mb-10 grid gap-6 md:grid-cols-2">
         <PomodoroInfoCard title="Cómo usarlo">
-          <ol className="list-inside list-decimal space-y-2 text-sm text-muted">
+          <ol className="text-muted list-inside list-decimal space-y-2 text-sm">
             <li>
               Pulsa <strong className="text-text">Iniciar</strong> para un bloque de 25 min de trabajo.
             </li>
@@ -35,7 +35,7 @@ export default function PomodoroPage() {
           </ol>
         </PomodoroInfoCard>
         <PomodoroInfoCard title="Beneficios">
-          <ul className="space-y-2 text-sm text-muted">
+          <ul className="text-muted space-y-2 text-sm">
             <li>• Menos distracciones: un solo bloque a la vez.</li>
             <li>• Descansos regulares evitan el agotamiento.</li>
             <li>• Fácil medir cuántos “pomodoros” haces al día.</li>
