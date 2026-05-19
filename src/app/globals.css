@@ -18,85 +18,59 @@
 }
 
 @layer base {
-  :root {
+  :root,
+  [data-theme="dark"] {
     color-scheme: dark;
+    --color-bg: #0f0f12;
+    --color-surface: #18181c;
+    --color-surface-hover: #1e1e24;
+    --color-border: #2a2a32;
+    --color-text: #e8e8ed;
+    --color-muted: #9898a6;
+    --color-accent: #7c6ef6;
+    --color-accent-soft: rgb(124 110 246 / 0.15);
+    --color-success: #34d399;
+    --color-selection-bg: #6b5ce8;
+    --color-selection-fg: #ffffff;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+    --color-bg: #f4f4f8;
+    --color-surface: #ffffff;
+    --color-surface-hover: #ececf2;
+    --color-border: #d5d5de;
+    --color-text: #1a1a22;
+    --color-muted: #5c5c6a;
+    --color-accent: #5b4ee0;
+    --color-accent-soft: rgb(91 78 224 / 0.14);
+    --color-success: #059669;
+    --color-selection-bg: #4a3fd4;
+    --color-selection-fg: #ffffff;
   }
 
   html {
     scroll-behavior: smooth;
-  }
-
-  html {
     background-color: var(--color-bg);
   }
 
   body {
-    position: relative;
     min-height: 100vh;
     font-family: var(--font-sans);
     font-size: 1rem;
     line-height: 1.5;
     color: var(--color-text);
-    background: transparent;
+    background-color: var(--color-bg);
   }
 
-  /* Fondo animado ligero: solo transform + opacidad (compositor GPU) */
-  body::before,
-  body::after {
-    content: "";
-    position: fixed;
-    pointer-events: none;
-    z-index: 0;
-    border-radius: 50%;
-    opacity: 0.55;
+  ::selection {
+    background-color: var(--color-selection-bg);
+    color: var(--color-selection-fg);
   }
 
-  body::before {
-    top: -15%;
-    left: -10%;
-    width: min(70vw, 520px);
-    height: min(70vw, 520px);
-    background: radial-gradient(circle, rgb(124 110 246 / 0.18) 0%, transparent 68%);
-    animation: ambient-drift-a 36s ease-in-out infinite alternate;
-  }
-
-  body::after {
-    right: -12%;
-    bottom: -18%;
-    width: min(55vw, 420px);
-    height: min(55vw, 420px);
-    background: radial-gradient(circle, rgb(52 211 153 / 0.09) 0%, transparent 68%);
-    animation: ambient-drift-b 44s ease-in-out infinite alternate;
-  }
-
-  body > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  @keyframes ambient-drift-a {
-    from {
-      transform: translate3d(0, 0, 0);
-    }
-    to {
-      transform: translate3d(6%, 4%, 0);
-    }
-  }
-
-  @keyframes ambient-drift-b {
-    from {
-      transform: translate3d(0, 0, 0);
-    }
-    to {
-      transform: translate3d(-5%, -6%, 0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    body::before,
-    body::after {
-      animation: none;
-    }
+  ::-moz-selection {
+    background-color: var(--color-selection-bg);
+    color: var(--color-selection-fg);
   }
 
   :focus-visible {
