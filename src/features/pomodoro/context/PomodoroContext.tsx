@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 
 const ALARM_PATH = "/alarma.mp3";
 const WORK_SEC = 25 * 60;
@@ -140,9 +132,10 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
     });
   }, [playAlarm]);
 
+  const { isRunning, endTime } = state;
+
   useEffect(() => {
-    const s = state;
-    if (!s.isRunning || !s.endTime) {
+    if (!isRunning || !endTime) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -159,11 +152,11 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
         intervalRef.current = null;
       }
     };
-  }, [state.isRunning, state.endTime, tick, requestWakeLock, releaseWakeLock]);
+  }, [isRunning, endTime, tick, requestWakeLock, releaseWakeLock]);
 
   useEffect(() => {
     const handleVisibility = () => {
-      if (document.visibilityState === "visible" && state.isRunning) {
+      if (document.visibilityState === "visible" && isRunning) {
         requestWakeLock();
       } else if (document.visibilityState === "hidden") {
         releaseWakeLock();
@@ -171,7 +164,7 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
     };
     document.addEventListener("visibilitychange", handleVisibility);
     return () => document.removeEventListener("visibilitychange", handleVisibility);
-  }, [state.isRunning, requestWakeLock, releaseWakeLock]);
+  }, [isRunning, requestWakeLock, releaseWakeLock]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -207,7 +200,11 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
         audioRef.current.currentTime = 0;
         audioRef.current = null;
       }
-      return { ...s, soundEnabled: nextEnabled, alarmPlaying: nextEnabled ? s.alarmPlaying : false };
+      return {
+        ...s,
+        soundEnabled: nextEnabled,
+        alarmPlaying: nextEnabled ? s.alarmPlaying : false,
+      };
     });
   }, []);
 
@@ -237,9 +234,7 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
     resetPomodoro,
   };
 
-  return (
-    <PomodoroContext.Provider value={value}>{children}</PomodoroContext.Provider>
-  );
+  return <PomodoroContext.Provider value={value}>{children}</PomodoroContext.Provider>;
 }
 
 export function usePomodoro() {

@@ -38,13 +38,13 @@ Open [http://localhost:3000](http://localhost:3000). The `/` route redirects to 
 
 **Routes:**
 
-| Route            | Content           |
-|------------------|-------------------|
-| `/`              | Redirects to Home |
-| `/inicio`        | Countdowns + image |
-| `/pomodoro`      | Pomodoro timer    |
-| `/temporizador`  | Multiple timers   |
-| `/hora`          | World clock       |
+| Route           | Content            |
+| --------------- | ------------------ |
+| `/`             | Redirects to Home  |
+| `/inicio`       | Countdowns + image |
+| `/pomodoro`     | Pomodoro timer     |
+| `/temporizador` | Multiple timers    |
+| `/hora`         | World clock        |
 
 ---
 
@@ -102,8 +102,8 @@ In **`src/config/countdowns.ts`**:
 ## Scripts
 
 | Command          | Description        |
-|------------------|--------------------|
-| `pnpm run dev`   | Development server  |
+| ---------------- | ------------------ |
+| `pnpm run dev`   | Development server |
 | `pnpm run build` | Production build   |
 | `pnpm start`     | Serve build        |
 | `pnpm run lint`  | Lint               |

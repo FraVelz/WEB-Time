@@ -38,13 +38,13 @@ Abre [http://localhost:3000](http://localhost:3000). La ruta `/` redirige a `/in
 
 **Rutas:**
 
-| Ruta            | Contenido        |
-|-----------------|------------------|
-| `/`             | Redirige a Inicio |
-| `/inicio`       | Countdowns + imagen |
-| `/pomodoro`     | Reloj Pomodoro   |
+| Ruta            | Contenido                |
+| --------------- | ------------------------ |
+| `/`             | Redirige a Inicio        |
+| `/inicio`       | Countdowns + imagen      |
+| `/pomodoro`     | Reloj Pomodoro           |
 | `/temporizador` | Temporizadores múltiples |
-| `/hora`         | Hora mundial     |
+| `/hora`         | Hora mundial             |
 
 ---
 
@@ -101,12 +101,12 @@ En **`src/config/countdowns.ts`**:
 
 ## Scripts
 
-| Comando           | Descripción              |
-|-------------------|--------------------------|
-| `pnpm run dev`    | Servidor de desarrollo   |
-| `pnpm run build`  | Build de producción      |
-| `pnpm start`      | Servir build (tras build) |
-| `pnpm run lint`   | Linter                   |
+| Comando          | Descripción               |
+| ---------------- | ------------------------- |
+| `pnpm run dev`   | Servidor de desarrollo    |
+| `pnpm run build` | Build de producción       |
+| `pnpm start`     | Servir build (tras build) |
+| `pnpm run lint`  | Linter                    |
 
 ---
 

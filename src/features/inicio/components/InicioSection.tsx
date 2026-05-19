@@ -2,17 +2,13 @@
 
 import Image from "next/image";
 import { CountdownGrid } from "./CountdownGrid";
-import { COUNTDOWN_CONFIG } from "@/config/countdowns";
+import { COUNTDOWN_CONFIG } from "@/features/inicio/config/countdowns";
 
 export function InicioSection() {
   return (
-    <section
-      id="inicio"
-      className="scroll-mt-20 mx-auto max-w-5xl px-4 md:px-6"
-      aria-labelledby="inicio-heading"
-    >
+    <section id="inicio" className="mx-auto max-w-5xl scroll-mt-20 px-4 md:px-6" aria-labelledby="inicio-heading">
       <h2 id="inicio-heading" className="sr-only">
-        Inicio — Contadores y imagen
+        Inicio: contadores e imagen
       </h2>
 
       <div>
@@ -30,18 +26,14 @@ export function InicioSection() {
               className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)]/80 via-transparent to-transparent"
               aria-hidden
             />
-            <div className="absolute bottom-4 left-4 right-4 text-[var(--color-text)]">
-              <p className="text-sm text-[var(--color-text)]/90 max-w-xl">
-                 🇨🇴
-              </p>
+            <div className="absolute right-4 bottom-4 left-4 text-[var(--color-text)]">
+              <p className="max-w-xl text-sm text-[var(--color-text)]/90">🇨🇴</p>
             </div>
           </div>
         </div>
 
         <div className="mt-10 space-y-6">
-          <h3 className="text-2xl font-semibold text-[var(--color-text)]">
-            Countdowns
-          </h3>
+          <h3 className="text-2xl font-semibold text-[var(--color-text)]">Countdowns</h3>
           <CountdownGrid countdowns={COUNTDOWN_CONFIG} />
         </div>
       </div>
