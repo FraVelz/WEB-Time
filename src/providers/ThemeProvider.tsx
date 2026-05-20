@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useSyncExternalStore, type ReactNode } from "react";
-import { applyTheme, getThemeFromDocument, THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
+import { getThemeFromDocument, persistTheme, type Theme } from "@/lib/theme";
 
 type ThemeContextValue = {
   theme: Theme;
@@ -19,13 +19,18 @@ function subscribeTheme(onStoreChange: () => void) {
   return () => observer.disconnect();
 }
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const theme = useSyncExternalStore<Theme>(subscribeTheme, getThemeFromDocument, () => "dark");
+type ThemeProviderProps = {
+  children: ReactNode;
+  /** Debe coincidir con `data-theme` del `<html>` renderizado en el servidor. */
+  initialTheme: Theme;
+};
+
+export function ThemeProvider({ children, initialTheme }: ThemeProviderProps) {
+  const theme = useSyncExternalStore<Theme>(subscribeTheme, getThemeFromDocument, () => initialTheme);
 
   const toggleTheme = useCallback(() => {
     const next: Theme = theme === "dark" ? "light" : "dark";
-    applyTheme(next);
-    localStorage.setItem(THEME_STORAGE_KEY, next);
+    persistTheme(next);
   }, [theme]);
 
   return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;

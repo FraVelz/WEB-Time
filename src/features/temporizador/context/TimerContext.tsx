@@ -137,11 +137,16 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const running = timers.find((t) => t.isRunning && t.endTime != null);
+  const alarmTimer =
+    alarmPlaying && alarmTimerId ? timers.find((t) => t.id === alarmTimerId) : undefined;
+
   const displayForHeader = running
     ? { type: "timer" as const, id: running.id, secondsLeft: running.secondsLeft }
-    : crono.isRunning
-      ? { type: "crono" as const, secondsElapsed: crono.secondsElapsed }
-      : null;
+    : alarmTimer
+      ? { type: "timer" as const, id: alarmTimer.id, secondsLeft: 0, alarm: true }
+      : crono.isRunning
+        ? { type: "crono" as const, secondsElapsed: crono.secondsElapsed }
+        : null;
 
   return (
     <TimerContext.Provider

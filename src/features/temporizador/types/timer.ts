@@ -21,7 +21,7 @@ export type CronoState = {
 export type TimerMode = "temporizador" | "cronometro";
 
 export type TimerHeaderDisplay =
-  | { type: "timer"; id: string; secondsLeft: number }
+  | { type: "timer"; id: string; secondsLeft: number; alarm?: boolean }
   | { type: "crono"; secondsElapsed: number }
   | null;
 
