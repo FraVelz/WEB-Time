@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+
 import "./globals.css";
+
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { AppProviders } from "@/providers/AppProviders";
+import { getServerTheme } from "@/lib/theme.server";
+
 import { dmSans, jetbrainsMono } from "@/lib/fonts";
 
 const SITE_URL = "https://fravelz.github.io/WEB-Time";
@@ -35,18 +39,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const theme = await getServerTheme();
+
   return (
-    <html lang="es" data-theme="dark" suppressHydrationWarning>
-      <Script id="theme-init" src="/theme-init.js" strategy="beforeInteractive" />
+    <html lang="es" data-theme={theme} suppressHydrationWarning>
+      <head>
+        <Script id="theme-init" src="/theme-init.js" strategy="beforeInteractive" />
+      </head>
+
       <body className={`${dmSans.variable} ${jetbrainsMono.variable} flex min-h-screen flex-col`}>
-        <AppProviders>
+        <AppProviders initialTheme={theme}>
           <SiteHeader />
+
           <main className="flex-1">{children}</main>
+
           <SiteFooter />
         </AppProviders>
       </body>

@@ -17,6 +17,10 @@ const NAV_LINKS = [
   { path: "/hora", label: "Hora" },
 ] as const;
 
+/** Anillo y fondo visibles al navegar con Tab (el outline global se recorta poco en enlaces compactos). */
+const navFocusRing =
+  "outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
+
 const HEADER_PHASE_LABELS = {
   ...POMODORO_PHASE_LABELS,
   shortBreak: "Descanso",
@@ -29,6 +33,8 @@ function MobileMenuButton({ open, onToggle }: { open: boolean; onToggle: () => v
       className={cn(
         "border-border text-text hover:bg-surface relative flex size-11 shrink-0 items-center justify-center rounded-lg border",
         "md:hidden",
+        navFocusRing,
+        "focus-visible:bg-surface focus-visible:border-accent",
       )}
       onClick={onToggle}
       aria-expanded={open}
@@ -78,7 +84,10 @@ function NavLink({
         href={path}
         className={cn(
           "text-text block w-full rounded-lg px-4 py-3 text-base font-medium transition-colors",
-          isActive ? "bg-accent-soft text-accent" : "hover:bg-surface active:bg-surface",
+          navFocusRing,
+          isActive
+            ? "bg-accent-soft text-accent focus-visible:ring-offset-[var(--color-bg)]"
+            : "hover:bg-surface active:bg-surface focus-visible:bg-surface",
         )}
         onClick={onNavigate}
         aria-current={isActive ? "page" : undefined}
@@ -92,8 +101,11 @@ function NavLink({
     <Link
       href={path}
       className={cn(
-        "group relative px-0 py-2 text-sm font-medium transition-colors",
-        isActive ? "text-accent" : "text-text hover:text-accent",
+        "group relative rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+        navFocusRing,
+        isActive
+          ? "text-accent focus-visible:bg-accent-soft"
+          : "text-text hover:text-accent focus-visible:bg-accent-soft focus-visible:text-accent",
       )}
       onClick={onNavigate}
       aria-current={isActive ? "page" : undefined}
@@ -104,7 +116,7 @@ function NavLink({
         className={cn(
           "bg-accent absolute bottom-0 left-1/2 h-0.5 -translate-x-1/2 rounded-full",
           "transition-[width] duration-300 ease-out",
-          isActive ? "w-[50%]" : "w-0 group-hover:w-[50%]",
+          isActive ? "w-[50%]" : "w-0 group-hover:w-[50%] group-focus-visible:w-[50%]",
         )}
       />
     </Link>
@@ -113,6 +125,7 @@ function NavLink({
 
 function RunningBadges({
   timerDisplay,
+  timerAlarm,
   pomodoroDisplay,
   pomodoroPhase,
   showTimer,
@@ -120,6 +133,7 @@ function RunningBadges({
   className,
 }: {
   timerDisplay: string;
+  timerAlarm?: boolean;
   pomodoroDisplay: string;
   pomodoroPhase: keyof typeof HEADER_PHASE_LABELS | undefined;
   showTimer: boolean;
@@ -134,13 +148,23 @@ function RunningBadges({
         <Link
           href="/temporizador"
           className={cn(
-            "bg-accent/20 text-accent hover:bg-accent/30 flex items-center gap-1.5 rounded-lg px-2.5 py-1",
-            "font-mono text-xs font-medium",
+            "flex items-center gap-1.5 rounded-lg px-2.5 py-1 font-mono text-xs font-medium",
+            navFocusRing,
+            timerAlarm
+              ? "bg-accent/30 text-accent ring-accent/70 animate-pulse ring-2"
+              : "bg-accent/20 text-accent hover:bg-accent/30",
           )}
-          title="Temporizador en marcha"
+          title={timerAlarm ? "Alarma sonando — pulsa para ir al temporizador y pausar" : "Temporizador en marcha"}
+          aria-live={timerAlarm ? "polite" : undefined}
         >
-          <span className="bg-accent size-1.5 animate-pulse rounded-full" />
-          {timerDisplay}
+          <span
+            className={cn(
+              "bg-accent size-1.5 rounded-full",
+              timerAlarm ? "animate-ping" : "animate-pulse",
+            )}
+            aria-hidden
+          />
+          <span className={cn(timerAlarm && "tabular-nums")}>{timerDisplay}</span>
         </Link>
       )}
       {showPomodoro && pomodoroPhase && (
@@ -149,6 +173,7 @@ function RunningBadges({
           className={cn(
             "bg-success/20 text-success hover:bg-success/30 flex items-center gap-1.5 rounded-lg px-2.5 py-1",
             "font-mono text-xs font-medium",
+            navFocusRing,
           )}
           title={`Pomodoro: ${HEADER_PHASE_LABELS[pomodoroPhase]}`}
         >
@@ -163,7 +188,7 @@ function RunningBadges({
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const { isRunning, displayForHeader } = useTimer();
+  const { displayForHeader } = useTimer();
   const pomodoro = usePomodoroOptional();
 
   const timerDisplay = displayForHeader
@@ -172,8 +197,9 @@ export function SiteHeader() {
       : formatMmSs(displayForHeader.secondsElapsed)
     : "";
 
+  const timerAlarm = displayForHeader?.type === "timer" && Boolean(displayForHeader.alarm);
   const pomodoroDisplay = pomodoro ? formatMmSs(pomodoro.secondsLeft) : "";
-  const showTimer = isRunning;
+  const showTimer = displayForHeader != null;
   const showPomodoro = Boolean(pomodoro?.isRunning);
 
   const closeMenu = () => setOpen(false);
@@ -186,7 +212,14 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:gap-4 md:px-6">
-        <Link href="/inicio" className="text-text hover:text-accent shrink-0 text-lg font-semibold transition-colors">
+        <Link
+          href="/inicio"
+          className={cn(
+            "text-text hover:text-accent shrink-0 rounded-lg px-2 py-1 text-lg font-semibold transition-colors",
+            navFocusRing,
+            "focus-visible:text-accent focus-visible:bg-accent-soft",
+          )}
+        >
           WEB-Time
         </Link>
 
@@ -202,6 +235,7 @@ export function SiteHeader() {
         <div className="flex shrink-0 items-center gap-2">
           <RunningBadges
             timerDisplay={timerDisplay}
+            timerAlarm={timerAlarm}
             pomodoroDisplay={pomodoroDisplay}
             pomodoroPhase={pomodoro?.phase}
             showTimer={showTimer}
@@ -220,6 +254,7 @@ export function SiteHeader() {
       >
         <RunningBadges
           timerDisplay={timerDisplay}
+          timerAlarm={timerAlarm}
           pomodoroDisplay={pomodoroDisplay}
           pomodoroPhase={pomodoro?.phase}
           showTimer={showTimer}
