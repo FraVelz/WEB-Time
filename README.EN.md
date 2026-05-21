@@ -1,10 +1,10 @@
 # WEB-Time
 
-[Version en Español](./README.md)
+[Spanish version](./README.md)
 
 **Personal site hosted on [GitHub Pages](https://fravelz.github.io/WEB-Time/): countdowns to important dates, Pomodoro timer, custom timers with stopwatch, and world clock.**
 
-[![Screenshot](./public/screenshot.png)](https://fravelz.github.io/WEB-Time/)
+[![Screenshot](public/screenshot.png)](https://fravelz.github.io/WEB-Time/)
 
 Built with **Next.js 15** (App Router), **React 18**, **TypeScript**, **Tailwind CSS v4**, and **pnpm**.
 
@@ -12,7 +12,7 @@ Built with **Next.js 15** (App Router), **React 18**, **TypeScript**, **Tailwind
 
 ## What’s included
 
-- **Home** (`/inicio`) — Hero image and countdown accordion. Target dates are at midnight Colombia time; configuration lives in `src/features/inicio/config/countdowns.ts` (ages from birth date plus 2045 milestone).
+- **Home** (`/inicio`) — Hero image and countdown accordion. Target dates are at midnight, Colombia time; configuration lives in `src/features/inicio/config/countdowns.ts` (ages from birth date plus the 2045 milestone).
 - **Pomodoro** (`/pomodoro`) — 25 min work, 5 min short break, 15 min long break (every 4 pomodoros). Start, pause, and reset. State keeps running when you navigate away.
 - **Timer** (`/temporizador`) — Multiple timers with editable hours and minutes, plus **stopwatch** mode. Add, start, pause, reset, or remove each timer. Timers and stopwatch keep running in the background while you browse the site.
 - **World clock** (`/hora`) — Live clocks for Colombia, USA, Russia, China, Japan, UK, France, Germany, and India.
@@ -23,6 +23,7 @@ Built with **Next.js 15** (App Router), **React 18**, **TypeScript**, **Tailwind
 - Header badges when Pomodoro or timer/stopwatch is running (`SiteHeader`).
 - Responsive layout, visible keyboard focus on nav and countdown accordion.
 - Custom 404 page (`src/app/not-found.tsx`).
+- Keyboard navigation (Tab / Shift+Tab).
 
 ---
 
@@ -55,7 +56,7 @@ Open [http://localhost:3000](http://localhost:3000). The `/` route redirects to 
 
 ## Project structure
 
-```
+```text
 ├── src/
 │   ├── app/                    # App Router routes (thin wrappers)
 │   │   ├── layout.tsx          # Global layout, metadata, SSR theme
@@ -75,7 +76,7 @@ Open [http://localhost:3000](http://localhost:3000). The `/` route redirects to 
 │   ├── lib/                    # theme, theme.server, fonts, time, cn
 │   └── types/                  # e.g. css.d.ts
 ├── public/
-│   ├── theme-init.js           # Theme before hydrate (no flash)
+│   ├── theme-init.js           # Theme before hydration (no flash)
 │   ├── alarma.mp3
 │   ├── screenshot.png
 │   └── Copia-de-Napoleón-Brienne.jpg
@@ -112,29 +113,19 @@ In **`src/features/inicio/config/countdowns.ts`**:
 
 ## Scripts
 
-| Command                 | Description                   |
-| ----------------------- | ----------------------------- |
-| `pnpm run dev`          | Development server            |
-| `pnpm run build`        | Production build              |
-| `pnpm start`            | Serve build (after `build`)   |
-| `pnpm run lint`         | ESLint                        |
-| `pnpm run lint:fix`     | ESLint with auto-fix          |
-| `pnpm run format`       | Prettier (format)             |
-| `pnpm run format:check` | Prettier (check only)         |
-| `pnpm run clean`        | Remove `.next` folder         |
-| `pnpm run react:doctor` | React diagnostics (opt., dev) |
-
----
-
-## Production
-
-```bash
-pnpm run build
-pnpm start
-```
-
-The public site is on **GitHub Pages**. With `pnpm run dev` or `pnpm start`, Next.js can read the theme cookie on the server for the initial HTML. On static hosting, `theme-init.js` and the browser cookie still apply the theme without Node on every request.
+| Command                 | Description                  |
+| ----------------------- | ---------------------------- |
+| `pnpm run dev`          | Development server           |
+| `pnpm run build`        | Production build             |
+| `pnpm start`            | Serve build (after `build`)  |
+| `pnpm run lint`         | ESLint                       |
+| `pnpm run lint:fix`     | ESLint with auto-fix         |
+| `pnpm run format`       | Prettier (format)            |
+| `pnpm run format:check` | Prettier (check only)        |
+| `pnpm run react:doctor` | React diagnostics (optional, dev) |
 
 ---
 
 > **Author:** Fravelz
+>
+> **License:** Apache 2.0
