@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { useTimerAlarm } from "@/features/temporizador/hooks/useTimerAlarm";
 import { LONG_BREAK_SEC, POMODOROS_FOR_LONG, SHORT_BREAK_SEC, WORK_SEC } from "@/features/pomodoro/lib/constants";
+import { recordPhaseComplete } from "@/features/pomodoro/lib/pomodoroCookies";
 
 type Phase = "work" | "shortBreak" | "longBreak";
 
@@ -60,6 +61,7 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
       const remaining = Math.max(0, Math.ceil((s.endTime - Date.now()) / 1000));
       if (remaining > 0) return { ...s, secondsLeft: remaining };
 
+      recordPhaseComplete(s.phase);
       playAlarm();
       if (s.phase === "work") {
         const nextPhase: Phase = s.pomodoroCount + 1 >= POMODOROS_FOR_LONG ? "longBreak" : "shortBreak";
