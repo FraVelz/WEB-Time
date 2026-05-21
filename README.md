@@ -2,9 +2,9 @@
 
 [English version](./README.EN.md)
 
-**Web personal desplegada en [GitHub Pages](https://fravelz.github.io/WEB-Time/): countdowns hacia fechas importantes, temporizador Pomodoro, temporizadores personalizados con cronómetro y hora mundial.**
+**countdowns hacia fechas importantes, temporizador Pomodoro, temporizadores personalizados con cronómetro y hora mundial.**
 
-[![Screenshot](public/screenshot.png)](https://fravelz.github.io/WEB-Time/)
+![Screenshot](public/screenshot.png)
 
 Hecho con **Next.js 15** (App Router), **React 18**, **TypeScript**, **Tailwind CSS v4** y **pnpm**.
 

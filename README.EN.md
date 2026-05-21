@@ -2,9 +2,9 @@
 
 [Spanish version](./README.md)
 
-**Personal site hosted on [GitHub Pages](https://fravelz.github.io/WEB-Time/): countdowns to important dates, Pomodoro timer, custom timers with stopwatch, and world clock.**
+**Countdowns to important dates, Pomodoro timer, custom timers with stopwatch, and world clock.**
 
-[![Screenshot](public/screenshot.png)](https://fravelz.github.io/WEB-Time/)
+![Screenshot](public/screenshot.png)
 
 Built with **Next.js 15** (App Router), **React 18**, **TypeScript**, **Tailwind CSS v4**, and **pnpm**.
 
