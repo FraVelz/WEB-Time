@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckIcon } from "@/components/ui/icons";
 import type { CountdownItem } from "@/features/inicio/config/countdowns";
 import type { TimeRemaining } from "@/features/inicio/lib/countdown";
 import { pluralize, pad } from "@/features/inicio/lib/formatting";
@@ -40,6 +41,30 @@ function formatTargetDateTime(date: Date | string, past = false): string {
   return `${prefix} en ${year}, el ${dayMonth}, a las ${time}`;
 }
 
+function PassedCelebration({ targetDate }: { targetDate: Date | string }) {
+  return (
+    <div
+      className="border-success/25 bg-success/5 flex flex-col gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:gap-5"
+      role="status"
+      aria-live="polite"
+    >
+      <div
+        className="bg-success/15 text-success mx-auto flex size-14 shrink-0 items-center justify-center rounded-full sm:mx-0"
+        aria-hidden
+      >
+        <CheckIcon className="size-7 stroke-[2.5]" />
+      </div>
+      <div className="min-w-0 flex-1 space-y-2 text-center sm:text-left">
+        <p className="text-success text-xs font-semibold tracking-widest uppercase">Completado</p>
+        <p className="text-text text-xl leading-tight font-semibold">¡Ya llegó la fecha!</p>
+        <p className="text-muted text-sm leading-relaxed">
+          <span className="text-text font-medium">{formatTargetDateTime(targetDate, true)}</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function TimeUnit({ value, label, size = "large" }: { value: string; label: string; size?: "large" | "medium" }) {
   const large = size === "large";
   return (
@@ -64,7 +89,7 @@ export function CountdownCard({ config, data, hideHeader }: CountdownCardProps) 
   if (data.passed) {
     return (
       <article
-        className="bg-surface border-success/40 bg-success/10 flex flex-col gap-4 rounded-xl border p-4"
+        className="bg-surface border-success/35 flex flex-col gap-4 rounded-xl border p-4"
         aria-labelledby={hideHeader ? undefined : `title-${config.id}`}
       >
         {!hideHeader && (
@@ -75,13 +100,8 @@ export function CountdownCard({ config, data, hideHeader }: CountdownCardProps) 
             <p className="text-muted text-base">{config.description}</p>
           </header>
         )}
-        {hideHeader && <p className="text-muted text-sm">{config.description}</p>}
-        <p className="text-muted text-sm">
-          <strong className="text-text">{formatTargetDateTime(config.targetDate, true)}</strong>.
-        </p>
-        <div className="flex flex-col gap-5" role="timer" aria-live="polite">
-          <p className="text-success text-xl font-semibold">¡Ya llegó la fecha!</p>
-        </div>
+        {hideHeader && <p className="text-muted text-sm leading-relaxed">{config.description}</p>}
+        <PassedCelebration targetDate={config.targetDate} />
       </article>
     );
   }
