@@ -87,30 +87,6 @@ Abre [http://localhost:3000](http://localhost:3000). La ruta `/` redirige a `/in
 
 ---
 
-## Zona horaria (Colombia)
-
-Las fechas objetivo se definen a **medianoche en Colombia (America/Bogotá, UTC-5)** en `src/features/inicio/config/countdowns.ts` (función `midnightColombia`). El cálculo del tiempo restante usa la hora del navegador (`src/features/inicio/lib/countdown.ts`).
-
----
-
-## Configuración
-
-En **`src/features/inicio/config/countdowns.ts`**:
-
-- **Fecha de nacimiento:** `BIRTH_YEAR`, `BIRTH_MONTH`, `BIRTH_DAY` (por defecto 19 de mayo de 2008). Con ellos se generan countdowns a los 18, 20, 25, 30, 35, 40, 45, 50, 55 y 60 años.
-- **Countdown fijo:** año 2045 (`midnightColombia(2045, 1, 1)`). Puedes añadir, editar o quitar entradas en `buildCountdowns()`.
-- **Zona:** `COLOMBIA_UTC_OFFSET_HOURS` (5) por si Colombia dejara de usar UTC-5.
-
----
-
-## Tema claro/oscuro
-
-- Preferencia guardada en la cookie **`web-time-theme`** (`light` | `dark`), no en `localStorage`.
-- **`public/theme-init.js`** se carga antes de la hidratación para aplicar el tema sin parpadeo; si no hay cookie, usa `prefers-color-scheme`.
-- El servidor lee la cookie en `src/lib/theme.server.ts` y pone `data-theme` en el `<html>`; el toggle está en el header (`ThemeToggle` + `ThemeProvider`).
-
----
-
 ## Scripts
 
 | Comando                 | Descripción                       |
