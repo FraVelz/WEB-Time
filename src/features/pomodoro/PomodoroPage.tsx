@@ -1,6 +1,7 @@
 import { FeaturePageShell } from "@/components/layout/FeaturePageShell";
 import { Pomodoro } from "@/features/pomodoro/components/Pomodoro";
 import { PomodoroInfoCard } from "@/features/pomodoro/components/PomodoroInfoCard";
+import { PomodoroStatsSection } from "@/features/pomodoro/components/PomodoroStatsSection";
 
 export default function PomodoroPage() {
   return (
@@ -43,6 +44,8 @@ export default function PomodoroPage() {
           </ul>
         </PomodoroInfoCard>
       </section>
+
+      <PomodoroStatsSection />
     </FeaturePageShell>
   );
 }
