@@ -12,7 +12,7 @@ Hecho con **Next.js 15** (App Router), **React 18**, **TypeScript**, **Tailwind 
 
 ## Qué incluye
 
-- **Inicio** (`/inicio`) — Imagen destacada y countdowns en acordeón. Las fechas objetivo son a medianoche en Colombia; la configuración está en `src/features/inicio/config/countdowns.ts` (edades desde la fecha de nacimiento y meta 2045).
+- **Inicio** (`/inicio`) — Imagen destacada y countdowns en acordeón. Las fechas objetivo son a medianoche, hora de Colombia; la configuración está en `src/features/inicio/config/countdowns.ts` (edades desde la fecha de nacimiento y objetivo 2045).
 - **Pomodoro** (`/pomodoro`) — 25 min trabajo, 5 min descanso corto, 15 min descanso largo (cada 4 pomodoros). Iniciar, pausar y reiniciar. El estado sigue activo al cambiar de página.
 - **Temporizador** (`/temporizador`) — Varios temporizadores con horas y minutos editables, más modo **cronómetro**. Añadir, iniciar, pausar, reiniciar o quitar cada uno. Los temporizadores y el cronómetro siguen en segundo plano al navegar por la web.
 - **Hora** (`/hora`) — Relojes en tiempo real para Colombia, EE. UU., Rusia, China, Japón, Reino Unido, Francia, Alemania e India.
@@ -23,6 +23,7 @@ Hecho con **Next.js 15** (App Router), **React 18**, **TypeScript**, **Tailwind 
 - Header con indicadores si hay Pomodoro o temporizador/cronómetro en marcha (`SiteHeader`).
 - Diseño responsive, foco visible en navegación y acordeón de countdowns.
 - Página 404 personalizada (`src/app/not-found.tsx`).
+- Navegación por teclado (Tab y Shift+Tab).
 
 ---
 
@@ -55,7 +56,7 @@ Abre [http://localhost:3000](http://localhost:3000). La ruta `/` redirige a `/in
 
 ## Estructura del proyecto
 
-```
+```text
 ├── src/
 │   ├── app/                    # Rutas App Router (wrappers finos)
 │   │   ├── layout.tsx          # Layout global, metadata, tema SSR
@@ -75,7 +76,7 @@ Abre [http://localhost:3000](http://localhost:3000). La ruta `/` redirige a `/in
 │   ├── lib/                    # theme, theme.server, fonts, time, cn
 │   └── types/                  # p. ej. css.d.ts
 ├── public/
-│   ├── theme-init.js           # Tema antes de hidratar (sin flash)
+│   ├── theme-init.js           # Tema antes de la hidratación (sin flash)
 │   ├── alarma.mp3
 │   ├── screenshot.png
 │   └── Copia-de-Napoleón-Brienne.jpg
@@ -98,7 +99,7 @@ En **`src/features/inicio/config/countdowns.ts`**:
 
 - **Fecha de nacimiento:** `BIRTH_YEAR`, `BIRTH_MONTH`, `BIRTH_DAY` (por defecto 19 de mayo de 2008). Con ellos se generan countdowns a los 18, 20, 25, 30, 35, 40, 45, 50, 55 y 60 años.
 - **Countdown fijo:** año 2045 (`midnightColombia(2045, 1, 1)`). Puedes añadir, editar o quitar entradas en `buildCountdowns()`.
-- **Zona:** `COLOMBIA_UTC_OFFSET_HOURS` (5) por si Colombia cambiara de UTC-5.
+- **Zona:** `COLOMBIA_UTC_OFFSET_HOURS` (5) por si Colombia dejara de usar UTC-5.
 
 ---
 
@@ -121,20 +122,10 @@ En **`src/features/inicio/config/countdowns.ts`**:
 | `pnpm run lint:fix`     | ESLint con corrección automática  |
 | `pnpm run format`       | Prettier (formatear)              |
 | `pnpm run format:check` | Prettier (solo comprobar)         |
-| `pnpm run clean`        | Borrar carpeta `.next`            |
-| `pnpm run react:doctor` | Diagnóstico React (opcional, dev) |
-
----
-
-## Producción
-
-```bash
-pnpm run build
-pnpm start
-```
-
-El sitio público está en **GitHub Pages**. En desarrollo o con `pnpm start`, Next.js puede leer la cookie de tema en el servidor para el HTML inicial. En hosting estático, `theme-init.js` y la cookie del navegador siguen aplicando el tema sin depender de Node en cada petición.
+| `pnpm run react:doctor` | Diagnóstico React (opcional, desarrollo) |
 
 ---
 
 > **Autor:** Fravelz
+>
+> **Licencia:** Apache 2.0
