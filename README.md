@@ -22,7 +22,7 @@ Hecho con **Next.js 15** (App Router), **React 18**, **TypeScript**, **Tailwind 
 - Tema **claro y oscuro** (`ThemeToggle` en el header, cookie `web-time-theme`, script `public/theme-init.js` para evitar flash al cargar).
 - Header con indicadores si hay Pomodoro o temporizador/cronómetro en marcha (`SiteHeader`).
 - Diseño responsive, foco visible en navegación y acordeón de countdowns.
-- Página 404 personalizada (`src/components/pages/not-found/`).
+- Página 404 personalizada (`src/app/not-found.tsx`).
 
 ---
 
@@ -43,13 +43,13 @@ Abre [http://localhost:3000](http://localhost:3000). La ruta `/` redirige a `/in
 
 **Rutas:**
 
-| Ruta            | Contenido                                      |
-| --------------- | ---------------------------------------------- |
-| `/`             | Redirige a Inicio                              |
-| `/inicio`       | Countdowns + imagen                            |
-| `/pomodoro`     | Reloj Pomodoro                                 |
-| `/temporizador` | Temporizadores múltiples y cronómetro           |
-| `/hora`         | Hora mundial por zona                          |
+| Ruta            | Contenido                             |
+| --------------- | ------------------------------------- |
+| `/`             | Redirige a Inicio                     |
+| `/inicio`       | Countdowns + imagen                   |
+| `/pomodoro`     | Reloj Pomodoro                        |
+| `/temporizador` | Temporizadores múltiples y cronómetro |
+| `/hora`         | Hora mundial por zona                 |
 
 ---
 
@@ -70,8 +70,7 @@ Abre [http://localhost:3000](http://localhost:3000). La ruta `/` redirige a `/in
 │   │   └── hora/               # Relojes por zona IANA
 │   ├── components/
 │   │   ├── layout/             # SiteHeader, SiteFooter, FeaturePageShell
-│   │   ├── ui/                 # ThemeToggle, iconos, controles
-│   │   └── pages/not-found/
+│   │   └── ui/                 # ThemeToggle, iconos, controles
 │   ├── providers/              # AppProviders, ThemeProvider
 │   ├── lib/                    # theme, theme.server, fonts, time, cn
 │   └── types/                  # p. ej. css.d.ts
@@ -113,17 +112,17 @@ En **`src/features/inicio/config/countdowns.ts`**:
 
 ## Scripts
 
-| Comando                 | Descripción                          |
-| ----------------------- | ------------------------------------ |
-| `pnpm run dev`          | Servidor de desarrollo               |
-| `pnpm run build`        | Build de producción                  |
-| `pnpm start`            | Servir build (tras `build`)          |
-| `pnpm run lint`         | ESLint                               |
-| `pnpm run lint:fix`     | ESLint con corrección automática     |
-| `pnpm run format`       | Prettier (formatear)                 |
-| `pnpm run format:check` | Prettier (solo comprobar)            |
-| `pnpm run clean`        | Borrar carpeta `.next`               |
-| `pnpm run react:doctor` | Diagnóstico React (opcional, dev)    |
+| Comando                 | Descripción                       |
+| ----------------------- | --------------------------------- |
+| `pnpm run dev`          | Servidor de desarrollo            |
+| `pnpm run build`        | Build de producción               |
+| `pnpm start`            | Servir build (tras `build`)       |
+| `pnpm run lint`         | ESLint                            |
+| `pnpm run lint:fix`     | ESLint con corrección automática  |
+| `pnpm run format`       | Prettier (formatear)              |
+| `pnpm run format:check` | Prettier (solo comprobar)         |
+| `pnpm run clean`        | Borrar carpeta `.next`            |
+| `pnpm run react:doctor` | Diagnóstico React (opcional, dev) |
 
 ---
 

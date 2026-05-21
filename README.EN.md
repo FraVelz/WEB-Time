@@ -22,7 +22,7 @@ Built with **Next.js 15** (App Router), **React 18**, **TypeScript**, **Tailwind
 - **Light and dark** theme (`ThemeToggle` in the header, `web-time-theme` cookie, `public/theme-init.js` to avoid flash on load).
 - Header badges when Pomodoro or timer/stopwatch is running (`SiteHeader`).
 - Responsive layout, visible keyboard focus on nav and countdown accordion.
-- Custom 404 page (`src/components/pages/not-found/`).
+- Custom 404 page (`src/app/not-found.tsx`).
 
 ---
 
@@ -43,13 +43,13 @@ Open [http://localhost:3000](http://localhost:3000). The `/` route redirects to 
 
 **Routes:**
 
-| Route           | Content                              |
-| --------------- | ------------------------------------ |
-| `/`             | Redirects to Home                    |
-| `/inicio`       | Countdowns + image                   |
-| `/pomodoro`     | Pomodoro timer                       |
-| `/temporizador` | Multiple timers and stopwatch        |
-| `/hora`         | World clock by time zone             |
+| Route           | Content                       |
+| --------------- | ----------------------------- |
+| `/`             | Redirects to Home             |
+| `/inicio`       | Countdowns + image            |
+| `/pomodoro`     | Pomodoro timer                |
+| `/temporizador` | Multiple timers and stopwatch |
+| `/hora`         | World clock by time zone      |
 
 ---
 
@@ -70,8 +70,7 @@ Open [http://localhost:3000](http://localhost:3000). The `/` route redirects to 
 │   │   └── hora/               # Clocks by IANA zone
 │   ├── components/
 │   │   ├── layout/             # SiteHeader, SiteFooter, FeaturePageShell
-│   │   ├── ui/                 # ThemeToggle, icons, controls
-│   │   └── pages/not-found/
+│   │   └── ui/                 # ThemeToggle, icons, controls
 │   ├── providers/              # AppProviders, ThemeProvider
 │   ├── lib/                    # theme, theme.server, fonts, time, cn
 │   └── types/                  # e.g. css.d.ts
@@ -113,16 +112,16 @@ In **`src/features/inicio/config/countdowns.ts`**:
 
 ## Scripts
 
-| Command                 | Description                    |
-| ----------------------- | ------------------------------ |
-| `pnpm run dev`          | Development server             |
-| `pnpm run build`        | Production build               |
-| `pnpm start`            | Serve build (after `build`)  |
-| `pnpm run lint`         | ESLint                         |
-| `pnpm run lint:fix`     | ESLint with auto-fix           |
-| `pnpm run format`       | Prettier (format)              |
-| `pnpm run format:check` | Prettier (check only)          |
-| `pnpm run clean`        | Remove `.next` folder          |
+| Command                 | Description                   |
+| ----------------------- | ----------------------------- |
+| `pnpm run dev`          | Development server            |
+| `pnpm run build`        | Production build              |
+| `pnpm start`            | Serve build (after `build`)   |
+| `pnpm run lint`         | ESLint                        |
+| `pnpm run lint:fix`     | ESLint with auto-fix          |
+| `pnpm run format`       | Prettier (format)             |
+| `pnpm run format:check` | Prettier (check only)         |
+| `pnpm run clean`        | Remove `.next` folder         |
 | `pnpm run react:doctor` | React diagnostics (opt., dev) |
 
 ---

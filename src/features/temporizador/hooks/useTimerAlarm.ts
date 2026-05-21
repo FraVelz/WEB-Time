@@ -54,20 +54,10 @@ export function useTimerAlarm(soundEnabled: boolean) {
     alarmPlayedRef.current = false;
   }, []);
 
-  const muteAlarmAudio = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current = null;
-    }
-    alarmPlayedRef.current = false;
-  }, []);
-
   return {
     playAlarm,
     requestWakeLock,
     releaseWakeLock,
     stopAlarmAudio,
-    muteAlarmAudio,
   };
 }

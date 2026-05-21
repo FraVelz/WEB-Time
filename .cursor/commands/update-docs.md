@@ -12,29 +12,29 @@ Usar cuando el usuario pida **actualizar la documentación**, **sincronizar READ
 
 Explorar el repo; **no** confiar solo en el README existente (está desactualizado en varias rutas).
 
-| Área | Dónde mirar |
-|------|-------------|
-| Rutas y páginas | `src/app/**/page.tsx`, `src/app/page.tsx`, `src/app/not-found.tsx` |
-| Features | `src/features/{inicio,pomodoro,temporizador,hora}/` |
-| Layout y shell | `src/app/layout.tsx`, `src/components/layout/` |
-| UI compartida | `src/components/ui/` |
-| Providers | `src/providers/` |
-| Utilidades | `src/lib/` |
-| Estilos y tema | `src/app/globals.css`, `src/lib/theme.ts`, `src/lib/theme.server.ts` |
-| Init de tema | `public/theme-init.js`, cookie `web-time-theme` |
-| Countdowns | `src/features/inicio/config/countdowns.ts` |
-| Scripts npm | `package.json` |
-| Tipos CSS | `src/types/css.d.ts` |
-| Comandos Cursor | `.cursor/commands/`, `.cursor/update-docs.md` |
+| Área            | Dónde mirar                                                          |
+| --------------- | -------------------------------------------------------------------- |
+| Rutas y páginas | `src/app/**/page.tsx`, `src/app/page.tsx`, `src/app/not-found.tsx`   |
+| Features        | `src/features/{inicio,pomodoro,temporizador,hora}/`                  |
+| Layout y shell  | `src/app/layout.tsx`, `src/components/layout/`                       |
+| UI compartida   | `src/components/ui/`                                                 |
+| Providers       | `src/providers/`                                                     |
+| Utilidades      | `src/lib/`                                                           |
+| Estilos y tema  | `src/app/globals.css`, `src/lib/theme.ts`, `src/lib/theme.server.ts` |
+| Init de tema    | `public/theme-init.js`, cookie `web-time-theme`                      |
+| Countdowns      | `src/features/inicio/config/countdowns.ts`                           |
+| Scripts npm     | `package.json`                                                       |
+| Tipos CSS       | `src/types/css.d.ts`                                                 |
+| Comandos Cursor | `.cursor/commands/`, `.cursor/update-docs.md`                        |
 
 ## Archivos de documentación a mantener
 
-| Archivo | Idioma | Rol |
-|---------|--------|-----|
-| `README.md` | ES | Documentación principal |
-| `README.EN.md` | EN | Misma estructura y secciones que el README en español |
-| `.cursor/commands/auto-commit.md` | ES | Convenciones de commit (no duplicar en README salvo mención breve) |
-| `.cursor/update-docs.md` | ES | Este comando |
+| Archivo                           | Idioma | Rol                                                                |
+| --------------------------------- | ------ | ------------------------------------------------------------------ |
+| `README.md`                       | ES     | Documentación principal                                            |
+| `README.EN.md`                    | EN     | Misma estructura y secciones que el README en español              |
+| `.cursor/commands/auto-commit.md` | ES     | Convenciones de commit (no duplicar en README salvo mención breve) |
+| `.cursor/update-docs.md`          | ES     | Este comando                                                       |
 
 No hay carpeta `docs/` hoy; no crear documentación nueva fuera de lo anterior **salvo** que el usuario lo pida.
 
@@ -55,7 +55,7 @@ No hay carpeta `docs/` hoy; no crear documentación nueva fuera de lo anterior *
 
 - Tema claro/oscuro (`ThemeToggle`, `ThemeProvider`, cookie `web-time-theme` + `theme-init.js`).
 - Header con badges si hay timer/pomodoro activos (`SiteHeader`).
-- 404 personalizada (`src/components/pages/not-found/`).
+- 404 personalizada (`src/app/not-found.tsx`).
 - Accesibilidad: foco visible en navegación, acordeón de countdowns, etc.
 
 ## Estructura del proyecto (referencia actualizada)
@@ -78,7 +78,6 @@ Usar esta forma en README (adaptar árbol si cambia el código):
 │   ├── components/
 │   │   ├── layout/             # SiteHeader, SiteFooter, FeaturePageShell
 │   │   ├── ui/                 # ThemeToggle, iconos, enlaces
-│   │   └── pages/not-found/
 │   ├── providers/              # AppProviders, ThemeProvider
 │   ├── lib/                    # theme, fonts, time, cn
 │   └── types/                  # p. ej. css.d.ts
@@ -116,15 +115,15 @@ Mantener el mismo orden en ambos idiomas:
 
 ## Scripts a documentar en la tabla
 
-| Comando | Descripción (ES / EN) |
-|---------|------------------------|
-| `pnpm run dev` | Servidor de desarrollo |
-| `pnpm run build` | Build de producción |
-| `pnpm start` | Servir build |
-| `pnpm run lint` / `lint:fix` | ESLint |
-| `pnpm run format` / `format:check` | Prettier |
-| `pnpm run clean` | Borrar `.next` |
-| `pnpm run react:doctor` | Diagnóstico React (opcional, dev) |
+| Comando                            | Descripción (ES / EN)             |
+| ---------------------------------- | --------------------------------- |
+| `pnpm run dev`                     | Servidor de desarrollo            |
+| `pnpm run build`                   | Build de producción               |
+| `pnpm start`                       | Servir build                      |
+| `pnpm run lint` / `lint:fix`       | ESLint                            |
+| `pnpm run format` / `format:check` | Prettier                          |
+| `pnpm run clean`                   | Borrar `.next`                    |
+| `pnpm run react:doctor`            | Diagnóstico React (opcional, dev) |
 
 ## Reglas de redacción
 

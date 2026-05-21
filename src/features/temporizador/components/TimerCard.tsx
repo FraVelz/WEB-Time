@@ -3,9 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PauseIcon, PlayIcon, TrashIcon } from "@/ui/icons";
 import { useTimer } from "@/features/temporizador/context/TimerContext";
-import { formatTimer } from "@/features/temporizador/lib/timerFormat";
 import { cn } from "@/lib/cn";
-import { parseMmSs } from "@/lib/time";
+import { formatMmSs as formatTimer, parseMmSs } from "@/lib/time";
 
 const PRESETS = [
   { sec: 30, label: "0:30" },

@@ -47,9 +47,7 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<PomodoroState>(initialState);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { playAlarm, requestWakeLock, releaseWakeLock, stopAlarmAudio, muteAlarmAudio } = useTimerAlarm(
-    state.soundEnabled,
-  );
+  const { playAlarm, requestWakeLock, releaseWakeLock, stopAlarmAudio } = useTimerAlarm(state.soundEnabled);
 
   const stopAlarm = useCallback(() => {
     stopAlarmAudio();
@@ -138,10 +136,10 @@ export function PomodoroProvider({ children }: { children: ReactNode }) {
   const toggleSound = useCallback(() => {
     setState((s) => {
       const nextEnabled = !s.soundEnabled;
-      if (!nextEnabled) muteAlarmAudio();
+      if (!nextEnabled) stopAlarmAudio();
       return { ...s, soundEnabled: nextEnabled, alarmPlaying: nextEnabled ? s.alarmPlaying : false };
     });
-  }, [muteAlarmAudio]);
+  }, [stopAlarmAudio]);
 
   const resetPomodoro = useCallback(() => {
     stopAlarmAudio();

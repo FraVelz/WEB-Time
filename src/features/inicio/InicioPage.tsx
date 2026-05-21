@@ -7,22 +7,22 @@ export default function InicioPage() {
       <InicioSection />
 
       <div className="mx-auto mt-16 max-w-5xl space-y-8 px-4 md:px-6">
-        <section className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8">
-          <h2 className="mb-3 text-xl font-semibold text-[var(--color-text)]">Sobre los countdowns</h2>
-          <p className="mb-4 leading-relaxed text-[var(--color-muted)]">
+        <section className="border-border bg-surface rounded-2xl border p-6 md:p-8">
+          <h2 className="text-text mb-3 text-xl font-semibold">Sobre los countdowns</h2>
+          <p className="text-muted mb-4 leading-relaxed">
             Cada contador es un objetivo de vida aproximado: una fecha o edad hacia la que quiero llegar con algo
             concreto avanzado. El título nombra la etapa; la descripción de cada uno indica, de forma orientativa, de
             qué trata ese tramo y qué tendría que conseguir aproximadamente en ese plazo.
           </p>
-          <p className="mb-4 leading-relaxed text-[var(--color-muted)]">
+          <p className="text-muted mb-4 leading-relaxed">
             Si todo sale bien, los primeros plazos pueden parecer demasiado amplios. La idea es que, al llegar a la
             mitad de cada contador, el progreso sea visible y surja la pregunta: ¿qué más se puede hacer?
           </p>
-          <ul className="list-inside list-disc space-y-2 text-sm text-[var(--color-muted)]">
+          <ul className="text-muted list-inside list-disc space-y-2 text-sm">
             <li>
-              <span className="font-medium text-[var(--color-text)]">Misión:</span> construir un legado de avance tan
-              sostenido que, en plazos relativamente cortos, parezca difícil de imaginar, y que inspire a otros a
-              plantearse hasta dónde se puede llegar.
+              <span className="text-text font-medium">Misión:</span> construir un legado de avance tan sostenido que, en
+              plazos relativamente cortos, parezca difícil de imaginar, y que inspire a otros a plantearse hasta dónde
+              se puede llegar.
             </li>
             <li>No son predicciones ni garantías: son brújulas personales que iré afinando según avance la vida.</li>
             <li>En mi instagram personal, estaré subiendo pruebas según los objetivos que vaya alcanzando.</li>
