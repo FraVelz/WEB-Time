@@ -22,7 +22,7 @@ export function PauseIcon({ className }: IconProps) {
 export function TrashIcon({ className }: IconProps) {
   return (
     <svg
-      className={cn("size-[18px]", className)}
+      className={cn("size-4.5", className)}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

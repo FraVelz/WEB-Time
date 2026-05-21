@@ -21,7 +21,6 @@ function subscribeTheme(onStoreChange: () => void) {
 
 type ThemeProviderProps = {
   children: ReactNode;
-  /** Debe coincidir con `data-theme` del `<html>` renderizado en el servidor. */
   initialTheme: Theme;
 };
 
@@ -38,6 +37,7 @@ export function ThemeProvider({ children, initialTheme }: ThemeProviderProps) {
 
 export function useTheme() {
   const ctx = useContext(ThemeContext);
+
   if (!ctx) throw new Error("useTheme must be used within ThemeProvider");
   return ctx;
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import "./countdown-accordion.css";
+
 import { useCallback, useEffect, useState } from "react";
 import { getTimeRemaining } from "@/features/inicio/lib/countdown";
 import { CountdownCard } from "./CountdownCard";

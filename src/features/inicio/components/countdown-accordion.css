@@ -1,0 +1,85 @@
+/* Acordeón de countdowns (solo Inicio). Usado en CountdownGrid.tsx. */
+
+.countdown-accordion-item {
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background-color: var(--color-surface);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.countdown-accordion-item:has(.countdown-accordion-trigger:focus-visible) {
+  border-color: var(--color-accent);
+  box-shadow:
+    0 0 0 2px var(--color-accent-soft),
+    0 0 0 1px var(--color-accent);
+}
+
+.countdown-accordion-item + .countdown-accordion-item {
+  margin-top: 0.5rem;
+}
+
+.countdown-accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  background-color: transparent;
+  border: none;
+  border-radius: 1rem;
+  transition:
+    background-color 0.2s ease,
+    border-radius 0.2s ease;
+}
+
+.countdown-accordion-trigger[aria-expanded="true"] {
+  border-radius: 1rem 1rem 0 0;
+}
+
+.countdown-accordion-trigger:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.countdown-accordion-trigger:focus {
+  outline: none;
+}
+
+.countdown-accordion-trigger:focus-visible {
+  outline: none;
+  background-color: var(--color-surface-hover);
+}
+
+.countdown-accordion-trigger:focus-visible .chevron {
+  color: var(--color-accent);
+}
+
+.countdown-accordion-trigger[aria-expanded="true"]:not(:focus-visible) {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.countdown-accordion-trigger[aria-expanded="true"]:focus-visible {
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.countdown-accordion-trigger .chevron {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.2s ease;
+}
+
+.countdown-accordion-trigger[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+.countdown-accordion-panel {
+  padding: 0 1.25rem 1.25rem;
+}

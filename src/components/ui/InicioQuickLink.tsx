@@ -10,7 +10,7 @@ export function InicioQuickLink({ href, children }: InicioQuickLinkProps) {
   return (
     <Link
       href={href}
-      className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-3 text-sm font-medium text-[var(--color-text)] transition-colors hover:border-[var(--color-accent-soft)] hover:bg-[var(--color-surface-hover)]"
+      className="border-border bg-surface text-text hover:border-accent-soft hover:bg-surface-hover rounded-xl border px-5 py-3 text-sm font-medium transition-colors"
     >
       {children}
     </Link>

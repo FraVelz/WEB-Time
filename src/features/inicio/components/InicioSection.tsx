@@ -12,7 +12,7 @@ export function InicioSection() {
       </h2>
 
       <div>
-        <div className="relative w-full overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-lg">
+        <div className="border-border bg-surface relative w-full overflow-hidden rounded-2xl border shadow-lg">
           <div className="relative aspect-[4/3] w-full sm:aspect-video">
             <Image
               src="/Copia-de-Napoleón-Brienne.jpg"
@@ -22,12 +22,9 @@ export function InicioSection() {
               sizes="(max-width: 768px) 100vw, 900px"
               priority
             />
-            <div
-              className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)]/80 via-transparent to-transparent"
-              aria-hidden
-            />
+            <div className="from-bg/80 absolute inset-0 bg-gradient-to-t via-transparent to-transparent" aria-hidden />
             <div className="absolute bottom-4 left-4">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)]/80 bg-[var(--color-bg)]/80 px-3 py-1.5 text-xs font-semibold tracking-wide text-[var(--color-text)] shadow-lg backdrop-blur-md">
+              <span className="border-border/80 bg-bg/80 text-text inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold tracking-wide shadow-lg backdrop-blur-md">
                 <span className="text-sm leading-none" aria-hidden>
                   🇨🇴
                 </span>
@@ -38,7 +35,7 @@ export function InicioSection() {
         </div>
 
         <div className="mt-10 space-y-6">
-          <h3 className="text-2xl font-semibold text-[var(--color-text)]">Countdowns</h3>
+          <h3 className="text-text text-2xl font-semibold">Countdowns</h3>
           <CountdownGrid countdowns={COUNTDOWN_CONFIG} />
         </div>
       </div>

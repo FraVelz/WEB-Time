@@ -19,7 +19,7 @@ function toDate(value: Date | string): Date {
 }
 
 /** Ej: "Será en 2040, el 19 de mayo, a las 00:00" */
-function formatTargetDateTime(date: Date | string): string {
+function formatTargetDateTime(date: Date | string, past = false): string {
   const d = toDate(date);
   const year = d.toLocaleString("es-ES", {
     year: "numeric",
@@ -36,27 +36,8 @@ function formatTargetDateTime(date: Date | string): string {
     hour12: false,
     timeZone: COLOMBIA,
   });
-  return `Será en ${year}, el ${dayMonth}, a las ${time}`;
-}
-
-function formatTargetDateTimePast(date: Date | string): string {
-  const d = toDate(date);
-  const year = d.toLocaleString("es-ES", {
-    year: "numeric",
-    timeZone: COLOMBIA,
-  });
-  const dayMonth = d.toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    timeZone: COLOMBIA,
-  });
-  const time = d.toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: COLOMBIA,
-  });
-  return `Fue en ${year}, el ${dayMonth}, a las ${time}`;
+  const prefix = past ? "Fue" : "Será";
+  return `${prefix} en ${year}, el ${dayMonth}, a las ${time}`;
 }
 
 function TimeUnit({ value, label, size = "large" }: { value: string; label: string; size?: "large" | "medium" }) {
@@ -96,7 +77,7 @@ export function CountdownCard({ config, data, hideHeader }: CountdownCardProps) 
         )}
         {hideHeader && <p className="text-muted text-sm">{config.description}</p>}
         <p className="text-muted text-sm">
-          <strong className="text-text">{formatTargetDateTimePast(config.targetDate)}</strong>.
+          <strong className="text-text">{formatTargetDateTime(config.targetDate, true)}</strong>.
         </p>
         <div className="flex flex-col gap-5" role="timer" aria-live="polite">
           <p className="text-success text-xl font-semibold">¡Ya llegó la fecha!</p>

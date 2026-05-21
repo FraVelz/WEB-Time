@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
+
 import { usePomodoroOptional } from "@/features/pomodoro/context/PomodoroContext";
 import { POMODORO_PHASE_LABELS } from "@/features/pomodoro/lib/constants";
-import { useTimer } from "@/features/temporizador/context/TimerContext";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { cn } from "@/lib/cn";
+
+import { useTimer } from "@/features/temporizador/context/TimerContext";
 import { formatMmSs } from "@/lib/time";
+import { cn } from "@/lib/cn";
 
 const NAV_LINKS = [
   { path: "/inicio", label: "Inicio" },
@@ -47,12 +49,14 @@ function MobileMenuButton({ open, onToggle }: { open: boolean; onToggle: () => v
           open ? "top-1/2 -translate-y-1/2 rotate-45" : "top-3",
         )}
       />
+
       <span
         className={cn(
           "absolute top-1/2 block h-0.5 w-5 -translate-y-1/2 rounded-full bg-current transition-all duration-200",
           open ? "scale-0 opacity-0" : "opacity-100",
         )}
       />
+
       <span
         className={cn(
           "absolute block h-0.5 w-5 rounded-full bg-current transition-all duration-200",
@@ -63,19 +67,15 @@ function MobileMenuButton({ open, onToggle }: { open: boolean; onToggle: () => v
   );
 }
 
-function NavLink({
-  path,
-  label,
-  pathname,
-  onNavigate,
-  variant,
-}: {
+type NavLinkProps = {
   path: string;
   label: string;
   pathname: string;
   onNavigate?: () => void;
   variant: "mobile" | "desktop";
-}) {
+};
+
+function NavLink({ path, label, pathname, onNavigate, variant }: NavLinkProps) {
   const isActive = pathname === path || (path === "/inicio" && pathname === "/");
 
   if (variant === "mobile") {
@@ -86,7 +86,7 @@ function NavLink({
           "text-text block w-full rounded-lg px-4 py-3 text-base font-medium transition-colors",
           navFocusRing,
           isActive
-            ? "bg-accent-soft text-accent focus-visible:ring-offset-[var(--color-bg)]"
+            ? "bg-accent-soft text-accent focus-visible:ring-offset-bg"
             : "hover:bg-surface active:bg-surface focus-visible:bg-surface",
         )}
         onClick={onNavigate}
@@ -111,6 +111,7 @@ function NavLink({
       aria-current={isActive ? "page" : undefined}
     >
       {label}
+
       <span
         aria-hidden
         className={cn(
@@ -123,6 +124,16 @@ function NavLink({
   );
 }
 
+type RunningBadgesProps = {
+  timerDisplay: string;
+  timerAlarm?: boolean;
+  pomodoroDisplay: string;
+  pomodoroPhase: keyof typeof HEADER_PHASE_LABELS | undefined;
+  showTimer: boolean;
+  showPomodoro: boolean;
+  className?: string;
+};
+
 function RunningBadges({
   timerDisplay,
   timerAlarm,
@@ -131,15 +142,7 @@ function RunningBadges({
   showTimer,
   showPomodoro,
   className,
-}: {
-  timerDisplay: string;
-  timerAlarm?: boolean;
-  pomodoroDisplay: string;
-  pomodoroPhase: keyof typeof HEADER_PHASE_LABELS | undefined;
-  showTimer: boolean;
-  showPomodoro: boolean;
-  className?: string;
-}) {
+}: RunningBadgesProps) {
   if (!showTimer && !showPomodoro) return null;
 
   return (
@@ -158,15 +161,14 @@ function RunningBadges({
           aria-live={timerAlarm ? "polite" : undefined}
         >
           <span
-            className={cn(
-              "bg-accent size-1.5 rounded-full",
-              timerAlarm ? "animate-ping" : "animate-pulse",
-            )}
+            className={cn("bg-accent size-1.5 rounded-full", timerAlarm ? "animate-ping" : "animate-pulse")}
             aria-hidden
           />
+
           <span className={cn(timerAlarm && "tabular-nums")}>{timerDisplay}</span>
         </Link>
       )}
+
       {showPomodoro && pomodoroPhase && (
         <Link
           href="/pomodoro"
@@ -242,7 +244,9 @@ export function SiteHeader() {
             showPomodoro={showPomodoro}
             className="hidden md:flex"
           />
+
           <ThemeToggle className="size-11 md:size-10" />
+
           <MobileMenuButton open={open} onToggle={() => setOpen((o) => !o)} />
         </div>
       </div>

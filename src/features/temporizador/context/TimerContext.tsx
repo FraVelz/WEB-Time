@@ -14,7 +14,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(timerReducer, initialTimerState);
   const { mode, timers, crono, soundEnabled, alarmPlaying, alarmTimerId } = state;
 
-  const { playAlarm, requestWakeLock, releaseWakeLock, stopAlarmAudio, muteAlarmAudio } = useTimerAlarm(soundEnabled);
+  const { playAlarm, requestWakeLock, releaseWakeLock, stopAlarmAudio } = useTimerAlarm(soundEnabled);
 
   const setTimers = useCallback(
     (fn: (prev: TimerItem[]) => TimerItem[]) => dispatch({ type: "SET_TIMERS", timers: fn }),
@@ -115,9 +115,9 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   );
 
   const toggleSound = useCallback(() => {
-    if (soundEnabled) muteAlarmAudio();
+    if (soundEnabled) stopAlarmAudio();
     dispatch({ type: "TOGGLE_SOUND" });
-  }, [muteAlarmAudio, soundEnabled]);
+  }, [stopAlarmAudio, soundEnabled]);
 
   const resetCronometro = useCallback(() => {
     dispatch({ type: "SET_CRONO", crono: initialCrono });
@@ -137,8 +137,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const running = timers.find((t) => t.isRunning && t.endTime != null);
-  const alarmTimer =
-    alarmPlaying && alarmTimerId ? timers.find((t) => t.id === alarmTimerId) : undefined;
+  const alarmTimer = alarmPlaying && alarmTimerId ? timers.find((t) => t.id === alarmTimerId) : undefined;
 
   const displayForHeader = running
     ? { type: "timer" as const, id: running.id, secondsLeft: running.secondsLeft }
