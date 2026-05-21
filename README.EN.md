@@ -87,30 +87,6 @@ Open [http://localhost:3000](http://localhost:3000). The `/` route redirects to 
 
 ---
 
-## Time zone (Colombia)
-
-Target dates are set to **midnight in Colombia (America/Bogotá, UTC-5)** in `src/features/inicio/config/countdowns.ts` (`midnightColombia`). Remaining time uses the browser clock (`src/features/inicio/lib/countdown.ts`).
-
----
-
-## Configuration
-
-In **`src/features/inicio/config/countdowns.ts`**:
-
-- **Birth date:** `BIRTH_YEAR`, `BIRTH_MONTH`, `BIRTH_DAY` (default May 19, 2008). Used to build countdowns at ages 18, 20, 25, 30, 35, 40, 45, 50, 55, and 60.
-- **Fixed countdown:** year 2045 (`midnightColombia(2045, 1, 1)`). You can add, edit, or remove entries in `buildCountdowns()`.
-- **Timezone:** `COLOMBIA_UTC_OFFSET_HOURS` (5) in case Colombia’s offset changes.
-
----
-
-## Light/dark theme
-
-- Preference stored in the **`web-time-theme`** cookie (`light` | `dark`), not `localStorage`.
-- **`public/theme-init.js`** runs before hydration to apply the theme without flash; if no cookie exists, it uses `prefers-color-scheme`.
-- The server reads the cookie in `src/lib/theme.server.ts` and sets `data-theme` on `<html>`; the toggle is in the header (`ThemeToggle` + `ThemeProvider`).
-
----
-
 ## Scripts
 
 | Command                 | Description                  |
