@@ -40,7 +40,7 @@ No hay carpeta `docs/` hoy; no crear documentación nueva fuera de lo anterior *
 
 ## Descripción actual del producto (baseline)
 
-**WEB-Time** — web personal desplegada en [GitHub Pages](https://fravelz.github.io/WEB-Time/).
+**WEB-Time** — web personal con countdowns, Pomodoro, temporizadores y hora mundial.
 
 **Stack:** Next.js 15 (App Router), React 18, TypeScript, Tailwind CSS v4, pnpm.
 
@@ -110,7 +110,7 @@ Mantener el mismo orden en ambos idiomas:
 8. **Configuración** — `countdowns.ts`, `BIRTH_*`, countdowns fijos
 9. **Tema claro/oscuro** (opcional pero recomendado) — cookie `web-time-theme` (sin `localStorage`), toggle en header, `theme-init.js`
 10. **Scripts** — tabla con todos los de `package.json` relevantes para usuarios
-11. **Producción** — `build` + `start`; nota breve si el despliegue es GitHub Pages (HTML estático vs servidor Node para cookies SSR)
+11. **Producción** — `build` + `start` (servidor Node para cookies SSR del tema)
 12. **Autor**
 
 ## Scripts a documentar en la tabla
