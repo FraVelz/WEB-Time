@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ensureTimeZoneCookie,
   getTimeZone,
@@ -47,7 +47,9 @@ export function PomodoroTimezoneSelector() {
   const [mounted, setMounted] = useState(false);
   const [timeZone, setTimeZoneState] = useState("UTC");
   const [filter, setFilter] = useState("");
-  const [listOpen, setListOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     ensureTimeZoneCookie();
@@ -59,6 +61,32 @@ export function PomodoroTimezoneSelector() {
     return () => window.removeEventListener(POMODORO_TIMEZONE_UPDATED_EVENT, onUpdate);
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+        setOpen(false);
+        setFilter("");
+      }
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        setFilter("");
+      }
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    searchRef.current?.focus();
+
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
   const catalog = useMemo(() => getGmtOffsetCatalog(), []);
   const filtered = useMemo(() => searchGmtOffsets(filter), [filter]);
   const selectedGmt = useMemo(
@@ -69,18 +97,15 @@ export function PomodoroTimezoneSelector() {
   const handleSelect = (option: GmtOffsetOption) => {
     setTimeZone(option.canonicalZoneId);
     setTimeZoneState(option.canonicalZoneId);
-    setListOpen(false);
+    setOpen(false);
     setFilter("");
   };
 
   if (!mounted) return null;
 
-  const browserGmt = findGmtOffsetByZoneId(getBrowserTimeZone());
   const currentOffset = formatGmtOffset(timeZone);
   const isSearching = filter.trim().length > 0;
-  const showList = listOpen || isSearching;
-  const browserDiffers =
-    browserGmt && selectedGmt && browserGmt.offsetMinutes !== selectedGmt.offsetMinutes;
+  const listOptions = isSearching ? filtered : catalog;
 
   return (
     <div className="border-border bg-surface rounded-2xl border p-5 md:p-6">
@@ -99,86 +124,86 @@ export function PomodoroTimezoneSelector() {
         </p>
       </div>
 
-      {selectedGmt && (
-        <p className="text-muted mb-3 text-sm">
-          Seleccionado:{" "}
-          <span className="text-text font-medium">{formatGmtOptionLabel(selectedGmt)}</span>
-        </p>
-      )}
-
-      <label className="text-muted mb-1.5 block text-xs font-medium" htmlFor="pomodoro-tz-filter">
-        Buscar tu país o GMT
+      <label className="text-muted mb-1.5 block text-xs font-medium" htmlFor="pomodoro-tz-trigger">
+        Desfase GMT
       </label>
-      <input
-        id="pomodoro-tz-filter"
-        type="search"
-        value={filter}
-        onChange={(e) => {
-          setFilter(e.target.value);
-          setListOpen(true);
-        }}
-        onFocus={() => setListOpen(true)}
-        placeholder="Ej. Colombia, España, GMT-5, UTC+0…"
-        className={`${inputClassName} mb-2`}
-        autoComplete="off"
-        role="combobox"
-        aria-expanded={showList}
-        aria-controls="pomodoro-tz-listbox"
-        aria-autocomplete="list"
-      />
 
-      <p className="text-muted mb-2 font-mono text-[10px]">
-        {isSearching
-          ? `${filtered.length} desfase(s) encontrado(s)`
-          : `${catalog.length} desfases GMT únicos · escribe tu país para filtrar`}
-      </p>
-
-      {!showList && (
+      <div ref={rootRef} className="relative">
         <button
           type="button"
-          onClick={() => setListOpen(true)}
-          className="border-border text-muted hover:bg-surface-hover hover:text-text w-full cursor-pointer rounded-xl border px-3 py-2.5 text-sm transition-colors"
+          id="pomodoro-tz-trigger"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-controls="pomodoro-tz-listbox"
+          onClick={() => setOpen((prev) => !prev)}
+          className={`${inputClassName} hover:bg-surface-hover flex w-full cursor-pointer items-center justify-between gap-2 text-left transition-colors`}
         >
-          Ver todos los desfases GMT
+          <span className={selectedGmt ? "text-text font-medium" : "text-muted"}>
+            {selectedGmt ? formatGmtOptionLabel(selectedGmt) : "Seleccionar desfase GMT"}
+          </span>
+          <svg
+            className={`text-muted h-4 w-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
         </button>
-      )}
 
-      {showList && (
-        <div
-          id="pomodoro-tz-listbox"
-          role="listbox"
-          aria-label="Desfases GMT"
-          className="border-border bg-bg max-h-[min(320px,45vh)] overflow-y-auto rounded-xl border p-2"
-        >
-          {browserDiffers && browserGmt && !isSearching && (
-            <div className="border-border mb-2 border-b pb-2">
-              <p className="text-muted mb-1 px-2 text-[10px] font-medium tracking-wide uppercase">
-                Según tu navegador
+        {open && (
+          <div className="border-border bg-bg absolute z-20 mt-1.5 w-full overflow-hidden rounded-xl border shadow-lg">
+            <div className="border-border border-b p-2">
+              <label className="sr-only" htmlFor="pomodoro-tz-filter">
+                Buscar tu país o GMT
+              </label>
+              <input
+                ref={searchRef}
+                id="pomodoro-tz-filter"
+                type="search"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                placeholder="Ej. Colombia, España, GMT-5, UTC+0…"
+                className={inputClassName}
+                autoComplete="off"
+              />
+              <p className="text-muted mt-1.5 px-1 font-mono text-[10px]">
+                {isSearching
+                  ? `${filtered.length} desfase(s) encontrado(s)`
+                  : `${catalog.length} desfases GMT únicos`}
               </p>
-              <GmtRow option={browserGmt} selected={false} onSelect={handleSelect} />
             </div>
-          )}
 
-          {isSearching && filtered.length === 0 ? (
-            <p className="text-muted px-3 py-4 text-sm">
-              No hay resultados. Busca el nombre de tu país (ej.{" "}
-              <span className="text-text">México</span>) o el GMT directamente (ej.{" "}
-              <span className="text-text">GMT-5</span>).
-            </p>
-          ) : (
-            <div className="space-y-0.5">
-              {(isSearching ? filtered : catalog).map((option) => (
-                <GmtRow
-                  key={option.offsetMinutes}
-                  option={option}
-                  selected={selectedGmt?.offsetMinutes === option.offsetMinutes}
-                  onSelect={handleSelect}
-                />
-              ))}
+            <div
+              id="pomodoro-tz-listbox"
+              role="listbox"
+              aria-label="Desfases GMT"
+              className="max-h-[min(280px,40vh)] overflow-y-auto p-2"
+            >
+              {isSearching && filtered.length === 0 ? (
+                <p className="text-muted px-3 py-4 text-sm">
+                  No hay resultados. Busca el nombre de tu país (ej.{" "}
+                  <span className="text-text">México</span>) o el GMT directamente (ej.{" "}
+                  <span className="text-text">GMT-5</span>).
+                </p>
+              ) : (
+                <div className="space-y-0.5">
+                  {listOptions.map((option) => (
+                    <GmtRow
+                      key={option.offsetMinutes}
+                      option={option}
+                      selected={selectedGmt?.offsetMinutes === option.offsetMinutes}
+                      onSelect={handleSelect}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
