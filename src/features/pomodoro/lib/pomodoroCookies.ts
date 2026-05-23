@@ -1,3 +1,12 @@
+import {
+  dateKeyDaysBefore,
+  dayKeyInTimeZone,
+  getBrowserTimeZone,
+  isValidTimeZone,
+  weekdayLabelForDateKey,
+} from "@/features/pomodoro/lib/pomodoroTimezone";
+import { resolveToCanonicalZone } from "@/features/pomodoro/lib/timezoneCatalog";
+
 export type PomodoroPhase = "work" | "shortBreak" | "longBreak";
 
 export type DayStats = {
@@ -18,10 +27,12 @@ export type CookieConsent = "accepted" | "rejected";
 
 const CONSENT_COOKIE = "pomodoro_cookie_consent";
 const STATS_COOKIE = "pomodoro_stats";
+const TIMEZONE_COOKIE = "pomodoro_timezone";
 const MAX_STORED_DAYS = 30;
 const CHART_DAYS = 7;
 
 export const POMODORO_STATS_UPDATED_EVENT = "pomodoro-stats-updated";
+export const POMODORO_TIMEZONE_UPDATED_EVENT = "pomodoro-timezone-updated";
 
 const emptyDay = (): DayStats => ({ work: 0, shortBreak: 0, longBreak: 0 });
 
@@ -46,8 +57,9 @@ function deleteCookie(name: string) {
   document.cookie = `${name}=;path=/;max-age=0`;
 }
 
-function todayKey(date = new Date()) {
-  return date.toISOString().slice(0, 10);
+function notifyTimezoneUpdated() {
+  if (!isBrowser()) return;
+  window.dispatchEvent(new Event(POMODORO_TIMEZONE_UPDATED_EVENT));
 }
 
 function parseStats(raw: string | null): StatsStore {
@@ -90,6 +102,27 @@ export function hasStatsConsent() {
   return getCookieConsent() === "accepted";
 }
 
+export function getTimeZone(): string {
+  const stored = readCookie(TIMEZONE_COOKIE);
+  if (stored && isValidTimeZone(stored)) return resolveToCanonicalZone(stored);
+  return resolveToCanonicalZone(getBrowserTimeZone());
+}
+
+/** Guarda la zona en cookie y notifica a la UI para refrescar la gráfica. */
+export function setTimeZone(timeZone: string) {
+  if (!isValidTimeZone(timeZone)) return;
+  writeCookie(TIMEZONE_COOKIE, resolveToCanonicalZone(timeZone));
+  notifyTimezoneUpdated();
+  notifyStatsUpdated();
+}
+
+/** Persiste el GMT del navegador si aún no hay cookie. */
+export function ensureTimeZoneCookie() {
+  if (!readCookie(TIMEZONE_COOKIE)) {
+    writeCookie(TIMEZONE_COOKIE, resolveToCanonicalZone(getBrowserTimeZone()));
+  }
+}
+
 export function getStatsStore(): StatsStore {
   return parseStats(readCookie(STATS_COOKIE));
 }
@@ -98,7 +131,7 @@ export function recordPhaseComplete(phase: PomodoroPhase) {
   if (!hasStatsConsent()) return;
 
   const store = pruneStore(getStatsStore());
-  const key = todayKey();
+  const key = dayKeyInTimeZone(new Date(), getTimeZone());
   const day = store[key] ?? emptyDay();
   day[phase] += 1;
   store[key] = day;
@@ -107,15 +140,14 @@ export function recordPhaseComplete(phase: PomodoroPhase) {
   notifyStatsUpdated();
 }
 
-export function getLast7DaysChartData(): PomodoroChartDay[] {
+export function getLast7DaysChartData(timeZone = getTimeZone()): PomodoroChartDay[] {
   const store = getStatsStore();
-  const formatter = new Intl.DateTimeFormat("es", { weekday: "short" });
+  const todayKey = dayKeyInTimeZone(new Date(), timeZone);
 
   return Array.from({ length: CHART_DAYS }, (_, index) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (CHART_DAYS - 1 - index));
-    const key = todayKey(date);
-    const label = formatter.format(date).replace(".", "");
+    const daysAgo = CHART_DAYS - 1 - index;
+    const key = dateKeyDaysBefore(todayKey, daysAgo);
+    const label = weekdayLabelForDateKey(key, timeZone);
     const pomodoros = store[key]?.work ?? 0;
     return { date: key, label, pomodoros };
   });

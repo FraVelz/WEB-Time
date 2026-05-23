@@ -3,28 +3,43 @@
 import { useEffect, useState } from "react";
 import { PomodoroIsometricChart } from "@/features/pomodoro/components/grafica";
 import { PomodoroCookieConsent } from "@/features/pomodoro/components/PomodoroCookieConsent";
+import { PomodoroTimezoneSelector } from "@/features/pomodoro/components/PomodoroTimezoneSelector";
 import {
+  ensureTimeZoneCookie,
   getCookieConsent,
+  getTimeZone,
   getWeekTotals,
   hasStatsConsent,
   POMODORO_STATS_UPDATED_EVENT,
+  POMODORO_TIMEZONE_UPDATED_EVENT,
 } from "@/features/pomodoro/lib/pomodoroCookies";
+import { findGmtOffsetByZoneId, formatGmtOptionLabel } from "@/features/pomodoro/lib/timezoneCatalog";
+import { formatGmtOffset } from "@/features/pomodoro/lib/pomodoroTimezone";
 
 export function PomodoroStatsSection() {
   const [consent, setConsent] = useState<ReturnType<typeof getCookieConsent>>(null);
   const [stats, setStats] = useState(getWeekTotals);
+  const [timeZone, setTimeZone] = useState("UTC");
 
   useEffect(() => {
+    ensureTimeZoneCookie();
     const sync = () => {
       setConsent(getCookieConsent());
+      setTimeZone(getTimeZone());
       setStats(getWeekTotals());
     };
     sync();
     window.addEventListener(POMODORO_STATS_UPDATED_EVENT, sync);
-    return () => window.removeEventListener(POMODORO_STATS_UPDATED_EVENT, sync);
+    window.addEventListener(POMODORO_TIMEZONE_UPDATED_EVENT, sync);
+    return () => {
+      window.removeEventListener(POMODORO_STATS_UPDATED_EVENT, sync);
+      window.removeEventListener(POMODORO_TIMEZONE_UPDATED_EVENT, sync);
+    };
   }, []);
 
   const { total, peak, data } = stats;
+  const gmtOption = findGmtOffsetByZoneId(timeZone);
+  const gmtLabel = gmtOption ? formatGmtOptionLabel(gmtOption) : formatGmtOffset(timeZone);
 
   const showChart = hasStatsConsent();
   const rejected = consent === "rejected";
@@ -36,10 +51,12 @@ export function PomodoroStatsSection() {
           Estadísticas
         </h2>
         <p className="text-muted max-w-2xl text-sm">
-          Resumen de los últimos 7 días. Cada barra cuenta pomodoros de trabajo completados ese día.
+          Resumen de los últimos 7 días según tu zona horaria ({gmtLabel}). Cada barra cuenta
+          pomodoros de trabajo completados ese día local.
         </p>
       </header>
 
+      <PomodoroTimezoneSelector />
       <PomodoroCookieConsent />
 
       {rejected && (
