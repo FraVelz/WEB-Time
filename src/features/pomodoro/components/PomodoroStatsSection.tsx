@@ -56,7 +56,6 @@ export function PomodoroStatsSection() {
         </p>
       </header>
 
-      <PomodoroTimezoneSelector />
       <PomodoroCookieConsent />
 
       {rejected && (
@@ -76,6 +75,8 @@ export function PomodoroStatsSection() {
       <div className="border-border bg-surface min-h-[320px] overflow-hidden rounded-2xl border">
         <PomodoroIsometricChart data={data} total={total} peakLabel={peak.label} peakCount={peak.pomodoros} />
       </div>
+
+      <PomodoroTimezoneSelector />
     </section>
   );
 }
