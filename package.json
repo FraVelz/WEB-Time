@@ -13,7 +13,9 @@
     "react:doctor": "react-doctor . --full --verbose"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.5.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.4.0",
     "motion": "^12.39.0",
     "next": "15.0.8",
     "react": "^18.3.1",

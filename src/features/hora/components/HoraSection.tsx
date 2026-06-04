@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { formatTimeInZone } from "@/lib/dates";
 
 const ZONES = [
   { zone: "Asia/Shanghai", label: "China", capital: "Pekín" },
@@ -16,13 +17,7 @@ const ZONES = [
 
 function formatZoneTime(zone: string): string {
   try {
-    return new Date().toLocaleTimeString("es-ES", {
-      timeZone: zone,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    });
+    return formatTimeInZone(zone);
   } catch {
     return "N/D";
   }

@@ -1,9 +1,11 @@
 import {
   dateKeyDaysBefore,
   dayKeyInTimeZone,
+  weekdayLabelForDateKey,
+} from "@/lib/dates";
+import {
   getBrowserTimeZone,
   isValidTimeZone,
-  weekdayLabelForDateKey,
 } from "@/features/pomodoro/lib/pomodoroTimezone";
 import { resolveToCanonicalZone } from "@/features/pomodoro/lib/timezoneCatalog";
 

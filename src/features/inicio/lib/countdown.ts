@@ -2,6 +2,8 @@
  * Cálculo de tiempo restante hasta una fecha objetivo.
  */
 
+import { differenceInCalendarDays, differenceInMilliseconds, intervalToDuration } from "date-fns";
+
 export type TimeRemaining = {
   totalMs: number;
   passed: boolean;
@@ -14,55 +16,35 @@ export type TimeRemaining = {
   totalDays: number;
 };
 
+const emptyRemaining: Omit<TimeRemaining, "totalMs" | "passed"> = {
+  years: 0,
+  months: 0,
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+  totalDays: 0,
+};
+
 export function getTimeRemaining(from: Date, to: Date): TimeRemaining {
-  const totalMs = to.getTime() - from.getTime();
+  const totalMs = differenceInMilliseconds(to, from);
   const passed = totalMs <= 0;
 
   if (passed) {
-    return {
-      totalMs: 0,
-      passed: true,
-      years: 0,
-      months: 0,
-      days: 0,
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
-      totalDays: 0,
-    };
+    return { totalMs: 0, passed: true, ...emptyRemaining };
   }
 
-  const seconds = Math.floor((totalMs / 1000) % 60);
-  const minutes = Math.floor((totalMs / (1000 * 60)) % 60);
-  const hours = Math.floor((totalMs / (1000 * 60 * 60)) % 24);
-  let d = new Date(from.getTime());
-  let years = 0;
-  let months = 0;
-
-  while (true) {
-    const nextYear = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate());
-    if (nextYear > to) break;
-    d = nextYear;
-    years += 1;
-  }
-  while (true) {
-    const nextMonth = new Date(d.getFullYear(), d.getMonth() + 1, d.getDate());
-    if (nextMonth > to) break;
-    d = nextMonth;
-    months += 1;
-  }
-  const days = Math.floor((to.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
-  const totalDays = Math.floor(totalMs / (1000 * 60 * 60 * 24));
+  const duration = intervalToDuration({ start: from, end: to });
 
   return {
     totalMs,
     passed: false,
-    years,
-    months,
-    days,
-    hours,
-    minutes,
-    seconds,
-    totalDays,
+    years: duration.years ?? 0,
+    months: duration.months ?? 0,
+    days: duration.days ?? 0,
+    hours: duration.hours ?? 0,
+    minutes: duration.minutes ?? 0,
+    seconds: duration.seconds ?? 0,
+    totalDays: differenceInCalendarDays(to, from),
   };
 }

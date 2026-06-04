@@ -4,22 +4,12 @@
  * Modifica aquí tu fecha de nacimiento y las metas.
  */
 
-/** Zona horaria: Colombia (UTC-5, sin horario de verano) */
-const COLOMBIA_UTC_OFFSET_HOURS = 5;
+import { midnightInTimeZone } from "@/lib/dates";
 
 /** 19 de mayo de 2008 — mayor de edad en 2026 */
 const BIRTH_YEAR = 2008;
 const BIRTH_MONTH = 5; // 1–12 (mayo)
 const BIRTH_DAY = 19;
-
-/**
- * Crea una fecha a medianoche en Colombia (America/Bogotá).
- * Evita que el servidor (p. ej. UTC) cambie "día siguiente" o "año nuevo".
- */
-function midnightColombia(year: number, month: number, day: number): Date {
-  // month 1–12 → Date.UTC usa mes 0–11
-  return new Date(Date.UTC(year, month - 1, day, COLOMBIA_UTC_OFFSET_HOURS, 0, 0, 0));
-}
 
 export type CountdownItem = {
   id: string;
@@ -30,6 +20,9 @@ export type CountdownItem = {
 };
 
 function buildCountdowns(): CountdownItem[] {
+  const midnightColombia = (year: number, month: number, day: number) =>
+    midnightInTimeZone(year, month, day);
+
   const countdowns: CountdownItem[] = [
     {
       id: "responsabilidad",

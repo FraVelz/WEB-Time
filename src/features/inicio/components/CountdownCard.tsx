@@ -5,6 +5,7 @@ import type { CountdownItem } from "@/features/inicio/config/countdowns";
 import type { TimeRemaining } from "@/features/inicio/lib/countdown";
 import { pluralize, pad } from "@/features/inicio/lib/formatting";
 import { cn } from "@/lib/cn";
+import { formatTargetDateTime } from "@/lib/dates";
 
 type CountdownCardProps = {
   config: CountdownItem;
@@ -12,34 +13,6 @@ type CountdownCardProps = {
   /** En acordeón el título va en el trigger; no repetir cabecera */
   hideHeader?: boolean;
 };
-
-const COLOMBIA = "America/Bogota";
-
-function toDate(value: Date | string): Date {
-  return typeof value === "string" ? new Date(value) : value;
-}
-
-/** Ej: "Será en 2040, el 19 de mayo, a las 00:00" */
-function formatTargetDateTime(date: Date | string, past = false): string {
-  const d = toDate(date);
-  const year = d.toLocaleString("es-ES", {
-    year: "numeric",
-    timeZone: COLOMBIA,
-  });
-  const dayMonth = d.toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    timeZone: COLOMBIA,
-  });
-  const time = d.toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: COLOMBIA,
-  });
-  const prefix = past ? "Fue" : "Será";
-  return `${prefix} en ${year}, el ${dayMonth}, a las ${time}`;
-}
 
 function PassedCelebration({ targetDate }: { targetDate: Date | string }) {
   return (
