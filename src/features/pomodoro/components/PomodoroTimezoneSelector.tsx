@@ -113,9 +113,8 @@ export function PomodoroTimezoneSelector() {
         <div>
           <h3 className="text-text text-base font-semibold">Zona horaria (GMT)</h3>
           <p className="text-muted mt-1 max-w-xl text-sm leading-relaxed">
-            Solo hay un desfase por GMT (sin repetidos). Busca tu país para saber cuál te corresponde
-            — por ejemplo <span className="text-text">Colombia</span> → GMT-5 — y selecciónalo. Se
-            guarda en la cookie{" "}
+            Solo hay un desfase por GMT (sin repetidos). Busca tu país para saber cuál te corresponde — por ejemplo{" "}
+            <span className="text-text">Colombia</span> → GMT-5 — y selecciónalo. Se guarda en la cookie{" "}
             <code className="text-text font-mono text-xs">pomodoro_timezone</code>.
           </p>
         </div>
@@ -170,9 +169,7 @@ export function PomodoroTimezoneSelector() {
                 autoComplete="off"
               />
               <p className="text-muted mt-1.5 px-1 font-mono text-[10px]">
-                {isSearching
-                  ? `${filtered.length} desfase(s) encontrado(s)`
-                  : `${catalog.length} desfases GMT únicos`}
+                {isSearching ? `${filtered.length} desfase(s) encontrado(s)` : `${catalog.length} desfases GMT únicos`}
               </p>
             </div>
 
@@ -184,9 +181,8 @@ export function PomodoroTimezoneSelector() {
             >
               {isSearching && filtered.length === 0 ? (
                 <p className="text-muted px-3 py-4 text-sm">
-                  No hay resultados. Busca el nombre de tu país (ej.{" "}
-                  <span className="text-text">México</span>) o el GMT directamente (ej.{" "}
-                  <span className="text-text">GMT-5</span>).
+                  No hay resultados. Busca el nombre de tu país (ej. <span className="text-text">México</span>) o el GMT
+                  directamente (ej. <span className="text-text">GMT-5</span>).
                 </p>
               ) : (
                 <div className="space-y-0.5">

@@ -7,12 +7,7 @@ export const COLOMBIA_TIME_ZONE = "America/Bogota";
 export const dateFnsEs = es;
 
 /** Medianoche en Colombia (America/Bogotá). */
-export function midnightInTimeZone(
-  year: number,
-  month: number,
-  day: number,
-  timeZone = COLOMBIA_TIME_ZONE,
-): Date {
+export function midnightInTimeZone(year: number, month: number, day: number, timeZone = COLOMBIA_TIME_ZONE): Date {
   return new TZDate(year, month - 1, day, 0, 0, 0, 0, timeZone);
 }
 
@@ -38,11 +33,7 @@ export function weekdayLabelForDateKey(dateKey: string, timeZone: string): strin
 }
 
 /** Ej: "Será en 2040, el 19 de mayo, a las 00:00" */
-export function formatTargetDateTime(
-  date: Date | string,
-  past = false,
-  timeZone = COLOMBIA_TIME_ZONE,
-): string {
+export function formatTargetDateTime(date: Date | string, past = false, timeZone = COLOMBIA_TIME_ZONE): string {
   const zoned = new TZDate(toDate(date), timeZone);
   const year = format(zoned, "yyyy", { locale: es });
   const dayMonth = format(zoned, "d 'de' MMMM", { locale: es });

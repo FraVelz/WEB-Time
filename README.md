@@ -89,15 +89,15 @@ Abre [http://localhost:3000](http://localhost:3000). La ruta `/` redirige a `/in
 
 ## Scripts
 
-| Comando                 | Descripción                       |
-| ----------------------- | --------------------------------- |
-| `pnpm run dev`          | Servidor de desarrollo            |
-| `pnpm run build`        | Build de producción               |
-| `pnpm start`            | Servir build (tras `build`)       |
-| `pnpm run lint`         | ESLint                            |
-| `pnpm run lint:fix`     | ESLint con corrección automática  |
-| `pnpm run format`       | Prettier (formatear)              |
-| `pnpm run format:check` | Prettier (solo comprobar)         |
+| Comando                 | Descripción                              |
+| ----------------------- | ---------------------------------------- |
+| `pnpm run dev`          | Servidor de desarrollo                   |
+| `pnpm run build`        | Build de producción                      |
+| `pnpm start`            | Servir build (tras `build`)              |
+| `pnpm run lint`         | ESLint                                   |
+| `pnpm run lint:fix`     | ESLint con corrección automática         |
+| `pnpm run format`       | Prettier (formatear)                     |
+| `pnpm run format:check` | Prettier (solo comprobar)                |
 | `pnpm run react:doctor` | Diagnóstico React (opcional, desarrollo) |
 
 ---

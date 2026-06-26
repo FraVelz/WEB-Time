@@ -20,8 +20,7 @@ export type CountdownItem = {
 };
 
 function buildCountdowns(): CountdownItem[] {
-  const midnightColombia = (year: number, month: number, day: number) =>
-    midnightInTimeZone(year, month, day);
+  const midnightColombia = (year: number, month: number, day: number) => midnightInTimeZone(year, month, day);
 
   const countdowns: CountdownItem[] = [
     {

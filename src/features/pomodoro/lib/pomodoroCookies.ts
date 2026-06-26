@@ -1,12 +1,5 @@
-import {
-  dateKeyDaysBefore,
-  dayKeyInTimeZone,
-  weekdayLabelForDateKey,
-} from "@/lib/dates";
-import {
-  getBrowserTimeZone,
-  isValidTimeZone,
-} from "@/features/pomodoro/lib/pomodoroTimezone";
+import { dateKeyDaysBefore, dayKeyInTimeZone, weekdayLabelForDateKey } from "@/lib/dates";
+import { getBrowserTimeZone, isValidTimeZone } from "@/features/pomodoro/lib/pomodoroTimezone";
 import { resolveToCanonicalZone } from "@/features/pomodoro/lib/timezoneCatalog";
 
 export type PomodoroPhase = "work" | "shortBreak" | "longBreak";

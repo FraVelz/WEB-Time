@@ -1,8 +1,5 @@
 import ianaTimeZones from "@/features/pomodoro/lib/ianaTimeZones.json";
-import {
-  CANONICAL_ZONE_BY_OFFSET,
-  OFFSET_REFERENCES_ES,
-} from "@/features/pomodoro/lib/offsetReferences";
+import { CANONICAL_ZONE_BY_OFFSET, OFFSET_REFERENCES_ES } from "@/features/pomodoro/lib/offsetReferences";
 import { formatGmtOffset, isValidTimeZone } from "@/features/pomodoro/lib/pomodoroTimezone";
 
 /** Una sola entrada por desfase GMT (sin duplicados). */
@@ -19,11 +16,7 @@ let catalogCache: GmtOffsetOption[] | null = null;
 let zoneToOffsetCache: Map<string, number> | null = null;
 
 function normalizeSearch(value: string): string {
-  return value
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
-    .toLowerCase()
-    .trim();
+  return value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().trim();
 }
 
 function cityFromZoneId(zoneId: string): string {
@@ -72,10 +65,7 @@ function offsetSearchVariants(offsetLabel: string): string {
   ];
   if (h === 0) variants.push("gmt0", "gmt-0", "gmt+0", "utc0", "utc+0", "utc-0", "zulu");
   if (m) {
-    variants.push(
-      `gmt${sign}${h}:${String(m).padStart(2, "0")}`,
-      `utc${sign}${h}:${String(m).padStart(2, "0")}`,
-    );
+    variants.push(`gmt${sign}${h}:${String(m).padStart(2, "0")}`, `utc${sign}${h}:${String(m).padStart(2, "0")}`);
   }
   return variants.join(" ");
 }
@@ -119,9 +109,7 @@ export function buildGmtOffsetCatalog(date = new Date()): GmtOffsetOption[] {
     const offsetLabel = formatGmtOffset(canonicalZoneId, date);
     const references = referencesForOffset(offMin, canonicalZoneId);
 
-    const zoneKeywords = zoneIds
-      .map((id) => `${id} ${cityFromZoneId(id)} ${id.split("/")[0] ?? ""}`)
-      .join(" ");
+    const zoneKeywords = zoneIds.map((id) => `${id} ${cityFromZoneId(id)} ${id.split("/")[0] ?? ""}`).join(" ");
 
     const searchText = normalizeSearch(
       [offsetLabel, references, offsetSearchVariants(offsetLabel), zoneKeywords].join(" "),

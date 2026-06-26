@@ -61,21 +61,9 @@ function IsoBar({
   const url = (name: string) => `url(#${idPrefix}-${name})`;
   const strokeColor = highlight ? HIGHLIGHT_COLOR_DARK : "var(--color-accent)";
 
-  const frontFill = FILLED
-    ? highlight
-      ? url("iso-front-accent")
-      : url("iso-front-base")
-    : "none";
-  const topFill = FILLED
-    ? highlight
-      ? url("iso-top-accent")
-      : url("iso-top-base")
-    : "none";
-  const rightFill = FILLED
-    ? highlight
-      ? url("iso-right-accent")
-      : url("iso-right-base")
-    : "none";
+  const frontFill = FILLED ? (highlight ? url("iso-front-accent") : url("iso-front-base")) : "none";
+  const topFill = FILLED ? (highlight ? url("iso-top-accent") : url("iso-top-base")) : "none";
+  const rightFill = FILLED ? (highlight ? url("iso-right-accent") : url("iso-right-base")) : "none";
   const hatchFill = highlight ? url("iso-hatch-accent") : url("iso-hatch-base");
 
   return (
@@ -89,31 +77,11 @@ function IsoBar({
       }}
       style={{ transformBox: "fill-box", transformOrigin: "50% 100%" }}
     >
-      <polygon
-        points={sidePoints}
-        fill={rightFill}
-        stroke={strokeColor}
-        strokeWidth={FILLED ? 0 : 1}
-      />
-      <polygon
-        points={topPoints}
-        fill={topFill}
-        stroke={strokeColor}
-        strokeWidth={FILLED ? 0 : 1}
-      />
-      <rect
-        x={bx}
-        y={by}
-        width={bw}
-        height={bh}
-        fill={frontFill}
-        stroke={strokeColor}
-        strokeWidth={FILLED ? 0 : 1}
-      />
+      <polygon points={sidePoints} fill={rightFill} stroke={strokeColor} strokeWidth={FILLED ? 0 : 1} />
+      <polygon points={topPoints} fill={topFill} stroke={strokeColor} strokeWidth={FILLED ? 0 : 1} />
+      <rect x={bx} y={by} width={bw} height={bh} fill={frontFill} stroke={strokeColor} strokeWidth={FILLED ? 0 : 1} />
       {FILLED && <rect x={bx} y={by} width={bw} height={bh} fill={hatchFill} />}
-      {FILLED && highlight && (
-        <rect x={bx} y={by} width={2} height={bh} fill="rgba(0,0,0,0.15)" />
-      )}
+      {FILLED && highlight && <rect x={bx} y={by} width={2} height={bh} fill="rgba(0,0,0,0.15)" />}
     </motion.g>
   );
 }
@@ -176,18 +144,10 @@ type PomodoroIsometricChartProps = {
   peakCount: number;
 };
 
-export function PomodoroIsometricChart({
-  data,
-  total,
-  peakLabel,
-  peakCount,
-}: PomodoroIsometricChartProps) {
+export function PomodoroIsometricChart({ data, total, peakLabel, peakCount }: PomodoroIsometricChartProps) {
   const idPrefix = React.useId().replace(/:/g, "");
 
-  const maxValue = React.useMemo(
-    () => data.reduce((m, d) => (d.pomodoros > m ? d.pomodoros : m), 0),
-    [data],
-  );
+  const maxValue = React.useMemo(() => data.reduce((m, d) => (d.pomodoros > m ? d.pomodoros : m), 0), [data]);
 
   return (
     <div className="flex h-full w-full flex-col p-4">
@@ -238,12 +198,8 @@ export function PomodoroIsometricChart({
             content={
               <ChartTooltipContent
                 formatter={(
-                  value: Parameters<
-                    NonNullable<DefaultTooltipContentProps["formatter"]>
-                  >[0],
-                  name: Parameters<
-                    NonNullable<DefaultTooltipContentProps["formatter"]>
-                  >[1],
+                  value: Parameters<NonNullable<DefaultTooltipContentProps["formatter"]>>[0],
+                  name: Parameters<NonNullable<DefaultTooltipContentProps["formatter"]>>[1],
                 ) => (
                   <div className="flex flex-1 items-center gap-2">
                     <div
@@ -251,9 +207,7 @@ export function PomodoroIsometricChart({
                       style={{ background: "var(--color-pomodoros-0)" }}
                     />
                     <span className="text-muted flex-1 capitalize">{String(name ?? "pomodoros")}</span>
-                    <span className="text-text font-mono font-medium tabular-nums">
-                      {value ?? 0}
-                    </span>
+                    <span className="text-text font-mono font-medium tabular-nums">{value ?? 0}</span>
                   </div>
                 )}
               />
@@ -262,9 +216,7 @@ export function PomodoroIsometricChart({
           <Bar
             dataKey="pomodoros"
             isAnimationActive={false}
-            shape={(props: unknown) => (
-              <IsoBar {...(props as ShapeProps)} maxValue={maxValue} idPrefix={idPrefix} />
-            )}
+            shape={(props: unknown) => <IsoBar {...(props as ShapeProps)} maxValue={maxValue} idPrefix={idPrefix} />}
           />
         </BarChart>
       </ChartContainer>

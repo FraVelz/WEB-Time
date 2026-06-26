@@ -21,9 +21,7 @@ const VALID_THEME_KEYS = Object.keys(THEMES) as ThemeKey[];
 function validateChartConfigColors(config: ChartConfig): void {
   for (const [key, value] of Object.entries(config)) {
     if (value.colors) {
-      const hasValidThemeKey = VALID_THEME_KEYS.some(
-        (themeKey) => value.colors?.[themeKey] !== undefined,
-      );
+      const hasValidThemeKey = VALID_THEME_KEYS.some((themeKey) => value.colors?.[themeKey] !== undefined);
 
       if (!hasValidThemeKey) {
         throw new Error(
@@ -76,9 +74,7 @@ interface ChartContainerProps
       | "children"
     > {
   config: ChartConfig;
-  innerResponsiveContainerStyle?: React.ComponentProps<
-    typeof RechartsPrimitive.ResponsiveContainer
-  >["style"];
+  innerResponsiveContainerStyle?: React.ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>["style"];
   footer?: React.ReactNode;
 }
 
@@ -110,10 +106,7 @@ function ChartContainer({
         {...props}
       >
         <ChartStyle id={chartId} config={config} />
-        <RechartsPrimitive.ResponsiveContainer
-          className="min-h-0 w-full flex-1"
-          initialDimension={initialDimension}
-        >
+        <RechartsPrimitive.ResponsiveContainer className="min-h-0 w-full flex-1" initialDimension={initialDimension}>
           {children}
         </RechartsPrimitive.ResponsiveContainer>
         {footer}
@@ -167,10 +160,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
       .join("\n");
 
   const css = Object.entries(THEMES)
-    .map(
-      ([theme, prefix]) =>
-        `${prefix} [data-chart=${id}] {\n${generateCssVars(theme as keyof typeof THEMES)}\n}`,
-    )
+    .map(([theme, prefix]) => `${prefix} [data-chart=${id}] {\n${generateCssVars(theme as keyof typeof THEMES)}\n}`)
     .join("\n");
 
   return <style dangerouslySetInnerHTML={{ __html: css }} />;

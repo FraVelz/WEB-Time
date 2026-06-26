@@ -51,8 +51,8 @@ export function PomodoroStatsSection() {
           Estadísticas
         </h2>
         <p className="text-muted max-w-2xl text-sm">
-          Resumen de los últimos 7 días según tu zona horaria ({gmtLabel}). Cada barra cuenta
-          pomodoros de trabajo completados ese día local.
+          Resumen de los últimos 7 días según tu zona horaria ({gmtLabel}). Cada barra cuenta pomodoros de trabajo
+          completados ese día local.
         </p>
       </header>
 
@@ -61,8 +61,8 @@ export function PomodoroStatsSection() {
       {rejected && (
         <p className="text-muted border-border bg-surface rounded-xl border px-4 py-3 text-sm">
           Has rechazado las cookies. La gráfica no guardará nuevos datos. Puedes borrar la cookie{" "}
-          <code className="text-text font-mono text-xs">pomodoro_cookie_consent</code> en tu
-          navegador y recargar para volver a elegir.
+          <code className="text-text font-mono text-xs">pomodoro_cookie_consent</code> en tu navegador y recargar para
+          volver a elegir.
         </p>
       )}
 

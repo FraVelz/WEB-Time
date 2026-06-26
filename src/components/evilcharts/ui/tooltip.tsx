@@ -62,13 +62,10 @@ function ChartTooltipContent({
     const [item] = payload;
     const key = `${labelKey ?? item?.dataKey ?? item?.name ?? "value"}`;
     const itemConfig = getPayloadConfigFromPayload(config, item, key);
-    const value =
-      !labelKey && typeof label === "string" ? (config[label]?.label ?? label) : itemConfig?.label;
+    const value = !labelKey && typeof label === "string" ? (config[label]?.label ?? label) : itemConfig?.label;
 
     if (labelFormatter) {
-      return (
-        <div className={cn("font-medium", labelClassName)}>{labelFormatter(value, payload)}</div>
-      );
+      return <div className={cn("font-medium", labelClassName)}>{labelFormatter(value, payload)}</div>;
     }
 
     if (!value) {
@@ -99,9 +96,7 @@ function ChartTooltipContent({
           .filter((item) => item.type !== "none")
           .map((item, index) => {
             const payloadName =
-              nameKey && item.payload
-                ? (item.payload as Record<string, unknown>)[nameKey]
-                : undefined;
+              nameKey && item.payload ? (item.payload as Record<string, unknown>)[nameKey] : undefined;
             const key = `${payloadName ?? item.name ?? item.dataKey ?? "value"}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
             const colorsCount = itemConfig ? getColorsCount(itemConfig) : 1;
@@ -110,7 +105,7 @@ function ChartTooltipContent({
               <div
                 key={index}
                 className={cn(
-                  "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted",
+                  "[&>svg]:text-muted flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
                   indicator === "dot" && "items-center",
                   selected != null && selected !== item.dataKey && "opacity-30",
                 )}
@@ -142,9 +137,7 @@ function ChartTooltipContent({
                       </div>
                       {item.value != null && (
                         <span className="text-text font-mono font-medium tabular-nums">
-                          {typeof item.value === "number"
-                            ? item.value.toLocaleString()
-                            : String(item.value)}
+                          {typeof item.value === "number" ? item.value.toLocaleString() : String(item.value)}
                         </span>
                       )}
                     </div>

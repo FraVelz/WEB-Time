@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  getCookieConsent,
-  setCookieConsent,
-  type CookieConsent,
-} from "@/features/pomodoro/lib/pomodoroCookies";
+import { getCookieConsent, setCookieConsent, type CookieConsent } from "@/features/pomodoro/lib/pomodoroCookies";
 
 export function PomodoroCookieConsent() {
   const [consent, setConsent] = useState<CookieConsent | null>(null);
@@ -30,9 +26,9 @@ export function PomodoroCookieConsent() {
         ¿Guardar estadísticas con cookies?
       </h2>
       <p className="text-muted mb-4 text-sm leading-relaxed">
-        Si aceptas, al terminar cada bloque (trabajo, descanso corto o descanso largo) se guardará
-        un registro en una cookie de tu navegador. La gráfica de abajo mostrará cuántos pomodoros de
-        trabajo completaste cada día. No enviamos datos a ningún servidor.
+        Si aceptas, al terminar cada bloque (trabajo, descanso corto o descanso largo) se guardará un registro en una
+        cookie de tu navegador. La gráfica de abajo mostrará cuántos pomodoros de trabajo completaste cada día. No
+        enviamos datos a ningún servidor.
       </p>
       <div className="flex flex-col gap-2 sm:flex-row">
         <button
@@ -41,7 +37,7 @@ export function PomodoroCookieConsent() {
             setCookieConsent("accepted");
             setConsent("accepted");
           }}
-          className="bg-accent hover:brightness-110 flex-1 cursor-pointer rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-all"
+          className="bg-accent flex-1 cursor-pointer rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
         >
           Aceptar cookies
         </button>
