@@ -1,6 +1,6 @@
 # WEB-Time
 
-[Spanish version](./README.md)
+This document is in English. [Versión en español](./README.md)
 
 **Countdowns to important dates, Pomodoro timer, custom timers with stopwatch, and world clock.**
 

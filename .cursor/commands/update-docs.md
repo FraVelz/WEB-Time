@@ -2,6 +2,14 @@
 
 Usar cuando el usuario pida **actualizar la documentación**, **sincronizar README**, **revisar docs** o invoque este comando. El objetivo es que `README.md` y `README.EN.md` reflejen el **código real** del repositorio, en **español e inglés** con la misma estructura.
 
+## Modos
+
+- **Por defecto / `@` archivos:** ortografía + sync del par bilingüe (según idioma fuente).
+- **`sync-en` / "sincronizar a inglés":** tomar `README.md` (y docs ES si aplica) como
+  **fuente** y **actualizar o crear** el espejo EN (`README.EN.md` / `README.en.md`). No
+  reescribir el ES salvo typos. En el EN, la cabecera debe incluir:
+  `This document is in English. [Versión en español](./README.md)`.
+
 ## Cuándo ejecutar
 
 - El usuario invoca este comando o pide explícitamente actualizar documentación.
@@ -100,7 +108,7 @@ Usar esta forma en README (adaptar árbol si cambia el código):
 
 Mantener el mismo orden en ambos idiomas:
 
-1. Título + enlace al otro idioma (`README.EN.md` / `README.md`)
+1. Título + enlace al otro idioma (`README.EN.md` / `README.md`); en el inglés: `This document is in English. [Versión en español](./README.md)`
 2. Descripción breve + screenshot + stack
 3. **Qué incluye** (lista de secciones)
 4. **Inicio rápido** (Node 18+, pnpm, `pnpm install`, `pnpm run dev`, URL local)
@@ -129,7 +137,7 @@ Mantener el mismo orden en ambos idiomas:
 
 - **Español** en `README.md`; **inglés** en `README.EN.md`; mismas secciones y tabla de rutas.
 - Prosa clara; listas y tablas para rutas/scripts.
-- Enlaces relativos entre READMEs: `[English version](./README.EN.md)` / `[Version en Español](./README.md)`.
+- Enlaces relativos entre READMEs: `[English version](./README.EN.md)` / `This document is in English. [Versión en español](./README.md)`.
 - No inventar features que no existan en el código.
 - No documentar secretos (`.env`, tokens).
 - Si algo es “solo desarrollo” (p. ej. `react:doctor`), marcarlo como opcional.
