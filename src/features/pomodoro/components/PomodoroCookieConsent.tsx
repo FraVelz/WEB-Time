@@ -1,26 +1,72 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCookieConsent, setCookieConsent, type CookieConsent } from "@/features/pomodoro/lib/pomodoroCookies";
+
+const FOCUSABLE_SELECTOR = [
+  "a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]),",
+  "select:not([disabled]), [tabindex]:not([tabindex='-1'])",
+].join(" ");
 
 export function PomodoroCookieConsent() {
   const [consent, setConsent] = useState<CookieConsent | null>(null);
   const [mounted, setMounted] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const acceptRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setConsent(getCookieConsent());
     setMounted(true);
   }, []);
 
-  if (!mounted || consent !== null) {
+  const visible = mounted && consent === null;
+
+  useEffect(() => {
+    if (!visible) return;
+    const el = dialogRef.current;
+    if (!el) return;
+
+    const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    requestAnimationFrame(() => acceptRef.current?.focus());
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const focusables = [...el.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)];
+      if (focusables.length === 0) return;
+      const first = focusables[0]!;
+      const last = focusables[focusables.length - 1]!;
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    el.addEventListener("keydown", handleKeyDown);
+    return () => {
+      el.removeEventListener("keydown", handleKeyDown);
+      if (trigger?.isConnected) {
+        requestAnimationFrame(() => trigger.focus());
+      }
+    };
+  }, [visible]);
+
+  if (!visible) {
     return null;
   }
 
   return (
     <div
+      ref={dialogRef}
       role="dialog"
+      aria-modal="true"
       aria-labelledby="pomodoro-cookie-title"
       className="border-border bg-surface rounded-2xl border p-5 md:p-6"
+      onKeyDown={(e) => e.stopPropagation()}
     >
       <h2 id="pomodoro-cookie-title" className="text-text mb-2 text-lg font-semibold">
         ¿Guardar estadísticas con cookies?
@@ -32,6 +78,7 @@ export function PomodoroCookieConsent() {
       </p>
       <div className="flex flex-col gap-2 sm:flex-row">
         <button
+          ref={acceptRef}
           type="button"
           onClick={() => {
             setCookieConsent("accepted");
